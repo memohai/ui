@@ -1,6 +1,7 @@
 export * from './components/alert/index'
 export * from './components/avatar/index'
 export * from './components/badge/index'
+export * from './components/breadcrumb/index'
 export * from './components/button/index'
 export * from './components/button-group/index'
 export * from './components/card/index'
