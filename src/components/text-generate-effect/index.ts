@@ -1,1 +1,1 @@
-export { default as TextGenerateEffect } from "./TextGenerateEffect.vue";
+export { default as TextGenerateEffect } from './TextGenerateEffect.vue'
