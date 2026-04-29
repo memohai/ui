@@ -37,7 +37,7 @@ The system employs a **bimodal elevation strategy**:
 ### Base Atoms
 
 - **Avatars**: 26px rounded full. Default fallback uses `accent`. Status badges require a 2px knockout border matching the background.
-- **Badges**: 4px radius (`rounded-sm`). Default is pure black (`bg-foreground text-background`). Secondary is `bg-accent text-foreground`. Destructive is pure red background. Warning is `bg-amber-500 text-white`. Outline is `bg-background border-border text-foreground`. Supports `size="sm"` (`text-[11px] px-2`) alongside default.
+- **Badges**: 4px radius (`rounded-sm`). Default is pure black (`bg-foreground text-background`). Secondary is `bg-accent text-foreground`. Destructive is pure red background. Success is `bg-green-500 text-white`. Warning is `bg-amber-500 text-white`. Outline is `bg-background border-border text-foreground`. Supports `size="sm"` (`text-[11px] px-2`) alongside default.
 - **BadgeCount**: Circular numeric counter. `rounded-full`, `h-[18px] min-w-[18px] px-1`, `text-[11px] font-medium`. Variants: default (`bg-foreground text-background`), destructive (`bg-destructive text-destructive-foreground`), secondary (`bg-accent text-foreground`). Values above 99 display as "99+".
 - **Buttons**:
   - Primary (Default): 8px radius, **`foreground` (black) background**, white text. Flat.
