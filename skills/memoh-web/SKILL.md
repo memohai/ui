@@ -7,7 +7,7 @@ description: Primary Web development skill for apps/web — white-floating-card 
 
 ## Non-negotiables — read this even if you skim the rest
 
-The nine rules that break a page if you miss them. The rest of this file is the *why* and
+The ten rules that break a page if you miss them. The rest of this file is the *why* and
 the *how*; these are the *must*.
 
 1. **Copy the new, never the legacy — and copy the *contract*, not a page's raw classes.** Open
@@ -58,6 +58,12 @@ the *how*; these are the *must*.
    a **named entry point** (a one-line summary row + a button) that opens a focused form showing
    the data *and* the action. Never spill them onto the root, and never bury them in an in-card
    "Advanced" disclosure that mixes diagnostics with real operations (§ 12).
+10. **A change is not committed until a human verifies it.** Run lint / grep / type checks
+    yourself, but the **rendered** result (visual + interaction) must be checked by a human
+    before any `commit` / `amend` / `push` — do not amend or squash unverified work into a
+    commit on your own say-so. "It should work" from the agent is not verification; the
+    human's eyes on the rendered page is. Follow-up tweaks to an already-committed change
+    re-verify before re-amending.
 
 ---
 
@@ -638,6 +644,15 @@ model, or make their relationship explicit and visible.
 - The motion duration palette is fixed (see `packages/ui/AGENTS.md` § Motion). Stay in it.
 - The rule: **don't overuse motion, but make every user action perceivable.** A click that
   changes nothing visible feels broken even when it worked.
+- **A button that swaps the whole card's structure is a last resort, not a pattern.** An
+  "Add member" button that replaces the member list with a picker form (Cancel/Confirm and
+  all) reflows the entire card on click — the frame the user was just reading vanishes.
+  Prefer an inline control that commits in place — a select trigger in the header that adds
+  on pick, a popover off the row — so the card's layout never changes. Caveat: the design
+  system does not yet have a settled pattern for "inline add to a list", so until it does,
+  treat the button→swap as an anti-pattern to **avoid**, not a template to copy. (The Bot
+  Access members card moved off this swap to an inline header select; the old swap form is
+  the anti-example.)
 
 ### Select triggers
 
