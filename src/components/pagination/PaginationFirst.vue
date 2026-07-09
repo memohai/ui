@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<PaginationFirstProps & {
   size: 'icon',
 })
 
-const delegatedProps = reactiveOmit(props, 'class', 'size')
+const delegatedProps = reactiveOmit(props, 'class', 'size', 'asChild')
 const forwarded = useForwardProps(delegatedProps)
 </script>
 
