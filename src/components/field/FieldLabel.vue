@@ -11,7 +11,7 @@ import { FIELD_INJECTION_KEY } from './context'
 // <Field> it auto-targets the control via `for`; pass `for` to override. Required
 // `*` and "Optional" affordances are i18n-agnostic by design: pass `requiredText`
 // / `optionalText` for a localized string, or slot the affordance directly. This
-// keeps @memohai/ui free of any vue-i18n dependency (cf. Toaster's contract).
+// keeps @felinic/ui free of any vue-i18n dependency (cf. Toaster's contract).
 const props = defineProps<LabelProps & {
   class?: HTMLAttributes['class']
   required?: boolean

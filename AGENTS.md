@@ -1,4 +1,4 @@
-# @memohai/ui — Design Language Contract
+# @felinic/ui — Design Language Contract
 
 Single source of truth for the **cross-cutting** visual and interaction decisions
 in this component library. It exists because one class of bug kept recurring:
