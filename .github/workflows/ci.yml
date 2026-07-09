@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm type-check
+      # No build step: this package is source-consumed by hosts (exports
+      # ./src/index.ts directly); the `build`/`build-only` scripts are legacy.
+      # NOTE: the design-token contract guard (check-ui-contract.mjs) currently
+      # runs in host repos' CI, scanning this repo's sources at the submodule
+      # mount point. See README "Known gaps".
