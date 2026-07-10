@@ -1,6 +1,6 @@
 ---
 name: memoh-web
-description: Primary Web development skill for apps/web — white-floating-card design language, disciplined @memohai/ui usage, deliberate copy, honest empty states, aligned controls, and restrained motion. Never hand-write controls or menus; never leave stray fragments (orphan status labels, misaligned save hints). Compose from @memohai/ui primitives and reuse existing save/feedback patterns from reference pages. Use for any apps/web UI work — new pages, settings/list/detail surfaces, chat components, polish passes — not only legacy page migrations. Read this skill before writing or changing Web frontend code.
+description: Primary Web development skill for apps/web — white-floating-card design language, disciplined @felinic/ui usage, deliberate copy, honest empty states, aligned controls, and restrained motion. Never hand-write controls or menus; never leave stray fragments (orphan status labels, misaligned save hints). Compose from @felinic/ui primitives and reuse existing save/feedback patterns from reference pages. Use for any apps/web UI work — new pages, settings/list/detail surfaces, chat components, polish passes — not only legacy page migrations. Read this skill before writing or changing Web frontend code.
 ---
 
 # Memoh Web — Page Development & Design Language
@@ -32,13 +32,13 @@ the *how*; these are the *must*.
    state, delete confirm, page frame…) have an owner component, the decision map, and when a
    shape deliberately stays hand-written — lives in `.agents/skills/memoh-ui-owners/SKILL.md`;
    read it before building any of those shapes.
-5. **Reuse a component — never hand-write one.** Compose from the real `@memohai/ui` atoms
+5. **Reuse a component — never hand-write one.** Compose from the real `@felinic/ui` atoms
    (Select / Combobox / Tooltip / icon `Button` / `Empty`) and the existing shared parts; never
    re-skin one, hand-roll an equivalent, or rebuild a control out of raw `<div>`s. **Menus
    included:** dropdown / context / action menus use `DropdownMenu` / `ContextMenu` and their
    `*Item` / `*Separator` / `*Label` slots — never hand-written `<button>` rows, never `<hr>` /
    `border-b` dividers inside a popover. The same rule applies to every other surface: if
-   `@memohai/ui` (or an existing app component) already covers it, use it — hand-built markup
+   `@felinic/ui` (or an existing app component) already covers it, use it — hand-built markup
    drifts out of the token contract and reads inconsistent page to page. If a layout repeats,
    extract it into one shared component instead of pasting it twice. A genuinely new component
    is a last resort — clear it with the developer *before* building it.
@@ -181,7 +181,7 @@ What concretely changed, before → after:
   high-emphasis CTA; blue means "selected"; purple is scarce. `success`/`warning`/
   `destructive` are **rationed signals**, not surface decoration — never tint a whole
   card `bg-success/5`.
-- **Unified components.** Use the refactored `@memohai/ui` atoms as-is. Do not re-skin
+- **Unified components.** Use the refactored `@felinic/ui` atoms as-is. Do not re-skin
   them or inject classes that fight their contract (the canonical "weird Select" bug).
 - **No hover-rise, ever.** Cards and rows do **not** lift / scale-up / grow a shadow on
   hover or press. Press-scale belongs only to buttons and sidebar rail items — never to a
@@ -343,7 +343,7 @@ already existed. Three rules, in order:
 1. **Hand-writing a component is forbidden.** A clickable `<div>` that re-implements a Button, a
    bespoke popover list that re-implements a Select, a `<div>`-grid that re-implements a Table —
    all banned. They can't receive the size / token / focus / a11y contract, and they drift. If
-   `@memohai/ui` (or an existing app component) has it, use it as-is.
+   `@felinic/ui` (or an existing app component) has it, use it as-is.
 2. **A composition that can repeat must be extracted, not pasted.** Even when every piece is a
    properly reused atom, if the *arrangement* could appear in more than one place (a provider
    row, a card header, an empty tile, a field cluster), lift it into one shared component and
@@ -420,7 +420,7 @@ recurring failures to avoid:
   border/bg. See `reference.md` § Dirty → clean for the full case (`ActionCard`'s icon slot).
 - **`BadgeCount`:** `destructive` red dot pinned to an icon corner = alert/unread; `default`
   neutral count rides a tab/filter/segment; a flat list row uses a plain muted numeral, no bubble.
-- **`Tooltip`:** always the `@memohai/ui` `Tooltip`. A hand-rolled or legacy tooltip is a bug.
+- **`Tooltip`:** always the `@felinic/ui` `Tooltip`. A hand-rolled or legacy tooltip is a bug.
 - **An empty state keeps the populated skeleton — it is the same page with no rows yet.** The
   worst empty-state failure is letting "there's no data" rearrange the page into a *different*
   shape. Keep the exact frame the populated state uses (the same `SettingsSection` card, the same
@@ -618,6 +618,25 @@ These are judgment rules. They are the difference between "it renders" and "it's
 
 ### 1. Interrogate every line of copy
 
+**P0 — Label ≠ placeholder (never show the same noun twice).** A field label and its
+placeholder must not be the same string, and must not read as the same bare noun sitting
+twice in the viewport (e.g. label `Password` + placeholder `Password`, or label `Email` +
+placeholder `Email`). The eye sees a stutter, not a hint. Placeholder is an *instruction*
+or a soft example, never a second label:
+
+- Prefer a verb lead-in: `Enter password`, `Enter your email`, `Enter email or username`.
+- Or a worked example: `name@company.com`, `e.g. acme-bot` — never the field's own name alone.
+- Same rule for the first step of a multi-step auth flow where there is *no* label and the
+  placeholder is the only chrome: still write `Enter your email`, not `Email` / `Username`.
+- Check **all three locales** — a language that glues verb+noun (`输入密码`) can accidentally
+  make the *page title* and the placeholder identical too; differentiate (e.g. title `输入密码`,
+  placeholder `请输入密码`, label `密码`).
+
+Lived fail (SaaS login, 2026-07): password step shipped label `Password` + placeholder
+`Password`; first step shipped placeholder `Email`. Fixed to `Enter password` /
+`Enter your email` / `Enter email or username`. Treat any new form field the same way before
+you ship.
+
 Before you write *any* user-facing line, slow down and ask, repeatedly:
 
 - The user already knows the page's **icon** and its **name in the sidebar**. So what do
@@ -690,6 +709,37 @@ matters (submit), and surface the error usefully then.
 Generalize this: the red-required box is just one instance. **Restraint applies to all
 external component signals.** Don't make a component shout a state the user did not ask
 about and does not benefit from.
+
+### 2b. Focus follows the job — every step lands the caret where the user will type
+
+This is not a layout rule and not "always autofocus the first field." It is a path rule:
+**when the view changes because the user advanced (or went back) in a multi-step flow, put
+keyboard focus on the field they are about to fill — not on the button they just pressed,
+and not nowhere.** Users expect to type immediately; making them click the field is a
+tax on a path they already committed to.
+
+Concrete tells (login is the worked example; apply the *path*, not a page template):
+
+- **Advance into a new step whose job is to type something** (e.g. identifier → password,
+  "send code" → OTP): after the step mounts, `focus()` that step's primary input. HTML
+  `autofocus` only fires on the *first* document load — it does **not** re-fire when a
+  `v-if` / step swap mounts a new field. Use `nextTick` + programmatic `focus()` (or a
+  shared helper) on the step transition itself.
+- **Back / Edit that returns to a prior field** (e.g. "Edit" on a readonly email, or
+  "Back" to the identifier step): focus that field again so the user can correct it
+  without an extra click. Same for dialog list→form→list when the form's job is input.
+- **One caret, one job.** Don't leave focus on Continue after it succeeded; don't focus a
+  readonly display field when the next action is typing in a different control; don't
+  steal focus mid-keystroke for ambient re-renders.
+- **Wrappers:** if the control is a composed field (`PasswordInput`, `InputGroup`), put a
+  stable `id` on the real `<input>` (or resolve it) before calling `focus()` — focusing the
+  outer shell does nothing useful.
+- **Don't invent a global "focus manager."** Wire focus at the transition site (`onContinue`,
+  `backToIdentifier`, dialog open, view-swap enter) where the *path* is known. A page that
+  has no step change needs no extra focus code beyond a sensible first-load `autofocus`.
+
+Review check: after every step / drill-in / back path you ship, tab away and re-enter with
+the keyboard only — can the user type the next thing without clicking?
 
 ### 3. Empty *and loading* states must hold the frame
 
@@ -937,7 +987,7 @@ learned from the Access → Advanced rules dialog that broke them:
   gated on `!formVisible` as well as its own condition — a `v-if` that only checks the data
   (`items.length`) leaks the list rows *above* the form view, and their `border-b` shows up as
   a mystery divider under the form title. The form is the dialog's only body while open.
-- **Wrap the swapping body in `@memohai/ui`'s `<AutoHeight>`** so list→form height changes
+- **Wrap the swapping body in `@felinic/ui`'s `<AutoHeight>`** so list→form height changes
   tween (220ms house spring) instead of hard-cutting — a dialog that jumps size on every
   drill-in reads as broken. `AutoHeight` is the height-tween primitive (see
   `packages/ui/AGENTS.md` § Motion); keep it *inside* the `overflow-y-auto` scroll element,
@@ -947,7 +997,7 @@ learned from the Access → Advanced rules dialog that broke them:
 dialog**: title top-LEFT + close top-right — the house default for a dialog that is one
 focused form (New Task, settings forms); what `DialogHeader` + `DialogTitle` render
 naturally. (b) **List-management dialog**: title CENTERED, close top-right, body led by the
-search+add toolbar above. For form (b), use `@memohai/ui`'s **`DialogViewHeader`** — do NOT
+search+add toolbar above. For form (b), use `@felinic/ui`'s **`DialogViewHeader`** — do NOT
 hand-write the grid, and do NOT keep the built-in corner close (it pins at `top-3` while the
 title row sits below the content padding, so their centerlines miss by ~12px and the header
 reads broken the moment a back chevron joins). `DialogPanel view-swap` disables the corner
@@ -1042,7 +1092,7 @@ is not that.)
 **The scrolling dialog body is `DialogBody`, and it fades at the scroll edges.** Inside a
 `DialogPanel` (the capped focused-dialog shell — its props own `max-h-[80dvh]`, the grid
 rows, width rungs, and the view-swap corner-close pairing; NEVER retype those classes),
-the body row is `@memohai/ui`'s `<DialogBody>` — it owns the `-mr-3 pr-3` scroll-gutter trick
+the body row is `@felinic/ui`'s `<DialogBody>` — it owns the `-mr-3 pr-3` scroll-gutter trick
 AND a stateful scroll-edge fade: content continuing past the box fades out over the last
 16px, each edge only while more content actually exists in that direction (top of scroll → no
 top fade; bottom reached → fade dissolves; content shorter than the box → no fade at all),
@@ -1054,7 +1104,7 @@ nests INSIDE `DialogBody`, never the other way around.
 > The remaining hand-written part of the list-management pattern is the body composition
 > (search+add toolbar, rows, empty/no-match states, AutoHeight'd list↔form swap) in
 > `bot-access.vue`. The shell primitives (`DialogViewHeader`, `DialogBody`, `AutoHeight`) are
-> already in `@memohai/ui` — compose those; if a second full list-management dialog appears,
+> already in `@felinic/ui` — compose those; if a second full list-management dialog appears,
 > consider lifting the body composition too.
 >
 > Same status for the ActionCard **entry section block** (`<section class="space-y-2.5">` +
@@ -1177,13 +1227,13 @@ seeing it rendered is:
 - **Reuse audit:** did you reuse every component you could — or hand-write / duplicate something
   a primitive or a shared composition already covers? Is any brand-new component cleared with
   the developer? Was a repeated arrangement extracted, not pasted?
-- **Import audit — a `@memohai/ui` tag you forgot to import silently degrades to a native
+- **Import audit — a `@felinic/ui` tag you forgot to import silently degrades to a native
   element, and *nothing flags it*.** Vue resolves an unimported PascalCase tag against the DOM:
   `<Progress>` falls back to the native `<progress>` (a chunky grey OS bar, `model-value` inert),
   `<Switch>`/`<Dialog>` to unknown/native elements — eslint and `vue-tsc` both pass, so it only
   shows up in the *rendered* page (the canonical bug: a billing meter that shipped as a fat grey
-  block instead of the thin token bar). For every `@memohai/ui` component the template uses,
-  confirm it's in the `import { … } from '@memohai/ui'` list — and trust the rendered pixels over
+  block instead of the thin token bar). For every `@felinic/ui` component the template uses,
+  confirm it's in the `import { … } from '@felinic/ui'` list — and trust the rendered pixels over
   "I wrote `<Progress>`, so it's the Progress component."
 - **Forms & sizing:** do forms match the New Task standard, and is every button sized on purpose
   (default h-9 for primaries / footers, `sm` only where genuinely tight)? No squat `sm` footers.
@@ -1211,7 +1261,7 @@ on controls. A page is not done until it passes.
    **icons stacked inside a card**, kill any layer that isn't earning its keep. The cheapest
    place to delete a needless layer is here, on paper, before it exists in code.
 5. **Rebuild** from the shell down, **reusing components, never hand-writing them**: page shell →
-   `SettingsSection`/`SettingsRow` groups → the right `@memohai/ui` atoms, tokens only →
+   `SettingsSection`/`SettingsRow` groups → the right `@felinic/ui` atoms, tokens only →
    **re-wire every behavior from the step-2 inventory** → copy through the § 1 interrogation →
    empty states that hold the frame → aligned same-row heights → only the motion that fits. If a
    composition repeats, extract it; if you think you need a new component or an icon, get the

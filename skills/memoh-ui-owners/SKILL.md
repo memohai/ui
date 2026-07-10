@@ -128,7 +128,7 @@ stacks it *above*.
 > `<Label>`. A plain field with no validation is just `<FieldStack :label>` around the
 > control. **One caveat:** because FieldStack now renders errors inline, any hardcoded
 > validation message in the zod schema becomes visible — translate it (zh/en/ja) instead
-> of shipping the English default. The older `@memohai/ui` `<FormItem>` (`grid gap-2`) is
+> of shipping the English default. The older `@felinic/ui` `<FormItem>` (`grid gap-2`) is
 > superseded; new code uses FieldStack.
 
 
@@ -169,7 +169,7 @@ A whole pane/panel with nothing else to show       → PanePlaceholder (centered
 **PanePlaceholder** · `pane-placeholder/index.vue`
 The centered fill for a pane's content area, three states: `loading` (horizontal
 spinner + text), default empty (vertical `#icon` + text + `#action`), `title` (emphasized
-two-line block, e.g. "Select a bot"). Deliberately **not** the `@memohai/ui` `Empty`
+two-line block, e.g. "Select a bot"). Deliberately **not** the `@felinic/ui` `Empty`
 (that's the dashed/solid framed card for in-page empties); PanePlaceholder is for the
 frameless center of a panel that has nothing else. Parent must give it height.
 
@@ -259,7 +259,7 @@ Same discipline, narrower home — compose these when working on their surface:
 
 ### Plus one atom you already have
 
-**Empty** (`@memohai/ui`) — the framed in-page empty state card. Fold `py-12`/`py-16` as
+**Empty** (`@felinic/ui`) — the framed in-page empty state card. Fold `py-12`/`py-16` as
 needed. Loading and empty states must still draw their frame so nothing reflows.
 
 ## Which owner? — a decision map

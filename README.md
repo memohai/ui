@@ -1,4 +1,4 @@
-# @memohai/ui
+# @felinic/ui
 
 Memoh's design system as a single distributable unit: the Vue 3 component
 library, the design-token scales, **and the AI agent skills that teach an
