@@ -1,5 +1,5 @@
 ---
-name: memoh-web
+name: web
 description: Primary Web development skill for apps/web — white-floating-card design language, disciplined @felinic/ui usage, deliberate copy, honest empty states, aligned controls, and restrained motion. Never hand-write controls or menus; never leave stray fragments (orphan status labels, misaligned save hints). Compose from @felinic/ui primitives and reuse existing save/feedback patterns from reference pages. Use for any apps/web UI work — new pages, settings/list/detail surfaces, chat components, polish passes — not only legacy page migrations. Read this skill before writing or changing Web frontend code.
 ---
 
@@ -30,7 +30,7 @@ the *how*; these are the *must*.
    dividers, deliberate spacing rhythm, and **no hover-rise** on cards. The full **owner
    vocabulary** — which recurring shapes (row, field, section, tile, banner, loading/empty
    state, delete confirm, page frame…) have an owner component, the decision map, and when a
-   shape deliberately stays hand-written — lives in `.agents/skills/memoh-ui-owners/SKILL.md`;
+   shape deliberately stays hand-written — lives in `.agents/skills/ui-owners/SKILL.md`;
    read it before building any of those shapes.
 5. **Reuse a component — never hand-write one.** Compose from the real `@felinic/ui` atoms
    (Select / Combobox / Tooltip / icon `Button` / `Empty`) and the existing shared parts; never

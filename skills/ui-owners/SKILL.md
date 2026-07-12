@@ -1,14 +1,14 @@
 ---
-name: memoh-ui-owners
-description: Read this BEFORE writing or editing any apps/web settings page, bot-detail tab, dialog/popover/sheet form, config panel, list row, or detail surface — i.e. almost any Vue markup that is not pure chat. The host app has a core owner vocabulary (SettingsRow, SettingsSection, FieldStack, PageShell, MetricReadout, PersonaTile, CalloutBanner, ExpandableSettingsRow, BackendCard, ModelListRow, FormStack, PanePlaceholder, InlineLoadingRow, ConfirmDeleteDialog, SectionGroup) that owns all recurring spacing. Use this skill whenever you are about to build a settings row, a form field (label + input), a section card, a Save/Cancel footer, a stat tile, a warning banner, an "Advanced" disclosure, an empty state, a loading state, a delete confirm, or a whole page frame — even if the user just says "add a settings page", "make a dialog", "add a toggle row", "build this form", or "add a field", without mentioning spacing or components. Hand-writing a row/field/card/tile out of raw `<div class="flex … border-b …">` is the #1 recurring mistake in this codebase (同形异码); compose an owner instead so spacing can never drift. The skill also says when a shape must STAY hand-written (a genuinely different spatial relationship, e.g. a denser list row). Pairs with memoh-web (page-level) and packages/ui/AGENTS.md (atom-level).
+name: ui-owners
+description: Read this BEFORE writing or editing any apps/web settings page, bot-detail tab, dialog/popover/sheet form, config panel, list row, or detail surface — i.e. almost any Vue markup that is not pure chat. The host app has a core owner vocabulary (SettingsRow, SettingsSection, FieldStack, PageShell, MetricReadout, PersonaTile, CalloutBanner, ExpandableSettingsRow, BackendCard, ModelListRow, FormStack, PanePlaceholder, InlineLoadingRow, ConfirmDeleteDialog, SectionGroup) that owns all recurring spacing. Use this skill whenever you are about to build a settings row, a form field (label + input), a section card, a Save/Cancel footer, a stat tile, a warning banner, an "Advanced" disclosure, an empty state, a loading state, a delete confirm, or a whole page frame — even if the user just says "add a settings page", "make a dialog", "add a toggle row", "build this form", or "add a field", without mentioning spacing or components. Hand-writing a row/field/card/tile out of raw `<div class="flex … border-b …">` is the #1 recurring mistake in this codebase (同形异码); compose an owner instead so spacing can never drift. The skill also says when a shape must STAY hand-written (a genuinely different spatial relationship, e.g. a denser list row). Pairs with web (page-level) and packages/ui/AGENTS.md (atom-level).
 ---
 
 # UI — Spacing Owner Vocabulary
 
 This skill is the **composition layer** between the page-level rules in
-`memoh-web/SKILL.md` and the atom-level token law in `packages/ui/AGENTS.md`.
+`web/SKILL.md` and the atom-level token law in `packages/ui/AGENTS.md`.
 
-`memoh-web` tells you *how a page reads*. `packages/ui/AGENTS.md` tells you *how one
+`web` tells you *how a page reads*. `packages/ui/AGENTS.md` tells you *how one
 control looks*. This file tells you the piece in between: **when you need a row, a
 field, a section, a tile, a disclosure, an object card, or a warning — you compose one
 of the owner components below instead of hand-writing it from `<div>`s.**
@@ -367,7 +367,7 @@ one-off" → keep it local and say why.
 
 ## Migration discipline (when converting a hand-rolled surface)
 
-1. **Read `memoh-web/SKILL.md` first**, then this file, then the page.
+1. **Read `web/SKILL.md` first**, then this file, then the page.
 2. **Inventory every behavior before editing** — every `v-model`, click handler,
    loading/empty branch, validation, i18n key — and re-wire each after. A refactor must not
    regress.
