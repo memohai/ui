@@ -3,7 +3,7 @@ name: memoh-web
 description: Primary Web development skill for apps/web — white-floating-card design language, disciplined @felinic/ui usage, deliberate copy, honest empty states, aligned controls, and restrained motion. Never hand-write controls or menus; never leave stray fragments (orphan status labels, misaligned save hints). Compose from @felinic/ui primitives and reuse existing save/feedback patterns from reference pages. Use for any apps/web UI work — new pages, settings/list/detail surfaces, chat components, polish passes — not only legacy page migrations. Read this skill before writing or changing Web frontend code.
 ---
 
-# Memoh Web — Page Development & Design Language
+# Web — Page Development & Design Language
 
 ## Non-negotiables — read this even if you skim the rest
 

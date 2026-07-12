@@ -2,7 +2,7 @@
 
 ## Overview
 
-A modern, clean, and highly functional interface designed for the Memoh AI Agent platform. The design emphasizes a "high-contrast, flat" aesthetic. It moves away from mushy, ubiquitous soft shadows (`shadow-sm`) and brand-colored primary buttons, favoring a tempered base palette with soft whites, light greys, and charcoal blacks. Brand colors are used extremely sparingly for distinct active states and primary conversion actions (like the chat "Send" button).
+A modern, clean, and highly functional interface designed for an AI Agent platform. The design emphasizes a "high-contrast, flat" aesthetic. It moves away from mushy, ubiquitous soft shadows (`shadow-sm`) and brand-colored primary buttons, favoring a tempered base palette with soft whites, light greys, and charcoal blacks. Brand colors are used extremely sparingly for distinct active states and primary conversion actions (like the chat "Send" button).
 
 ## Colors
 
