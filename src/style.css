@@ -2164,7 +2164,7 @@
   }
 }
 
-/* ── Toast (Memoh) ───────────────────────────────────────────────────────────
+/* ── Toast ───────────────────────────────────────────────────────────────────
    Our own toast surface (components/sonner/Toaster.vue + toast.ts) — replaces
    vue-sonner. Plain fixed flex column: NO JS height measurement, NO transform-
    offset depth stack. The close × is a real flex child (ghost icon Button),
