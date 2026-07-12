@@ -6,7 +6,7 @@ description: Read this BEFORE writing or editing any apps/web settings page, bot
 # UI — Spacing Owner Vocabulary
 
 This skill is the **composition layer** between the page-level rules in
-`web/SKILL.md` and the atom-level token law in `packages/ui/AGENTS.md`.
+`../web/SKILL.md` and the atom-level token law in `packages/ui/AGENTS.md`.
 
 `web` tells you *how a page reads*. `packages/ui/AGENTS.md` tells you *how one
 control looks*. This file tells you the piece in between: **when you need a row, a
@@ -367,7 +367,7 @@ one-off" → keep it local and say why.
 
 ## Migration discipline (when converting a hand-rolled surface)
 
-1. **Read `web/SKILL.md` first**, then this file, then the page.
+1. **Read `../web/SKILL.md` first**, then this file, then the page.
 2. **Inventory every behavior before editing** — every `v-model`, click handler,
    loading/empty branch, validation, i18n key — and re-wire each after. A refactor must not
    regress.

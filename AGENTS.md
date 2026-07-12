@@ -9,6 +9,19 @@ and reintroduce version bugs (see Motion below).
 If you build or refactor a component in `packages/ui`, follow this file. When you
 make a **new** cross-cutting decision, write it back here — this is a living doc.
 
+## Web host guidance
+
+This repository also owns the Web composition guidance consumed by host
+applications. When working on a host Web page or component that uses this
+library, read these files from the host repository root, in order:
+
+1. `packages/ui/skills/web/SKILL.md` — page-level design language and workflow.
+2. `packages/ui/skills/ui-owners/SKILL.md` — recurring layout-owner vocabulary.
+
+Resolve references inside either skill relative to its own directory. Hosts
+should point agents to `packages/ui/AGENTS.md`; they do not need to copy,
+forward, symlink, or separately register these skills under `.agents/skills`.
+
 ## Enforcement is three layers
 
 | Layer | Where | Role |

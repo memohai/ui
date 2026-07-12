@@ -26,13 +26,9 @@ git submodule add https://github.com/memohai/ui packages/ui
 
 The mount point **must** be `packages/ui`: all internal path references
 (in `AGENTS.md`, the skills, and the host-side contract guard) are written
-from the host repo root and assume this location. Wire the skills into the
-host's agent config by symlinking:
-
-```bash
-ln -s ../../packages/ui/skills/web .agents/skills/web
-ln -s ../../packages/ui/skills/ui-owners .agents/skills/ui-owners
-```
+from the host repo root and assume this location. A host's `AGENTS.md` should
+direct Web/UI work to `packages/ui/AGENTS.md`; that contract routes agents to
+the adjacent skills without host-side copies, forwarders, or symlinks.
 
 Version pinning is the host's job: hosts pin a commit, bump via a one-line
 PR. Framework versions are the host's job too — this package declares

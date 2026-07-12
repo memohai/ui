@@ -30,7 +30,7 @@ the *how*; these are the *must*.
    dividers, deliberate spacing rhythm, and **no hover-rise** on cards. The full **owner
    vocabulary** — which recurring shapes (row, field, section, tile, banner, loading/empty
    state, delete confirm, page frame…) have an owner component, the decision map, and when a
-   shape deliberately stays hand-written — lives in `.agents/skills/ui-owners/SKILL.md`;
+   shape deliberately stays hand-written — lives in `../ui-owners/SKILL.md`;
    read it before building any of those shapes.
 5. **Reuse a component — never hand-write one.** Compose from the real `@felinic/ui` atoms
    (Select / Combobox / Tooltip / icon `Button` / `Empty`) and the existing shared parts; never
