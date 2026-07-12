@@ -14,8 +14,8 @@ workspace resolves it by path with zero build/publish step.
 |---|---|
 | `src/` | Components + `style.css` (interaction contracts, radius/text/z/alpha token scales) |
 | `AGENTS.md` | The atom-level design-token law. Read it before touching any component. |
-| `skills/memoh-web/` | Page-level design-language skill (AI agent skill) |
-| `skills/memoh-ui-owners/` | Spacing-owner vocabulary skill (AI agent skill) |
+| `skills/web/` | Page-level design-language skill (AI agent skill) |
+| `skills/ui-owners/` | Spacing-owner vocabulary skill (AI agent skill) |
 | `.storybook/` | The module's own living reference |
 
 ## Consuming as a submodule
@@ -26,13 +26,9 @@ git submodule add https://github.com/memohai/ui packages/ui
 
 The mount point **must** be `packages/ui`: all internal path references
 (in `AGENTS.md`, the skills, and the host-side contract guard) are written
-from the host repo root and assume this location. Wire the skills into the
-host's agent config by symlinking:
-
-```bash
-ln -s ../../packages/ui/skills/memoh-web  .agents/skills/memoh-web
-ln -s ../../packages/ui/skills/memoh-ui-owners .agents/skills/memoh-ui-owners
-```
+from the host repo root and assume this location. A host's `AGENTS.md` should
+direct Web/UI work to `packages/ui/AGENTS.md`; that contract routes agents to
+the adjacent skills without host-side copies, forwarders, or symlinks.
 
 Version pinning is the host's job: hosts pin a commit, bump via a one-line
 PR. Framework versions are the host's job too — this package declares
@@ -60,10 +56,10 @@ adapts call sites.
   PRs here are only guard-checked when a host bumps its pointer. Parameterizing
   the guard and moving it into this repo's CI is a planned follow-up.
 - **Owner components still live in the host** (`apps/web/src/components/`):
-  SettingsRow, FieldStack, PageShell, etc. The `memoh-ui-owners` skill
+  SettingsRow, FieldStack, PageShell, etc. The `ui-owners` skill
   documents them, so a brand-new host that doesn't share the same page
   structure won't get them from this repo yet. Promoting them into `src/` is
   a planned follow-up.
-- **`skills/memoh-web/reference.md`** is a host-specific page map — host
+- **`skills/web/reference.md`** is a host-specific page map — host
   knowledge that travels here for now; splitting portable design language
   from host-specific references is a planned follow-up.

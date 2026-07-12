@@ -1,4 +1,4 @@
-# Memoh Web — Reference
+# Web — Reference
 
 Concrete recipes, the dirty→clean diagnostic table, the reference-page map, and the
 component picker. Read `SKILL.md` first for the principles; this file is the lookup.

@@ -11,7 +11,7 @@
 // the title centerline. A component library exists precisely so callers never
 // hand-write that string — this component IS that string.
 //
-// Anatomy (the two golden forms, memoh-web SKILL § 11):
+// Anatomy (the two golden forms, web SKILL § 11):
 //   (a) workbench  — <DialogPanel> + DialogHeader/DialogTitle + DialogBody
 //   (b) view-swap  — <DialogPanel view-swap> + DialogViewHeader + DialogBody(AutoHeight)
 //
