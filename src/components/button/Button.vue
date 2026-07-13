@@ -87,9 +87,13 @@ const buttonClass = computed(() =>
     >
       <Spinner />
     </span>
+    <!-- [gap:inherit]:display:contents 在布局上消失,但在 CSS 继承链上仍是 slot
+         内容的父元素 —— gap 不是继承属性,不显式转发的话,slot 里做组合的包装组件
+         (如 LabelSwap)想 [gap:inherit] 拿到的是这层的 normal(0),不是按钮的
+         gap-2/gap-1.5。这里转发一次,按钮的间距契约就能穿透到嵌套组合。 -->
     <span
       data-button-content
-      class="contents"
+      class="contents [gap:inherit]"
     >
       <slot />
     </span>

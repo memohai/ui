@@ -138,6 +138,22 @@ A `space-y-4` wrapper for a run of `FieldStack`s. Use it around a contiguous for
 
 ### Readouts & notices
 
+**DeviceCodePanel** · `device-code-panel/index.vue`
+设备码授权(RFC 8628)的"输码时刻":一句指引(caller i18n,防钓鱼警示写在 hint 里)→
+英雄码(text-2xl mono,select-all,不是输入框)→ 唯一动作"复制并前往"(同一手势里
+先开空白 tab 占位再复制,失败收回 —— 等剪贴板 Promise 再 open 会被弹窗拦截)→
+可见性守卫的 mm:ss 倒计时(面板唯一活性信号;授权轮询是 caller 的事,静默)。
+Props: `code`, `verificationUri`, `expiresAt?`, `hint`, `retryLoading?`;emit `retry`
+(过期后重新签发)。"取消整个流程"属于 caller 的入口控件,与面板的 retry 语义不同,
+不要合并。已知同形状旧写法:bots ACP 面板、onboarding Step4 —— 迁移前先做各自的
+行为盘点(ACP 有真 cancel API 和错误态)。
+
+**LabelSwap**(`@felinic/ui` 原语,非 apps/web owner,顺带登记防重造)
+会"换字"的内容槽:每个候选 label 一个具名 slot,`active` 指名当前项;各 label 保持
+自然宽度,切换时外壳宽度按 house spring 平滑过渡、label 交叉淡出。给 Connect↔Cancel
+式的状态开关按钮用 —— 不要再用 min-w 魔法数定宽或手写叠格量宽(grid 轨道按最宽
+label 定尺寸、靠左锚定会单侧裁字,这些坑都已收进组件,见其头注)。
+
 **MetricReadout** · `settings/metric-readout.vue`
 One metric tile: caption label + tabular value (or a status dot + label). Props: `label`,
 `value`, `sub`, `framed` (default `true` — draws the tile box; `false` for a bare stat on
@@ -280,6 +296,8 @@ A stacked form field (label above control)?     → FieldStack (wrap a run in Fo
 A stat / number tile?                           → MetricReadout (you own the grid)
 A vertical, centered entity/add tile?           → PersonaTile
 A warning / destructive framed notice?          → CalloutBanner
+A device-code "enter this code" moment?         → DeviceCodePanel
+A label that swaps with state (Connect↔Cancel)? → LabelSwap (@felinic/ui)
 The page frame itself?                          → PageShell
 A pane with nothing to show (loading/empty)?    → PanePlaceholder (centered fill)
 An in-flow loading row (spinner + text)?        → InlineLoadingRow
@@ -300,9 +318,11 @@ Keep a shape local when its relationship genuinely differs. The tells:
 - **A different surface.** Sidebar rows, file-tree rows, chat message rows live in
   non-settings surfaces with their own row systems. Owners are for the settings/form/list
   surface, not everywhere a `border-b` appears.
-- **A genuinely one-off compound block.** OAuth device-flow, a drag-drop upload target, a
+- **A genuinely one-off compound block.** A drag-drop upload target, a
   Monaco/JSON editor, a snapshot input, a link-code countdown, the single real data table
-  — no owner covers these; hand-write them.
+  — no owner covers these; hand-write them. (OAuth device-flow used to sit in this list;
+  it graduated to **DeviceCodePanel** once the same shape hit three call sites — the same
+  ratchet applies to the rest of this list.)
 - **A centered framed placeholder paired with a sibling state** — e.g. a `min-h` framed
   loading block whose twin is a framed empty state in the same slot (bot-container's
   workspace card). The frame + pairing is the relationship; PanePlaceholder (frameless

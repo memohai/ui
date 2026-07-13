@@ -400,6 +400,17 @@ recurring failures to avoid:
   standalone. Icons are **lucide components** (`<Plus/>`), never a typed glyph (`"+"`),
   and never free-sized — let the `size-4` control ladder apply. Never `scale-90` a control
   to "fix" its size.
+- **Icon position in a text button is semantics, not decoration.** On a compound-action
+  button, the icon's placement declares which verb dominates: a *leading* glyph names the
+  action's identity ("this is a copy button"), a *trailing* `ExternalLink`/chevron names the
+  *outcome/destination* ("pressing this leaves to a page / drills in"). Worked case: the
+  device-code "Copy & Open" button with a leading `Copy` glyph read as copy-only and users
+  never guessed it opened the browser; moving to a trailing `ExternalLink` fixed the
+  expectation without a word of extra copy. Pick the position by asking "what should the
+  user expect to *happen*?" — never by symmetry or habit. And **spacing between a Button's
+  direct children belongs to the Button** (`gap-2`, `gap-1.5` on `sm`, plus `has-[>svg]`
+  padding compensation): hand-adding `ml-*`/`mr-*` on the icon stacks onto that gap and
+  visibly unbalances the button (the recurring "icon drifted right" bug).
 - **Default to no icon — an icon is a cost, not a freebie.** An icon must earn its place by
   carrying meaning — a brand/provider mark, a status, or a clear action glyph on a button. It is
   never free: a boxed icon drags in a surface (and its shadow), one more color, and a "does this
