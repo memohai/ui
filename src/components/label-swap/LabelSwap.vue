@@ -83,7 +83,7 @@ onBeforeUnmount(() => {
 <template>
   <span
     data-slot="label-swap"
-    class="grid justify-center overflow-hidden [gap:inherit]"
+    class="inline-grid justify-center overflow-hidden [gap:inherit]"
     :class="{ 'label-swap-animated': ready }"
     :style="width !== null ? { width: `${width}px` } : undefined"
   >
