@@ -11,6 +11,8 @@ export const inputSpec: ComponentSpec = {
   name: 'Input',
   description:
     'Single-line text field. The edge is one inset hairline that deepens on focus — never an outer ring, never a grown border.',
+  descriptionZh:
+    '单行文本输入。边缘是一条内嵌发丝线，聚焦时原位加深——不是外圈 ring，也不加粗边框。',
   controls: [
     { kind: 'enum', key: 'size', label: 'Size', options: SIZES, default: 'default' },
     {
@@ -52,4 +54,10 @@ export const inputSpec: ComponentSpec = {
 - emphasis="subtle" is for search boxes and other low-chrome fields; forms keep the default "solid".
 - Sizes follow the control ladder (sm 32 / default 36 / lg 40) with matching type scale — never a fixed 16px field.
 - Need a label, description, or error? Wrap in Field — it wires for/aria for you.`,
+  usageZh: `输入框只在聚焦时激活,hover 永远不变。
+
+- 聚焦把 field edge 原位换成 --field-edge-solid——不要加外圈 ring,也不要加粗边框宽度。
+- emphasis="subtle" 用于搜索框等低铬场景;表单保持默认 "solid"。
+- 尺寸走控件阶梯(sm 32 / default 36 / lg 40)并带配套字阶——绝不做固定 16px 的输入框。
+- 需要标签、描述或错误?用 Field 包一层,for/aria 它来接。`,
 }

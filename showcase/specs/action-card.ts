@@ -9,6 +9,8 @@ export const actionCardSpec: ComponentSpec = {
   name: 'ActionCard',
   description:
     'A card that IS an action: leading icon, title, and a forward affordance. The entry-point pattern — not a display card with a click bolted on.',
+  descriptionZh:
+    '本身就是动作的卡片：前导图标、标题、前向指示。入口模式——不是给展示卡片硬接 click。',
   controls: [
     { kind: 'string', key: 'title', label: 'Title', default: 'Workspace settings' },
     { kind: 'string', key: 'description', label: 'Description', default: 'Files, commands, and runtime limits' },
@@ -55,4 +57,10 @@ ${strAttr('description', String(state.description), '')}
 - Trailing defaults to a forward chevron; external links override with ArrowUpRight.
 - Deep/rare operations belong behind one of these (the 99/1 rule) — never an in-card "Advanced" disclosure.
 - A list of same-weight peers is Item, not a stack of ActionCards.`,
+  usageZh: `当一行是通往下一层表面的"门"(聚焦对话框、详情抽屉、外部链接)时,用 ActionCard。
+
+- #icon 槽必填——卡片不内置图标,才不会沦为它无法自证的图标滥用。
+- 尾部默认是前向 chevron;外部链接换成 ArrowUpRight。
+- 深层/低频操作收在一个入口后面(99/1 法则)——绝不用卡片内 "Advanced" 折叠。
+- 一组同等权重的并列项用 Item,不是一叠 ActionCard。`,
 }

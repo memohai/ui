@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { FONT_STACKS, TYPE_SCALE, WEIGHT_ROLES } from '../../lib/foundations-data'
+import { tt } from '../../lib/i18n'
 
 const SPECIMEN = 'Design the conversation, not just the chat.'
+const SPECIMEN_ZH = '设计的不是聊天，而是对话本身。'
 </script>
 
 <template>
   <div class="mx-auto max-w-4xl p-8">
     <section class="mb-10">
       <h2 class="mb-3 text-label font-medium text-foreground">
-        Type scale
+        {{ tt('Type scale', '字阶') }}
       </h2>
       <div class="border-y border-border-soft">
         <div
@@ -19,9 +21,9 @@ const SPECIMEN = 'Design the conversation, not just the chat.'
           <span
             :class="t.cls"
             class="min-w-0 truncate text-foreground"
-          >{{ SPECIMEN }}</span>
+          >{{ tt(SPECIMEN, SPECIMEN_ZH) }}</span>
           <span class="shrink-0 font-mono text-caption text-muted-foreground">
-            {{ t.cls }} · {{ t.px }}px · lh {{ t.lh }} · {{ t.role }}
+            {{ t.cls }} · {{ t.px }}px · lh {{ t.lh }} · {{ tt(t.role, t.roleZh) }}
           </span>
         </div>
       </div>
@@ -29,11 +31,13 @@ const SPECIMEN = 'Design the conversation, not just the chat.'
 
     <section class="mb-10">
       <h2 class="mb-3 text-label font-medium text-foreground">
-        Weight roles
+        {{ tt('Weight roles', '字重角色') }}
       </h2>
       <p class="mb-3 text-body text-muted-foreground">
-        Weight is role-mapped, never free-styled — Inter runs heavy, so the
-        numeric values sit a half-step below the Tailwind defaults.
+        {{ tt(
+          'Weight is role-mapped, never free-styled — Inter runs heavy, so the numeric values sit a half-step below the Tailwind defaults.',
+          '字重按角色映射，绝不随手写——Inter 同数值偏重，所以数值比 Tailwind 默认值下调半档。',
+        ) }}
       </p>
       <div class="border-y border-border-soft">
         <div
@@ -44,9 +48,9 @@ const SPECIMEN = 'Design the conversation, not just the chat.'
           <span
             :class="[w.cls]"
             class="text-title text-foreground"
-          >{{ SPECIMEN }}</span>
+          >{{ tt(SPECIMEN, SPECIMEN_ZH) }}</span>
           <span class="shrink-0 font-mono text-caption text-muted-foreground">
-            {{ w.cls }} · {{ w.value }} · {{ w.role }}
+            {{ w.cls }} · {{ w.value }} · {{ tt(w.role, w.roleZh) }}
           </span>
         </div>
       </div>
@@ -54,7 +58,7 @@ const SPECIMEN = 'Design the conversation, not just the chat.'
 
     <section>
       <h2 class="mb-3 text-label font-medium text-foreground">
-        Font family
+        {{ tt('Font family', '字体族') }}
       </h2>
       <div class="border-y border-border-soft">
         <div

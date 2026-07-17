@@ -1,10 +1,19 @@
 <script setup lang="ts">
 import { Moon, Sun } from 'lucide-vue-next'
 import { Button } from '#/components/button'
-import { NativeSelect } from '#/components/native-select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectItemText,
+  SelectTrigger,
+  SelectValue,
+} from '#/components/select'
+import { TextButton } from '#/components/text-button'
 import { ScrollArea } from '#/components/scroll-area'
 import { navGroups } from '../registry'
 import { navigate, route } from '../router'
+import { tt, setLocale, localeState } from '../lib/i18n'
 import type { Scheme } from '../theme'
 import { SCHEMES, setScheme, setTheme, themeState } from '../theme'
 import RowButton from './RowButton.vue'
@@ -20,7 +29,7 @@ import RowButton from './RowButton.vue'
           class="mb-3 last:mb-0"
         >
           <div class="px-2.5 pb-1 pt-2 text-caption text-muted-foreground first:pt-1">
-            {{ group.label }}
+            {{ tt(group.label, group.labelZh) }}
           </div>
           <RowButton
             v-for="page in group.pages"
@@ -28,37 +37,51 @@ import RowButton from './RowButton.vue'
             :active="route.id === page.id"
             @select="navigate(page.id)"
           >
-            {{ page.title }}
+            {{ tt(page.title, page.titleZh) }}
           </RowButton>
         </div>
       </div>
     </ScrollArea>
-    <!-- Theme + scheme live at the sidebar foot (the Aaru moon slot). Scheme
-         has no icon — the whole canvas IS the preview. -->
-    <div class="flex items-center justify-between gap-2 p-2">
+    <!-- Theme + locale + scheme live at the sidebar foot (the Aaru moon slot).
+         The scheme picker is the library's own Select — the showcase chrome
+         dogfoods the styled menu, never the OS-native popup. -->
+    <div class="flex items-center justify-between gap-1 p-2">
       <Button
         variant="ghost"
         size="icon-sm"
-        :aria-label="themeState.theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'"
+        :aria-label="themeState.theme === 'dark' ? tt('Switch to light theme', '切换到亮色主题') : tt('Switch to dark theme', '切换到暗色主题')"
         @click="setTheme(themeState.theme === 'dark' ? 'light' : 'dark')"
       >
         <Sun v-if="themeState.theme === 'dark'" />
         <Moon v-else />
       </Button>
-      <NativeSelect
-        size="sm"
-        aria-label="Color scheme"
+      <TextButton
+        :aria-label="tt('Switch language', '切换语言')"
+        @click="setLocale(localeState.locale === 'zh' ? 'en' : 'zh')"
+      >
+        {{ localeState.locale === 'zh' ? 'EN' : '中文' }}
+      </TextButton>
+      <Select
         :model-value="themeState.scheme"
         @update:model-value="setScheme(String($event) as Scheme)"
       >
-        <option
-          v-for="s in SCHEMES"
-          :key="s"
-          :value="s"
+        <SelectTrigger
+          size="sm"
+          class="w-28"
+          :aria-label="tt('Color scheme', '配色方案')"
         >
-          {{ s }}
-        </option>
-      </NativeSelect>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent size="sm">
+          <SelectItem
+            v-for="s in SCHEMES"
+            :key="s"
+            :value="s"
+          >
+            <SelectItemText>{{ s }}</SelectItemText>
+          </SelectItem>
+        </SelectContent>
+      </Select>
     </div>
   </aside>
 </template>

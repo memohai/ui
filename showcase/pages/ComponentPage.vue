@@ -47,6 +47,7 @@ const code = computed(() => (activeExample.value?.code ?? props.spec.code)(state
         v-model:expanded="expanded"
         :code="code"
         :usage="spec.usage"
+        :usage-zh="spec.usageZh"
       />
     </div>
     <ControlsPanel

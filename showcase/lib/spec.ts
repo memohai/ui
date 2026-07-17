@@ -49,6 +49,7 @@ export type ControlSpec = EnumControl | BooleanControl | NumberControl | StringC
 // one replaces the current state; further manual tweaks keep working.
 export interface ExampleSpec {
   name: string
+  nameZh?: string
   state?: Partial<SpecState>
   // Optional overrides for cases the default render/code can't express (e.g.
   // slot-heavy compositions like InputGroup adornments).
@@ -61,6 +62,8 @@ export interface ComponentSpec {
   name: string // 'Button'
   // 1–2 lines atop the Controls panel: what it IS, not how to use it.
   description: string
+  // zh translation of description; falls back to description when absent.
+  descriptionZh?: string
   controls: ControlSpec[]
   examples?: ExampleSpec[]
   render: (state: SpecState) => VNodeChild
@@ -69,6 +72,7 @@ export interface ComponentSpec {
   code: (state: SpecState) => string
   // Agent-facing do/don't notes; renders the Usage tab when present.
   usage?: string
+  usageZh?: string
 }
 
 export function defaultState(spec: ComponentSpec): SpecState {

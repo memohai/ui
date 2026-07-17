@@ -27,12 +27,15 @@ export const segmentedSpec: ComponentSpec = {
   name: 'SegmentedControl',
   description:
     'One value picked from a short row, with the elevated sliding thumb. A mode/filter selector — it owns no panels.',
+  descriptionZh:
+    '从短行中选一个值，滑块拇指带浮起感。它是模式/筛选选择器——不拥有面板。',
   controls: [
     { kind: 'enum', key: 'value', label: 'Value', options: BASIC_ITEMS.map(i => i.value), default: 'week', display: 'radio-list' },
   ],
   examples: [
     {
       name: 'Four items',
+      nameZh: '四个选项',
       state: { value: 'month' },
       render: state =>
         h(SegmentedControl, {
@@ -51,6 +54,7 @@ ${itemsCode(FOUR_ITEMS)}
     },
     {
       name: 'With a disabled item',
+      nameZh: '含禁用项',
       state: { value: 'week' },
       render: state =>
         h(SegmentedControl, {
@@ -87,4 +91,9 @@ ${itemsCode(BASIC_ITEMS)}
 - Day/Week/Month, List/Board, view toggles → SegmentedControl.
 - Switching panels of content → Tabs (underline style, never re-skinned as a pill).
 - The thumb is measured from the active item — widths just work, don't force equal widths.`,
+  usageZh: `SegmentedControl ≠ Tabs。Segmented 返回一个值(role="radiogroup"),不拥有内容;Tabs 切换面板并携带 tab 无障碍契约。
+
+- 日/周/月、列表/看板、视图切换 → SegmentedControl。
+- 切换内容面板 → Tabs(下划线样式,永远不要重画成药丸)。
+- 滑块拇指从激活项实测定位——宽度自然对齐,不要强行等宽。`,
 }

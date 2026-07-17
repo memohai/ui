@@ -30,6 +30,7 @@ import {
   X,
 } from 'lucide-vue-next'
 import { copyText } from '../../lib/clipboard'
+import { tt } from '../../lib/i18n'
 import { ICON_SIZE_LADDER } from '../../lib/foundations-data'
 
 // Every lucide icon the library itself renders (grep: src/ → lucide-vue-next),
@@ -81,7 +82,7 @@ async function copy(name: string) {
   <div class="mx-auto max-w-4xl p-8">
     <section class="mb-10">
       <h2 class="mb-3 text-label font-medium text-foreground">
-        Used by the library
+        {{ tt('Used by the library', '库内使用的图标') }}
       </h2>
       <div class="grid grid-cols-6 gap-2">
         <button
@@ -89,7 +90,7 @@ async function copy(name: string) {
           :key="name"
           type="button"
           class="flex cursor-pointer flex-col items-center gap-1.5 rounded-md py-3 hover:bg-(--ui-hover)"
-          :title="`Copy ${name}`"
+          :title="`${tt('Copy', '复制')} ${name}`"
           @click="copy(name)"
         >
           <component
@@ -97,20 +98,21 @@ async function copy(name: string) {
             class="size-4 text-foreground"
           />
           <span class="font-mono text-caption text-muted-foreground">
-            {{ copied === name ? 'Copied' : name }}
+            {{ copied === name ? tt('Copied', '已复制') : name }}
           </span>
         </button>
       </div>
       <p class="mt-3 text-body text-muted-foreground">
-        Icons are always lucide-vue-next components, never typed text glyphs —
-        a glyph can't receive the sizing ladder or the 2px stroke. Brand and
-        provider icons come from the host's @memohai/icon package.
+        {{ tt(
+          'Icons are always lucide-vue-next components, never typed text glyphs — a glyph can\'t receive the sizing ladder or the 2px stroke. Brand and provider icons come from the host\'s @memohai/icon package.',
+          '图标永远是 lucide-vue-next 组件,绝不是手打的文字符号——符号字符吃不到尺寸阶梯和 2px 描边。品牌/服务商图标来自宿主仓的 @memohai/icon 包。',
+        ) }}
       </p>
     </section>
 
     <section>
       <h2 class="mb-3 text-label font-medium text-foreground">
-        Size ladder
+        {{ tt('Size ladder', '尺寸阶梯') }}
       </h2>
       <div class="border-y border-border-soft">
         <div
@@ -122,14 +124,14 @@ async function copy(name: string) {
             <Search :style="{ width: `${s.px}px`, height: `${s.px}px` }" />
             {{ s.px }}px
           </span>
-          <span class="text-right text-body text-muted-foreground">{{ s.role }}</span>
+          <span class="text-right text-body text-muted-foreground">{{ tt(s.role, s.roleZh) }}</span>
         </div>
       </div>
       <p class="mt-3 text-body text-muted-foreground">
-        Pick the rung — never a free-set size. Containers pin it with
-        <span class="font-mono text-foreground">[&amp;_svg]:size-4</span>
-        (16px), <span class="font-mono text-foreground">size-3.5</span> (14px),
-        or <span class="font-mono text-foreground">size-3</span> (12px).
+        {{ tt(
+          'Pick the rung — never a free-set size. Containers pin it with [&_svg]:size-4 (16px), size-3.5 (14px), or size-3 (12px).',
+          '按档位选——绝不随手写尺寸。容器用 [&_svg]:size-4(16px)、size-3.5(14px)或 size-3(12px)统一固定。',
+        ) }}
       </p>
     </section>
   </div>

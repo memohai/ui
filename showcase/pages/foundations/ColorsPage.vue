@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { COLOR_SECTIONS } from '../../lib/color-catalog'
+import { tt } from '../../lib/i18n'
 import ColorSectionColumn from '../../components/ColorSectionColumn.vue'
 
 // Every swatch reads its value live from the cascade, so this page follows the
@@ -16,18 +17,18 @@ import ColorSectionColumn from '../../components/ColorSectionColumn.vue'
       class="mb-10 last:mb-0"
     >
       <h2 class="mb-3 text-label font-medium text-foreground">
-        {{ section.title }}
+        {{ tt(section.title, section.titleZh) }}
       </h2>
       <div class="grid grid-cols-2 gap-6">
         <div class="p-3">
           <div class="mb-2 text-caption text-muted-foreground">
-            Light
+            {{ tt('Light', '亮色') }}
           </div>
           <ColorSectionColumn :section="section" />
         </div>
         <div class="dark rounded-lg bg-background p-3">
           <div class="mb-2 text-caption text-muted-foreground">
-            Dark
+            {{ tt('Dark', '暗色') }}
           </div>
           <ColorSectionColumn :section="section" />
         </div>

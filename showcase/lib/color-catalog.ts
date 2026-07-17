@@ -16,6 +16,7 @@ export interface RampSpec {
 
 export interface ColorSection {
   title: string
+  titleZh: string
   rows?: string[]
   ramps?: RampSpec[]
 }
@@ -33,6 +34,7 @@ function ramp(prefix: string, roles: string[], label = prefix): RampSpec {
 export const COLOR_SECTIONS: ColorSection[] = [
   {
     title: 'Surfaces & text',
+    titleZh: '表面与文字',
     rows: [
       '--background',
       '--background-chrome',
@@ -48,6 +50,7 @@ export const COLOR_SECTIONS: ColorSection[] = [
   },
   {
     title: 'Edges & fields',
+    titleZh: '边缘与输入框',
     rows: [
       '--border',
       '--border-soft',
@@ -64,10 +67,12 @@ export const COLOR_SECTIONS: ColorSection[] = [
   },
   {
     title: 'Brand',
+    titleZh: '品牌色',
     rows: ['--brand', '--brand-soft', '--brand-border', '--brand-hover', '--sidebar-primary'],
   },
   {
     title: 'Status',
+    titleZh: '状态色',
     ramps: [
       ramp('--success', STATUS_ROLES),
       ramp('--warning', STATUS_ROLES),
@@ -77,6 +82,7 @@ export const COLOR_SECTIONS: ColorSection[] = [
   },
   {
     title: 'Accent palette',
+    titleZh: 'Accent 色板',
     ramps: [
       ...ACCENT_HUES.map(hue => ramp(`--accent-${hue}`, ACCENT_ROLES)),
       ramp('--accent-blue-fill', ['', 'hover', 'active']),
@@ -84,6 +90,7 @@ export const COLOR_SECTIONS: ColorSection[] = [
   },
   {
     title: 'Interaction overlays',
+    titleZh: '交互叠层',
     rows: [
       '--overlay-hover-light',
       '--overlay-hover',
@@ -100,6 +107,7 @@ export const COLOR_SECTIONS: ColorSection[] = [
   },
   {
     title: 'Buttons',
+    titleZh: '按钮',
     rows: [
       '--btn-primary',
       '--btn-primary-hover',
@@ -112,6 +120,7 @@ export const COLOR_SECTIONS: ColorSection[] = [
   },
   {
     title: 'Domain colors',
+    titleZh: '业务色板',
     ramps: [
       ramp('--event-schedule', DOMAIN_ROLES),
       ramp('--event-heartbeat', DOMAIN_ROLES),

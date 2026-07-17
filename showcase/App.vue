@@ -20,7 +20,10 @@ const currentSpec = computed(() => (current.value.kind === 'component' ? current
 
 <template>
   <div class="flex h-dvh flex-col bg-background text-foreground">
-    <TopBar :title="current.title" />
+    <TopBar
+      :title="current.title"
+      :title-zh="current.titleZh"
+    />
     <div class="flex min-h-0 flex-1">
       <SideNav />
       <!-- Static pages own their scroll container; ComponentPage owns its

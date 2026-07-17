@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { copyText } from '../lib/clipboard'
+import { tt } from '../lib/i18n'
 import type { RampSpec } from '../lib/color-catalog'
 
 // A color-ramp bar: one family (accent hue / status / domain palette) rendered
@@ -41,8 +42,8 @@ async function copy(token: string) {
         class="h-7 flex-1 cursor-pointer transition-opacity"
         :class="copiedToken === seg.token ? 'opacity-50' : ''"
         :style="{ background: `var(${seg.token})` }"
-        :title="`Copy ${seg.token}`"
-        :aria-label="`Copy ${seg.token}`"
+        :title="`${tt('Copy', '复制')} ${seg.token}`"
+        :aria-label="`${tt('Copy', '复制')} ${seg.token}`"
         @click="copy(seg.token)"
       />
     </div>

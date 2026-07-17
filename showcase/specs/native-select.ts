@@ -12,6 +12,8 @@ export const nativeSelectSpec: ComponentSpec = {
   name: 'NativeSelect',
   description:
     'The platform <select> under the same size/type ladder as Select — for dense toolbars that don’t need a menu surface.',
+  descriptionZh:
+    '原生 <select>，与 Select 共享尺寸/字阶——用于不需要菜单浮层的紧凑工具栏。',
   controls: [
     { kind: 'enum', key: 'size', label: 'Size', options: SIZES, default: 'default' },
     { kind: 'boolean', key: 'disabled', label: 'Disabled', default: false },

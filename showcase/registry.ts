@@ -13,39 +13,45 @@ import OverviewPage from './pages/OverviewPage.vue'
 
 // Single manifest: drives the sidebar groups, the hash routes, AND prev/next
 // order — one list, three consumers, so they can never drift.
+// Titles are English (the canonical component/page names); titleZh is the
+// localized twin rendered by the zh locale — component pages stay English-only
+// on purpose (they're API names, not prose).
 export type PageEntry =
-  | { kind: 'static', id: string, title: string, component: Component }
-  | { kind: 'component', id: string, title: string, spec: ComponentSpec }
+  | { kind: 'static', id: string, title: string, titleZh?: string, component: Component }
+  | { kind: 'component', id: string, title: string, titleZh?: string, spec: ComponentSpec }
 
 export interface NavGroup {
   id: string
   label: string
+  labelZh: string
   pages: PageEntry[]
 }
 
-function foundation(id: string, title: string, component: Component): PageEntry {
-  return { kind: 'static', id: `foundations/${id}`, title, component }
+function foundation(id: string, title: string, titleZh: string, component: Component): PageEntry {
+  return { kind: 'static', id: `foundations/${id}`, title, titleZh, component }
 }
 
 export const navGroups: NavGroup[] = [
   {
     id: 'foundations',
     label: 'Foundations',
+    labelZh: '基础',
     pages: [
-      { kind: 'static', id: 'overview', title: 'Overview', component: OverviewPage },
-      foundation('colors', 'Colors', ColorsPage),
-      foundation('typography', 'Typography', TypographyPage),
-      foundation('spacing', 'Spacing', SpacingPage),
-      foundation('radius', 'Radius', RadiusPage),
-      foundation('elevation', 'Elevation', ElevationPage),
-      foundation('motion', 'Motion', MotionPage),
-      foundation('layers', 'Layers', LayersPage),
-      foundation('icons', 'Icons', IconsPage),
+      { kind: 'static', id: 'overview', title: 'Overview', titleZh: '概览', component: OverviewPage },
+      foundation('colors', 'Colors', '颜色', ColorsPage),
+      foundation('typography', 'Typography', '字体', TypographyPage),
+      foundation('spacing', 'Spacing', '间距', SpacingPage),
+      foundation('radius', 'Radius', '圆角', RadiusPage),
+      foundation('elevation', 'Elevation', '阴影', ElevationPage),
+      foundation('motion', 'Motion', '动效', MotionPage),
+      foundation('layers', 'Layers', '层级', LayersPage),
+      foundation('icons', 'Icons', '图标', IconsPage),
     ],
   },
   {
     id: 'components',
     label: 'Components',
+    labelZh: '组件',
     pages: componentSpecs.map(spec => ({
       kind: 'component',
       id: `components/${spec.id}`,

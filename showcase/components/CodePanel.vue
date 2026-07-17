@@ -4,18 +4,21 @@ import { Check, ChevronDown, ChevronUp, Copy } from 'lucide-vue-next'
 import { Button } from '#/components/button'
 import { SegmentedControl } from '#/components/segmented'
 import type { SegmentedItem } from '#/components/segmented'
+import { tt } from '../lib/i18n'
 import CodeBlock from './CodeBlock.vue'
 
-const props = defineProps<{ code: string, usage?: string }>()
+const props = defineProps<{ code: string, usage?: string, usageZh?: string }>()
 const expanded = defineModel<boolean>('expanded', { default: false })
 
 const tab = ref<'code' | 'usage'>('code')
 // Usage stays visible-but-disabled when a spec has none — the tab row keeps a
 // stable shape across pages instead of appearing/disappearing per component.
 const tabs = computed<SegmentedItem<'code' | 'usage'>[]>(() => [
-  { value: 'code', label: 'Code' },
-  { value: 'usage', label: 'Usage', disabled: !props.usage },
+  { value: 'code', label: tt('Code', '代码') },
+  { value: 'usage', label: tt('Usage', '用法'), disabled: !props.usage },
 ])
+
+const usageText = computed(() => tt(props.usage ?? '', props.usageZh))
 
 const copied = ref(false)
 let timer: number | undefined
@@ -41,13 +44,13 @@ const firstLine = computed(() => props.code.split('\n')[0] ?? '')
       <SegmentedControl
         v-model="tab"
         :items="tabs"
-        aria-label="Code panel tab"
+        :aria-label="tt('Code panel tab', '代码面板标签')"
       />
       <div class="ml-auto flex items-center gap-0.5">
         <Button
           variant="ghost"
           size="icon-sm"
-          aria-label="Copy code"
+          :aria-label="tt('Copy code', '复制代码')"
           @click="copy"
         >
           <Check
@@ -59,7 +62,7 @@ const firstLine = computed(() => props.code.split('\n')[0] ?? '')
         <Button
           variant="ghost"
           size="icon-sm"
-          :aria-label="expanded ? 'Collapse code' : 'Expand code'"
+          :aria-label="expanded ? tt('Collapse code', '收起代码') : tt('Expand code', '展开代码')"
           @click="expanded = !expanded"
         >
           <ChevronDown v-if="expanded" />
@@ -79,7 +82,7 @@ const firstLine = computed(() => props.code.split('\n')[0] ?? '')
       class="max-h-96 overflow-auto px-3 pb-3"
     >
       <p class="text-body whitespace-pre-wrap text-muted-foreground">
-        {{ usage }}
+        {{ usageText }}
       </p>
     </div>
   </div>

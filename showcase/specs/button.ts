@@ -21,6 +21,8 @@ export const buttonSpec: ComponentSpec = {
   name: 'Button',
   description:
     'Triggers an action. The charcoal default is the high-emphasis CTA; brand purple is scarce and reserved for rare moments.',
+  descriptionZh:
+    '触发一个动作。深炭色 default 是高强调 CTA;brand 紫色稀缺，只留给极少数时刻。',
   controls: [
     {
       kind: 'enum',
@@ -49,6 +51,7 @@ export const buttonSpec: ComponentSpec = {
   examples: [
     {
       name: 'With icons',
+      nameZh: '带图标',
       render: () => [
         h(Button, () => [h(Plus), 'New']),
         h(Button, { variant: 'secondary' }, () => ['Continue', h(ArrowRight)]),
@@ -68,6 +71,7 @@ export const buttonSpec: ComponentSpec = {
     },
     {
       name: 'Loading modes',
+      nameZh: '加载模式',
       render: () => [
         h(Button, { loading: true }, () => 'Save changes'),
         h(Button, { variant: 'secondary', loading: true, loadingMode: 'icon' }, () => [h(RefreshCw), 'Sync']),
@@ -82,6 +86,7 @@ export const buttonSpec: ComponentSpec = {
     },
     {
       name: 'Icon buttons',
+      nameZh: '图标按钮',
       render: () => [
         h(Button, { size: 'icon-lg', 'aria-label': 'Add' }, () => h(Plus)),
         h(Button, { size: 'icon', 'aria-label': 'Add' }, () => h(Plus)),
@@ -127,4 +132,12 @@ export const buttonSpec: ComponentSpec = {
 - "Clickable text with a hover chip" is TextButton (ghost @ size="text"), not a hand-rolled hover on a span.
 - Icon-only buttons must carry an aria-label.
 - loading holds full color and blocks clicks; disabled fades to opacity-40. Busy ≠ disabled.`,
+  usageZh: `用 variant + size 表达意图,永远别手写 class。
+
+- default/primary 是深炭色高强调 CTA——一个界面最多一个。
+- brand 紫是稀缺色:只留给聊天发送键这类极少数时刻,绝不做默认填充。
+- destructive 是实心红 CTA,不是红字 ghost。
+- "可点击、带 hover 衬底的文字"是 TextButton(ghost @ size="text"),不是给 span 手写 hover。
+- 纯图标按钮必须带 aria-label。
+- loading 保持全色并屏蔽点击;disabled 降到 opacity-40。忙 ≠ 禁用。`,
 }

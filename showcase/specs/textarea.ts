@@ -10,6 +10,8 @@ export const textareaSpec: ComponentSpec = {
   name: 'Textarea',
   description:
     'Multi-line text field sharing the Input field-edge contract: one inset hairline, swapped in place on focus.',
+  descriptionZh:
+    '多行文本输入，与 Input 共享 field-edge 契约：一条内嵌发丝线，聚焦时原位换色。',
   controls: [
     { kind: 'enum', key: 'size', label: 'Size', options: SIZES, default: 'default' },
     { kind: 'string', key: 'placeholder', label: 'Placeholder', default: 'Tell the bot what to do…' },

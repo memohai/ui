@@ -1,9 +1,17 @@
 <script setup lang="ts">
 import type { ComponentSpec, ControlSpec, EnumControl, SpecState } from '../lib/spec'
 import { Input } from '#/components/input'
-import { NativeSelect } from '#/components/native-select'
 import { NumberField } from '#/components/number-field'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectItemText,
+  SelectTrigger,
+  SelectValue,
+} from '#/components/select'
 import { Switch } from '#/components/switch'
+import { tt } from '../lib/i18n'
 import RowButton from './RowButton.vue'
 
 const props = defineProps<{
@@ -24,7 +32,8 @@ function enabled(c: ControlSpec): boolean {
   return !c.when || c.when(props.state)
 }
 
-// ≤5 options → full-width radio rows (the Aaru look); longer lists → dropdown.
+// ≤5 options → full-width radio rows (the Aaru look); longer lists → the
+// library's own Select (never the OS-native popup).
 function enumDisplay(c: EnumControl): 'radio-list' | 'select' {
   return c.display ?? (c.options.length <= 5 ? 'radio-list' : 'select')
 }
@@ -33,12 +42,12 @@ function enumDisplay(c: EnumControl): 'radio-list' | 'select' {
 <template>
   <aside class="flex w-72 shrink-0 flex-col gap-5 overflow-y-auto border-l border-border p-4">
     <p class="text-body text-muted-foreground">
-      {{ spec.description }}
+      {{ tt(spec.description, spec.descriptionZh) }}
     </p>
 
     <div v-if="spec.examples?.length">
       <div class="mb-1 text-body text-muted-foreground">
-        Example
+        {{ tt('Example', '示例') }}
       </div>
       <RowButton
         v-for="ex in spec.examples"
@@ -46,7 +55,7 @@ function enumDisplay(c: EnumControl): 'radio-list' | 'select' {
         :active="example === ex.name"
         @select="emit('selectExample', ex.name)"
       >
-        {{ ex.name }}
+        {{ tt(ex.name, ex.nameZh) }}
       </RowButton>
     </div>
 
@@ -77,20 +86,27 @@ function enumDisplay(c: EnumControl): 'radio-list' | 'select' {
           class="text-control"
           :class="enabled(c) ? 'text-foreground' : 'text-muted-foreground'"
         >{{ c.label }}</label>
-        <NativeSelect
+        <Select
           v-if="c.kind === 'enum'"
-          size="sm"
           :model-value="String(state[c.key])"
           @update:model-value="emit('set', c.key, String($event))"
         >
-          <option
-            v-for="opt in c.options"
-            :key="opt"
-            :value="opt"
+          <SelectTrigger
+            size="sm"
+            class="w-32"
           >
-            {{ opt }}
-          </option>
-        </NativeSelect>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent size="sm">
+            <SelectItem
+              v-for="opt in c.options"
+              :key="opt"
+              :value="opt"
+            >
+              <SelectItemText>{{ opt }}</SelectItemText>
+            </SelectItem>
+          </SelectContent>
+        </Select>
         <Switch
           v-else-if="c.kind === 'boolean'"
           size="sm"

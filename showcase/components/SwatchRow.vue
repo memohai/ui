@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { copyText } from '../lib/clipboard'
+import { tt } from '../lib/i18n'
 import { useTokenValue } from '../lib/tokens'
 
 // One token row: swatch chip + mono name + live resolved value. Click copies
@@ -27,7 +28,7 @@ async function copy() {
     ref="el"
     type="button"
     class="flex w-full cursor-pointer items-center gap-3 rounded-md px-2 py-1.5 text-left hover:bg-(--ui-hover)"
-    :title="`Copy ${token}`"
+    :title="`${tt('Copy', '复制')} ${token}`"
     @click="copy"
   >
     <span
@@ -36,7 +37,7 @@ async function copy() {
     />
     <span class="font-mono text-body text-foreground">{{ token }}</span>
     <span class="ml-auto font-mono text-caption text-muted-foreground">
-      {{ copied ? 'Copied' : value }}
+      {{ copied ? tt('Copied', '已复制') : value }}
     </span>
   </button>
 </template>

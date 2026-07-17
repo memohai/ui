@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { MOTION_DURATIONS, MOTION_EASINGS } from '../../lib/foundations-data'
+import { tt } from '../../lib/i18n'
 </script>
 
 <template>
   <div class="mx-auto max-w-3xl p-8">
     <section class="mb-10">
       <h2 class="mb-3 text-label font-medium text-foreground">
-        Duration palette
+        {{ tt('Duration palette', '时长调色板') }}
       </h2>
       <p class="mb-3 text-body text-muted-foreground">
-        Durations aren't tokenized — the palette is law by convention
-        (AGENTS.md § Motion). Hover a row to feel it.
+        {{ tt(
+          'Durations aren\'t tokenized — the palette is law by convention (AGENTS.md § Motion). Hover a row to feel it.',
+          '时长没有令牌化——这份调色板是约定之法(AGENTS.md § Motion)。hover 任意一行感受它。',
+        ) }}
       </p>
       <div class="border-y border-border-soft">
         <div
@@ -18,7 +21,7 @@ import { MOTION_DURATIONS, MOTION_EASINGS } from '../../lib/foundations-data'
           :key="d.ms"
           class="group flex items-center justify-between gap-6 border-b border-border-soft py-2 last:border-b-0"
         >
-          <span class="text-body text-muted-foreground group-hover:text-foreground">{{ d.what }}</span>
+          <span class="text-body text-muted-foreground group-hover:text-foreground">{{ tt(d.what, d.whatZh) }}</span>
           <span class="flex items-center gap-3">
             <span
               class="inline-block h-2 w-8 rounded-sm transition-[width] ease-out group-hover:w-24"
@@ -32,7 +35,7 @@ import { MOTION_DURATIONS, MOTION_EASINGS } from '../../lib/foundations-data'
 
     <section class="mb-10">
       <h2 class="mb-3 text-label font-medium text-foreground">
-        Easings
+        {{ tt('Easings', '缓动') }}
       </h2>
       <div class="border-y border-border-soft">
         <div
@@ -41,23 +44,20 @@ import { MOTION_DURATIONS, MOTION_EASINGS } from '../../lib/foundations-data'
           class="flex items-baseline justify-between gap-6 border-b border-border-soft py-2 last:border-b-0"
         >
           <span class="text-body text-foreground">{{ e.name }}</span>
-          <span class="text-right font-mono text-caption text-muted-foreground">{{ e.value }} · {{ e.what }}</span>
+          <span class="text-right font-mono text-caption text-muted-foreground">{{ e.value }} · {{ tt(e.what, e.whatZh) }}</span>
         </div>
       </div>
     </section>
 
     <section>
       <h2 class="mb-3 text-label font-medium text-foreground">
-        Tailwind v4 gotcha
+        {{ tt('Tailwind v4 gotcha', 'Tailwind v4 陷阱') }}
       </h2>
       <p class="text-body text-muted-foreground">
-        v4 maps <span class="font-mono text-foreground">translate-x/y</span>,
-        <span class="font-mono text-foreground">scale</span>, and
-        <span class="font-mono text-foreground">rotate</span> to the standalone
-        CSS properties — NOT <span class="font-mono text-foreground">transform</span>.
-        A <span class="font-mono text-foreground">transition: transform</span>
-        won't animate them (it snaps). Transition the actual property:
-        <span class="font-mono text-foreground">transition: translate</span>.
+        {{ tt(
+          'v4 maps translate-x/y, scale, and rotate to the standalone CSS properties — NOT transform. A transition: transform won\'t animate them (it snaps). Transition the actual property: transition: translate.',
+          'v4 把 translate-x/y、scale、rotate 映射到独立的 CSS 属性——不是 transform。对 transform 做过渡不会生效(会瞬跳)。要对真实属性做过渡:transition: translate。',
+        ) }}
       </p>
     </section>
   </div>

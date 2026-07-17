@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { componentSpecs } from '../specs'
 import { navigate } from '../router'
+import { tt } from '../lib/i18n'
 import RowButton from '../components/RowButton.vue'
 
 // Status groups from AGENTS.md § Reference status — the source of truth for
@@ -14,19 +15,22 @@ const LEGACY = ['Badge (semantic fills)', 'Alert (semantic fills)', 'components/
   <div class="mx-auto max-w-3xl p-8">
     <section class="mb-10">
       <p class="max-w-xl text-control text-foreground">
-        The living reference for <span class="font-mono">@felinic/ui</span> —
-        every page renders the real component, and every control drives the
-        code snippet live.
+        {{ tt(
+          'The living reference for @felinic/ui — every page renders the real component, and every control drives the code snippet live.',
+          '@felinic/ui 的活文档——每一页渲染的都是真实组件,每个控件都实时驱动代码片段。',
+        ) }}
       </p>
       <p class="mt-2 max-w-xl text-body text-muted-foreground">
-        Theme and color scheme switch at the bottom of the sidebar; the
-        controls panel and code panel frame every component page.
+        {{ tt(
+          'Theme and color scheme switch at the bottom of the sidebar; the controls panel and code panel frame every component page.',
+          '主题与配色方案在侧栏底部切换;控件面板和代码面板框定每一个组件页。',
+        ) }}
       </p>
     </section>
 
     <section class="mb-10">
       <h2 class="mb-3 text-label font-medium text-foreground">
-        Reference — copy these
+        {{ tt('Reference — copy these', '标杆——照抄这些') }}
       </h2>
       <div class="grid grid-cols-2 gap-x-6">
         <RowButton
@@ -41,7 +45,7 @@ const LEGACY = ['Badge (semantic fills)', 'Alert (semantic fills)', 'components/
 
     <section class="mb-10">
       <h2 class="mb-3 text-label font-medium text-foreground">
-        In progress — check before use
+        {{ tt('In progress — check before use', '进行中——用前先确认') }}
       </h2>
       <p class="text-body text-muted-foreground">
         {{ IN_PROGRESS.join(' · ') }}
@@ -50,7 +54,7 @@ const LEGACY = ['Badge (semantic fills)', 'Alert (semantic fills)', 'components/
 
     <section>
       <h2 class="mb-3 text-label font-medium text-foreground">
-        Legacy — do not pattern-match
+        {{ tt('Legacy — do not pattern-match', '遗留——不要照抄') }}
       </h2>
       <p class="text-body text-muted-foreground">
         {{ LEGACY.join(' · ') }}

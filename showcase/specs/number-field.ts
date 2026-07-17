@@ -10,6 +10,8 @@ export const numberFieldSpec: ComponentSpec = {
   name: 'NumberField',
   description:
     'Numeric input with steppers inside the shared field edge. The ± buttons are real ghost Buttons — no hand-rolled hover.',
+  descriptionZh:
+    '共享 field edge 内的数字输入与步进器。± 按钮是真正的 ghost Button，没有手写 hover。',
   controls: [
     { kind: 'enum', key: 'size', label: 'Size', options: SIZES, default: 'default' },
     { kind: 'number', key: 'value', label: 'Value', default: 3, min: 0, max: 100 },

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { SPACING_STEPS } from '../../lib/foundations-data'
+import { tt } from '../../lib/i18n'
 
 // No custom spacing tokens exist — the system rides the Tailwind spacing
 // ladder (0.25rem base). What the contract legislates is rem-vs-px: anything
@@ -15,7 +16,7 @@ function rem(n: number): string {
   <div class="mx-auto max-w-3xl p-8">
     <section class="mb-10">
       <h2 class="mb-3 text-label font-medium text-foreground">
-        The rem ladder
+        {{ tt('The rem ladder', 'rem 阶梯') }}
       </h2>
       <div class="space-y-2">
         <div
@@ -35,19 +36,20 @@ function rem(n: number): string {
 
     <section>
       <h2 class="mb-3 text-label font-medium text-foreground">
-        rem, not px
+        {{ tt('rem, not px', '用 rem，不用 px') }}
       </h2>
       <div class="space-y-2 text-body text-muted-foreground">
         <p>
-          The root font size is <span class="font-mono text-foreground">var(--memoh-ui-font-size, 1rem)</span> —
-          the UI font-size control and browser zoom resize the whole UI through
-          rem. A hardcoded px on a text-coupled property (font size, control
-          height, padding, gaps) stops growing while the text around it grows.
+          {{ tt(
+            'The root font size is var(--memoh-ui-font-size, 1rem) — the UI font-size control and browser zoom resize the whole UI through rem. A hardcoded px on a text-coupled property (font size, control height, padding, gaps) stops growing while the text around it grows.',
+            '根字号是 var(--memoh-ui-font-size, 1rem)——界面字号设置和浏览器缩放都通过 rem 整体缩放 UI。写死 px 的文本相关属性(字号、控件高度、内距、间距)会在周围文字变大时停止跟随。',
+          ) }}
         </p>
         <p>
-          px is only for non-text decoration: 1–4px hairlines, icon sizes,
-          border/ring/translate offsets, and blur. JS layout (virtualizer
-          estimates, scroll offsets) must derive from the root font size too.
+          {{ tt(
+            'px is only for non-text decoration: 1–4px hairlines, icon sizes, border/ring/translate offsets, and blur. JS layout (virtualizer estimates, scroll offsets) must derive from the root font size too.',
+            'px 只用于非文本装饰:1–4px 发丝线、图标尺寸、border/ring/translate 偏移和模糊。JS 布局(虚拟列表行高、滚动偏移)同样要从根字号推导。',
+          ) }}
         </p>
       </div>
     </section>
