@@ -6,6 +6,9 @@ import ColorStack from '../../components/ColorStack.vue'
 // Every bar reads its value live from the cascade, so the page follows the
 // sidebar's theme/scheme pickers for free — there is deliberately no static
 // Light/Dark split: the pickers ARE the comparison tool.
+// Layout: single-family sections share the two-column page grid side by side;
+// multi-family sections (Status / Accent / Domain) span the full row with
+// their own inner family grid.
 </script>
 
 <template>
@@ -16,31 +19,33 @@ import ColorStack from '../../components/ColorStack.vue'
         '每个色条都实时读取级联中的 token——在侧栏切换主题或配色,整页跟随。悬停查看解析值,点击复制 token 名。',
       ) }}
     </p>
-    <section
-      v-for="section in COLOR_SECTIONS"
-      :key="section.title"
-      class="mb-10 last:mb-0"
-    >
-      <h2 class="mb-4 text-label font-medium text-foreground">
-        {{ tt(section.title, section.titleZh) }}
-      </h2>
-      <div
-        class="grid gap-5"
-        :class="section.families.length > 1 ? 'sm:grid-cols-2 xl:grid-cols-3' : 'sm:grid-cols-2'"
+    <div class="grid gap-x-5 gap-y-10 sm:grid-cols-2">
+      <section
+        v-for="section in COLOR_SECTIONS"
+        :key="section.title"
+        :class="{ 'sm:col-span-2': section.families.length > 1 }"
       >
+        <h2 class="mb-4 text-label font-medium text-foreground">
+          {{ tt(section.title, section.titleZh) }}
+        </h2>
         <div
-          v-for="(family, i) in section.families"
-          :key="family.label ?? i"
+          class="grid gap-5"
+          :class="section.families.length > 1 ? 'sm:grid-cols-2 xl:grid-cols-3' : ''"
         >
           <div
-            v-if="family.label"
-            class="mb-1.5 text-caption text-muted-foreground"
+            v-for="(family, i) in section.families"
+            :key="family.label ?? i"
           >
-            {{ tt(family.label, family.labelZh) }}
+            <div
+              v-if="family.label"
+              class="mb-1.5 text-caption text-muted-foreground"
+            >
+              {{ tt(family.label, family.labelZh) }}
+            </div>
+            <ColorStack :rows="family.rows" />
           </div>
-          <ColorStack :rows="family.rows" />
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   </div>
 </template>

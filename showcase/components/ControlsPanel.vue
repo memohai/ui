@@ -12,7 +12,7 @@ import {
 } from '#/components/select'
 import { Switch } from '#/components/switch'
 import { tt } from '../lib/i18n'
-import OptionRows from './OptionRows.vue'
+import RowButton from './RowButton.vue'
 
 const props = defineProps<{
   spec: ComponentSpec
@@ -49,11 +49,16 @@ function enumDisplay(c: EnumControl): 'radio-list' | 'select' {
       <div class="mb-1 text-body text-muted-foreground">
         {{ tt('Example', '示例') }}
       </div>
-      <OptionRows
-        :options="spec.examples.map(ex => ({ value: ex.name, label: tt(ex.name, ex.nameZh) }))"
-        :model-value="example"
-        @select="emit('selectExample', $event)"
-      />
+      <div class="flex flex-col gap-0.5">
+        <RowButton
+          v-for="ex in spec.examples"
+          :key="ex.name"
+          :active="example === ex.name"
+          @select="emit('selectExample', ex.name)"
+        >
+          {{ tt(ex.name, ex.nameZh) }}
+        </RowButton>
+      </div>
     </div>
 
     <div
@@ -65,11 +70,16 @@ function enumDisplay(c: EnumControl): 'radio-list' | 'select' {
         <div class="mb-1 text-body text-muted-foreground">
           {{ c.label }}
         </div>
-        <OptionRows
-          :options="c.options.map(opt => ({ value: opt, label: opt }))"
-          :model-value="String(state[c.key])"
-          @select="emit('set', c.key, $event)"
-        />
+        <div class="flex flex-col gap-0.5">
+          <RowButton
+            v-for="opt in c.options"
+            :key="opt"
+            :active="state[c.key] === opt"
+            @select="emit('set', c.key, opt)"
+          >
+            {{ opt }}
+          </RowButton>
+        </div>
       </template>
 
       <div

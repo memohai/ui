@@ -30,9 +30,6 @@ export const buttonSpec: ComponentSpec = {
       label: 'Variant',
       options: buttonVariantKeys,
       default: 'default',
-      // Ten options but the primary showcase axis — rows make browsing one
-      // click each instead of two.
-      display: 'radio-list',
     },
     { kind: 'enum', key: 'size', label: 'Size', options: buttonSizeKeys, default: 'default' },
     { kind: 'string', key: 'label', label: 'Label', default: 'Save changes' },

@@ -1,8 +1,18 @@
 <script setup lang="ts">
 import { componentSpecs } from '../specs'
+import { defaultState } from '../lib/spec'
 import { navigate } from '../router'
 import { tt } from '../lib/i18n'
-import RowButton from '../components/RowButton.vue'
+
+// The landing page is a LIVE index, not a link list: every Reference component
+// renders its default state inside its card. Previews are inert
+// (pointer-events-none) — the whole card is the link to the component page,
+// where the controls panel drives the live instance. State is created once
+// per card; nothing here ever mutates it.
+const cards = componentSpecs.map((spec) => {
+  const state = defaultState(spec)
+  return { spec, render: () => spec.render(state) }
+})
 
 // Status groups from AGENTS.md § Reference status — the source of truth for
 // "which components are safe to pattern-match off". This board makes the
@@ -12,7 +22,7 @@ const LEGACY = ['Badge (semantic fills)', 'Alert (semantic fills)', 'components/
 </script>
 
 <template>
-  <div class="mx-auto max-w-3xl p-8">
+  <div class="mx-auto max-w-5xl p-8">
     <section class="mb-10">
       <p class="max-w-xl text-control text-foreground">
         {{ tt(
@@ -32,14 +42,27 @@ const LEGACY = ['Badge (semantic fills)', 'Alert (semantic fills)', 'components/
       <h2 class="mb-3 text-label font-medium text-foreground">
         {{ tt('Reference — copy these', '标杆——照抄这些') }}
       </h2>
-      <div class="grid grid-cols-2 gap-x-6 gap-y-0.5">
-        <RowButton
-          v-for="spec in componentSpecs"
+      <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <button
+          v-for="{ spec, render } in cards"
           :key="spec.id"
-          @select="navigate(`components/${spec.id}`)"
+          type="button"
+          class="flex cursor-pointer flex-col rounded-lg border border-border-soft p-4 text-left transition-colors hover:bg-(--ui-hover)"
+          @click="navigate(`components/${spec.id}`)"
         >
-          {{ spec.name }}
-        </RowButton>
+          <div class="mb-1 text-label font-medium text-foreground">
+            {{ spec.name }}
+          </div>
+          <p class="mb-4 line-clamp-2 text-body text-muted-foreground">
+            {{ tt(spec.description, spec.descriptionZh) }}
+          </p>
+          <div
+            class="pointer-events-none mt-auto flex min-h-20 w-full items-center justify-center rounded-md border border-border-soft p-3"
+            aria-hidden="true"
+          >
+            <component :is="render" />
+          </div>
+        </button>
       </div>
     </section>
 
