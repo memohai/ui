@@ -12,7 +12,7 @@ import {
 } from '#/components/select'
 import { Switch } from '#/components/switch'
 import { tt } from '../lib/i18n'
-import RowButton from './RowButton.vue'
+import OptionRows from './OptionRows.vue'
 
 const props = defineProps<{
   spec: ComponentSpec
@@ -32,7 +32,7 @@ function enabled(c: ControlSpec): boolean {
   return !c.when || c.when(props.state)
 }
 
-// ≤5 options → full-width radio rows (the Aaru look); longer lists → the
+// ≤5 options → menu-vocabulary radio rows (OptionRows); longer lists → the
 // library's own Select (never the OS-native popup).
 function enumDisplay(c: EnumControl): 'radio-list' | 'select' {
   return c.display ?? (c.options.length <= 5 ? 'radio-list' : 'select')
@@ -49,14 +49,11 @@ function enumDisplay(c: EnumControl): 'radio-list' | 'select' {
       <div class="mb-1 text-body text-muted-foreground">
         {{ tt('Example', '示例') }}
       </div>
-      <RowButton
-        v-for="ex in spec.examples"
-        :key="ex.name"
-        :active="example === ex.name"
-        @select="emit('selectExample', ex.name)"
-      >
-        {{ tt(ex.name, ex.nameZh) }}
-      </RowButton>
+      <OptionRows
+        :options="spec.examples.map(ex => ({ value: ex.name, label: tt(ex.name, ex.nameZh) }))"
+        :model-value="example"
+        @select="emit('selectExample', $event)"
+      />
     </div>
 
     <div
@@ -68,14 +65,11 @@ function enumDisplay(c: EnumControl): 'radio-list' | 'select' {
         <div class="mb-1 text-body text-muted-foreground">
           {{ c.label }}
         </div>
-        <RowButton
-          v-for="opt in c.options"
-          :key="opt"
-          :active="state[c.key] === opt"
-          @select="emit('set', c.key, opt)"
-        >
-          {{ opt }}
-        </RowButton>
+        <OptionRows
+          :options="c.options.map(opt => ({ value: opt, label: opt }))"
+          :model-value="String(state[c.key])"
+          @select="emit('set', c.key, $event)"
+        />
       </template>
 
       <div

@@ -26,25 +26,32 @@ import RowButton from './RowButton.vue'
         <div
           v-for="group in navGroups"
           :key="group.id"
-          class="mb-3 last:mb-0"
+          class="mb-4 last:mb-0"
         >
-          <div class="px-2.5 pb-1 pt-2 text-caption text-muted-foreground first:pt-1">
+          <!-- Group label mirrors menuLabelClass's optical trick: pl-2 (not the
+               rows' px-2.5) so the smaller caption text lines up with the row
+               labels to the eye. -->
+          <div class="pt-3 pr-2.5 pb-1 pl-2 text-caption text-muted-foreground first:pt-1">
             {{ tt(group.label, group.labelZh) }}
           </div>
-          <RowButton
-            v-for="page in group.pages"
-            :key="page.id"
-            :active="route.id === page.id"
-            @select="navigate(page.id)"
-          >
-            {{ tt(page.title, page.titleZh) }}
-          </RowButton>
+          <!-- The 2px seam between rows is the chat sidebar's row rhythm:
+               adjacent selected/hover fills never fuse into one block. -->
+          <div class="flex flex-col gap-0.5">
+            <RowButton
+              v-for="page in group.pages"
+              :key="page.id"
+              :active="route.id === page.id"
+              @select="navigate(page.id)"
+            >
+              {{ tt(page.title, page.titleZh) }}
+            </RowButton>
+          </div>
         </div>
       </div>
     </ScrollArea>
-    <!-- Theme + locale + scheme live at the sidebar foot (the Aaru moon slot).
-         The scheme picker is the library's own Select — the showcase chrome
-         dogfoods the styled menu, never the OS-native popup. -->
+    <!-- Theme + locale + scheme live at the sidebar foot. The scheme picker is
+         the library's own Select — the showcase chrome dogfoods the styled
+         menu, never the OS-native popup. -->
     <div class="flex items-center justify-between gap-1 p-2">
       <Button
         variant="ghost"

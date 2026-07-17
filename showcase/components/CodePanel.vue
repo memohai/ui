@@ -2,21 +2,17 @@
 import { computed, ref } from 'vue'
 import { Check, ChevronDown, ChevronUp, Copy } from 'lucide-vue-next'
 import { Button } from '#/components/button'
-import { SegmentedControl } from '#/components/segmented'
-import type { SegmentedItem } from '#/components/segmented'
+import { Tabs, TabsList, TabsTrigger } from '#/components/tabs'
 import { tt } from '../lib/i18n'
 import CodeBlock from './CodeBlock.vue'
 
 const props = defineProps<{ code: string, usage?: string, usageZh?: string }>()
 const expanded = defineModel<boolean>('expanded', { default: false })
 
-const tab = ref<'code' | 'usage'>('code')
-// Usage stays visible-but-disabled when a spec has none — the tab row keeps a
-// stable shape across pages instead of appearing/disappearing per component.
-const tabs = computed<SegmentedItem<'code' | 'usage'>[]>(() => [
-  { value: 'code', label: tt('Code', '代码') },
-  { value: 'usage', label: tt('Usage', '用法'), disabled: !props.usage },
-])
+// Code/Usage is panel switching, so it uses the library's Tabs (pill variant —
+// the enclosed segment chrome) rather than a value-picker: AGENTS.md reaches
+// for Tabs when switching panels.
+const tab = ref('code')
 
 const usageText = computed(() => tt(props.usage ?? '', props.usageZh))
 
@@ -41,11 +37,25 @@ const firstLine = computed(() => props.code.split('\n')[0] ?? '')
 <template>
   <div class="shrink-0 border-t border-border">
     <div class="flex h-11 items-center gap-2 px-3">
-      <SegmentedControl
-        v-model="tab"
-        :items="tabs"
-        :aria-label="tt('Code panel tab', '代码面板标签')"
-      />
+      <!-- Usage stays visible-but-disabled when a spec has none — the tab row
+           keeps a stable shape across pages instead of appearing/disappearing
+           per component. -->
+      <Tabs v-model="tab">
+        <TabsList
+          variant="pill"
+          :aria-label="tt('Code panel tab', '代码面板标签')"
+        >
+          <TabsTrigger value="code">
+            {{ tt('Code', '代码') }}
+          </TabsTrigger>
+          <TabsTrigger
+            value="usage"
+            :disabled="!usage"
+          >
+            {{ tt('Usage', '用法') }}
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
       <div class="ml-auto flex items-center gap-0.5">
         <Button
           variant="ghost"

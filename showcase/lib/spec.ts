@@ -20,7 +20,7 @@ export interface EnumControl extends ControlBase {
   kind: 'enum'
   options: readonly string[]
   default: string
-  // radio-list = full-width rows (≤5 options, the Aaru look); select = a
+  // radio-list = full-width menu-vocabulary rows (≤5 options); select = a
   // right-aligned dropdown for longer lists. Default picks by option count.
   display?: 'radio-list' | 'select'
 }

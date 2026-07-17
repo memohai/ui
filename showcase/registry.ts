@@ -67,7 +67,7 @@ export function pageById(id: string): PageEntry | undefined {
   return flatPages.find(p => p.id === id)
 }
 
-// Prev/next follow the flat manifest order across groups (like Aaru's arrows).
+// Prev/next follow the flat manifest order across groups, ignoring group boundaries.
 export function neighbor(id: string, delta: -1 | 1): PageEntry | undefined {
   const i = flatPages.findIndex(p => p.id === id)
   return i === -1 ? undefined : flatPages[i + delta]

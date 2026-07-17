@@ -32,7 +32,7 @@ const LEGACY = ['Badge (semantic fills)', 'Alert (semantic fills)', 'components/
       <h2 class="mb-3 text-label font-medium text-foreground">
         {{ tt('Reference — copy these', '标杆——照抄这些') }}
       </h2>
-      <div class="grid grid-cols-2 gap-x-6">
+      <div class="grid grid-cols-2 gap-x-6 gap-y-0.5">
         <RowButton
           v-for="spec in componentSpecs"
           :key="spec.id"
