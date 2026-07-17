@@ -827,6 +827,36 @@ Remaining (non-blocking) TODOs:
 - SegmentedControl disabled uses CSS `opacity: 0.5`; the contract says 40 — unify
   to `0.4` if/when the maintainer agrees it's not part of its personality.
 
+## The showcase (`showcase/`)
+
+`pnpm dev` serves the module's living reference: a custom, spec-driven
+showcase (foundations pages + one page per component with live controls, live
+Vue code generation, and light/dark × 5-scheme switching). It replaced
+Storybook (removed — 3 stale stories, zero remaining value over the dev wall).
+
+Rules for adding or changing a component page:
+
+- **One spec per component** in `showcase/specs/<name>.ts`, registered in
+  `showcase/specs/index.ts` (order = sidebar order). The spec declares
+  `controls`, optional `examples`, `render(state)`, `code(state)`, and
+  optional `usage` — the Controls panel, canvas, and Code panel all derive
+  from it.
+- **Control options come from the component's exported key arrays**
+  (`buttonVariantKeys`, `toggleVariantKeys`, …) — never a hand-copied list.
+  If a component doesn't export its keys, add the export next to its cva call
+  (the `*Keys` pattern) rather than duplicating the list in the spec.
+- **`code()` is hand-written per spec** (with the `strAttr`/`boolAttr`/
+  `numAttr` helpers), not a generic serializer — snippet quality is the point,
+  and the snippet must mirror exactly what `render()` shows.
+- **The shell dogfoods the library**: sidebar/controls/code chrome is built
+  from `@felinic/ui` components and follows this contract (tokens only, rem on
+  text-coupled sizes, the z ladder, `[data-ui-selected]` for selected rows).
+  The host guard scans `showcase/` the same as `src/`.
+- Foundation page data is either **live** (Colors/Elevation read resolved
+  values from the cascade via `useTokenValue` — never transcribe values) or
+  **static constants** (`showcase/lib/foundations-data.ts`, transcribed from
+  `style.css` / this file — update it when the source changes).
+
 ## Extending this contract
 
 When you lock a new cross-cutting decision (a color role, a duration, an icon
