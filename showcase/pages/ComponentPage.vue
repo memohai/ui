@@ -13,7 +13,6 @@ const props = defineProps<{ spec: ComponentSpec }>()
 const state = reactive<SpecState>(defaultState(props.spec))
 const example = ref<string>()
 const viewport = ref<'desktop' | 'tablet' | 'mobile'>('desktop')
-const expanded = ref(false)
 
 const activeExample = computed(() => props.spec.examples?.find(e => e.name === example.value))
 
@@ -44,7 +43,6 @@ const code = computed(() => (activeExample.value?.code ?? props.spec.code)(state
         <component :is="rendered" />
       </CanvasStage>
       <CodePanel
-        v-model:expanded="expanded"
         :code="code"
         :usage="spec.usage"
         :usage-zh="spec.usageZh"

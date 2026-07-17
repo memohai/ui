@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Check, ChevronDown, ChevronUp, Copy } from 'lucide-vue-next'
+import { Check, Copy } from 'lucide-vue-next'
 import { Button } from '#/components/button'
 import { Tabs, TabsList, TabsTrigger } from '#/components/tabs'
 import { tt } from '../lib/i18n'
 import CodeBlock from './CodeBlock.vue'
 
 const props = defineProps<{ code: string, usage?: string, usageZh?: string }>()
-const expanded = defineModel<boolean>('expanded', { default: false })
 
 // Code/Usage is panel switching, so it uses the library's Tabs (pill variant —
 // the enclosed segment chrome) rather than a value-picker: AGENTS.md reaches
@@ -30,11 +29,12 @@ async function copy() {
     // toast for this — the icon simply doesn't flip.
   }
 }
-
-const firstLine = computed(() => props.code.split('\n')[0] ?? '')
 </script>
 
 <template>
+  <!-- No collapse toggle: a one-line "collapsed" preview carried no
+       information and only added a state to manage. The snippet is always
+       fully visible; long ones scroll inside a capped height. -->
   <div class="shrink-0 border-t border-border">
     <div class="flex h-11 items-center gap-2 px-3">
       <!-- Usage stays visible-but-disabled when a spec has none — the tab row
@@ -56,40 +56,29 @@ const firstLine = computed(() => props.code.split('\n')[0] ?? '')
           </TabsTrigger>
         </TabsList>
       </Tabs>
-      <div class="ml-auto flex items-center gap-0.5">
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          :aria-label="tt('Copy code', '复制代码')"
-          @click="copy"
-        >
-          <Check
-            v-if="copied"
-            class="text-(--accent-green)"
-          />
-          <Copy v-else />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          :aria-label="expanded ? tt('Collapse code', '收起代码') : tt('Expand code', '展开代码')"
-          @click="expanded = !expanded"
-        >
-          <ChevronDown v-if="expanded" />
-          <ChevronUp v-else />
-        </Button>
-      </div>
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        class="ml-auto"
+        :aria-label="tt('Copy code', '复制代码')"
+        @click="copy"
+      >
+        <Check
+          v-if="copied"
+          class="text-(--accent-green)"
+        />
+        <Copy v-else />
+      </Button>
     </div>
     <div
       v-if="tab === 'code'"
-      class="px-3 pb-3"
-      :class="expanded ? 'max-h-96 overflow-auto' : 'max-h-8 overflow-hidden'"
+      class="max-h-96 overflow-auto px-3 pt-1 pb-3"
     >
-      <CodeBlock :code="expanded ? code : firstLine" />
+      <CodeBlock :code="code" />
     </div>
     <div
       v-else
-      class="max-h-96 overflow-auto px-3 pb-3"
+      class="max-h-96 overflow-auto px-3 pt-1 pb-3"
     >
       <p class="text-body whitespace-pre-wrap text-muted-foreground">
         {{ usageText }}
