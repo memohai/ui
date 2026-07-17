@@ -36,9 +36,9 @@ export const fieldSpec: ComponentSpec = {
     const lines = [
       `<Field${boolAttr('invalid', Boolean(state.invalid))}>`,
       `  <FieldLabel${boolAttr('required', Boolean(state.required))}>${state.label}</FieldLabel>`,
-      `  <FieldControl>`,
+      '  <FieldControl>',
       `    <Input${strAttr('placeholder', String(state.placeholder), '')} />`,
-      `  </FieldControl>`,
+      '  </FieldControl>',
     ]
     if (state.description) lines.push(`  <FieldDescription>${DESCRIPTION}</FieldDescription>`)
     if (state.invalid) lines.push(`  <FieldError>${ERROR}</FieldError>`)
