@@ -1,6 +1,14 @@
 import type { Component } from 'vue'
 import type { ComponentSpec } from './lib/spec'
 import { componentSpecs } from './specs'
+import ColorsPage from './pages/foundations/ColorsPage.vue'
+import ElevationPage from './pages/foundations/ElevationPage.vue'
+import IconsPage from './pages/foundations/IconsPage.vue'
+import LayersPage from './pages/foundations/LayersPage.vue'
+import MotionPage from './pages/foundations/MotionPage.vue'
+import RadiusPage from './pages/foundations/RadiusPage.vue'
+import SpacingPage from './pages/foundations/SpacingPage.vue'
+import TypographyPage from './pages/foundations/TypographyPage.vue'
 import OverviewPage from './pages/OverviewPage.vue'
 
 // Single manifest: drives the sidebar groups, the hash routes, AND prev/next
@@ -15,14 +23,24 @@ export interface NavGroup {
   pages: PageEntry[]
 }
 
+function foundation(id: string, title: string, component: Component): PageEntry {
+  return { kind: 'static', id: `foundations/${id}`, title, component }
+}
+
 export const navGroups: NavGroup[] = [
   {
     id: 'foundations',
     label: 'Foundations',
     pages: [
       { kind: 'static', id: 'overview', title: 'Overview', component: OverviewPage },
-      // Colors / Typography / Spacing / Radius / Elevation / Motion / Layers /
-      // Icons entries land with their pages (Task 5).
+      foundation('colors', 'Colors', ColorsPage),
+      foundation('typography', 'Typography', TypographyPage),
+      foundation('spacing', 'Spacing', SpacingPage),
+      foundation('radius', 'Radius', RadiusPage),
+      foundation('elevation', 'Elevation', ElevationPage),
+      foundation('motion', 'Motion', MotionPage),
+      foundation('layers', 'Layers', LayersPage),
+      foundation('icons', 'Icons', IconsPage),
     ],
   },
   {
