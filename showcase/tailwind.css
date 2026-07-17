@@ -1,0 +1,9 @@
+/* Showcase Tailwind entry — mirrors apps/web (and the old .storybook/tailwind.css)
+   so the showcase renders with the exact same utilities + design tokens as the
+   real app. The token law in AGENTS.md applies to showcase/ the same as src/. */
+@import "tailwindcss";
+@import "../src/style.css";
+
+/* Tailwind v4 content scan: library source + the showcase app itself. */
+@source "../src";
+@source "../showcase";
