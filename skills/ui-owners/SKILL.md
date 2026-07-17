@@ -267,6 +267,21 @@ Same discipline, narrower home — compose these when working on their surface:
   prop for the `bg-surface-editor` panels (file/preview/asset); `#header`
   for a top strip like PanelBreadcrumb. New dock panels compose it — never
   hand-write the shell).
+- **chat composer dock** (`pages/home/components/`): everything anchored above
+  the chat input box is owned here — `composer-dock.vue` (ComposerDock, the
+  orchestrator: owns the box-slot mutex — composer by default, the ask_user
+  capsule while the agent is asking — plus backdrop-mask geometry and all
+  visibility/height logic; the composer is the ONE special member, injected
+  via slot because it owns its radius/height morph), `composer-panel.vue`
+  (ComposerPanel, the stack tier: approvals / command results / composer
+  errors as hairline-separated sections of ONE capsule), and
+  `composer-capsule.vue` (ComposerCapsule, the ONLY dock shell — the
+  input-group edge + surface-composer + 20px radius lives nowhere else).
+  Adding a new dock member = write a `composer-panel-*.vue` section component
+  (content only, like `composer-panel-error.vue`'s 17 lines) + register one
+  branch in the panel's `sections` computed. Never hand-write the capsule
+  chrome, the mask measurement, or ad-hoc `v-if` stacking above the composer
+  again — that is how the four hand-shelled cards this replaced drifted.
 - **chat tool-call** (`pages/home/components/tool-detail/`): `empty-row.vue`,
   `preview-box.vue` (max-h-48), `header-row.vue` (collapsible row, tone axis,
   `nested` for button-in-button), `expand-chevron.vue`, `capsule.vue`
