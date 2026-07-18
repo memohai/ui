@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import type { ComponentSpec, SpecState } from '../lib/spec'
-import { computed, reactive, ref } from 'vue'
+import { computed, h, reactive, ref } from 'vue'
+import { SegmentedControl } from '#/components/segmented'
 import { defaultState } from '../lib/spec'
 import { shellState } from '../shell'
+import { tt } from '../lib/i18n'
 import CanvasStage from '../components/CanvasStage.vue'
 import CodePanel from '../components/CodePanel.vue'
 import ControlsPanel from '../components/ControlsPanel.vue'
@@ -13,6 +15,7 @@ const props = defineProps<{ spec: ComponentSpec }>()
 const state = reactive<SpecState>(defaultState(props.spec))
 const example = ref<string>()
 const viewport = ref<'desktop' | 'tablet' | 'mobile'>('desktop')
+const stageMode = ref<'single' | 'examples' | 'matrix'>('single')
 
 const activeExample = computed(() => props.spec.examples?.find(e => e.name === example.value))
 
@@ -34,13 +37,81 @@ function selectExample(name: string) {
 
 const rendered = computed(() => (activeExample.value?.render ?? props.spec.render)(state))
 const code = computed(() => (activeExample.value?.code ?? props.spec.code)(state))
+
+// ── Stage modes ─────────────────────────────────────────────────────────────
+// 'single' is the live instance the controls drive. 'examples' tiles every
+// preset with its label — frozen at each preset's state, deliberately NOT
+// live: a preset wall answers "what states exist", the controls answer "what
+// happens when I tweak". 'matrix' crosses two declared axes over defaults.
+const modeItems = computed(() => [
+  { value: 'single', label: tt('Single', '单个') },
+  ...(props.spec.examples?.length ? [{ value: 'examples', label: tt('Examples', '示例') }] : []),
+  ...(props.spec.matrix ? [{ value: 'matrix', label: tt('Matrix', '矩阵') }] : []),
+])
+
+function axisValues(key: string): Array<string | boolean> {
+  const c = props.spec.controls.find(c => c.key === key)
+  if (c?.kind === 'enum') return [...c.options]
+  if (c?.kind === 'boolean') return [false, true]
+  return []
+}
+
+const examplesBody = computed(() =>
+  h('div', { class: 'flex w-full flex-col gap-8' },
+    (props.spec.examples ?? []).map(ex =>
+      h('div', {}, [
+        h('div', { class: 'mb-2 text-body font-medium text-muted-foreground' }, tt(ex.name, ex.nameZh)),
+        // Children wrapped in an array: a bare VNodeChild can be null, which
+        // h()'s RawChildren rejects; VNodeArrayChildren allows it.
+        h('div', { class: 'flex flex-wrap items-center gap-3' }, [
+          (ex.render ?? props.spec.render)(Object.assign(defaultState(props.spec), ex.state)),
+        ]),
+      ]),
+    ),
+  ),
+)
+
+const matrixBody = computed(() => {
+  const m = props.spec.matrix!
+  const rowVals = axisValues(m.rows)
+  const colVals = axisValues(m.cols)
+  return h('div', {
+    class: 'inline-grid items-center gap-x-6 gap-y-4',
+    style: { gridTemplateColumns: `repeat(${colVals.length + 1}, auto)` },
+  }, [
+    h('span'),
+    ...colVals.map(c => h('span', { class: 'text-center text-body font-medium text-muted-foreground' }, String(c))),
+    ...rowVals.flatMap(r => [
+      h('span', { class: 'text-body font-medium text-muted-foreground' }, String(r)),
+      ...colVals.map(c => h('span', { class: 'flex items-center justify-center' }, [
+        props.spec.render(Object.assign(defaultState(props.spec), { [m.rows]: r, [m.cols]: c })),
+      ])),
+    ]),
+  ])
+})
+
+const body = computed(() => {
+  if (stageMode.value === 'examples' && props.spec.examples?.length) return examplesBody.value
+  if (stageMode.value === 'matrix' && props.spec.matrix) return matrixBody.value
+  return rendered.value
+})
 </script>
 
 <template>
   <div class="flex min-h-0 min-w-0 flex-1">
     <div class="flex min-w-0 flex-1 flex-col">
       <CanvasStage v-model="viewport">
-        <component :is="rendered" />
+        <component :is="body" />
+        <template
+          v-if="modeItems.length > 1"
+          #modes
+        >
+          <SegmentedControl
+            v-model="stageMode"
+            :items="modeItems"
+            :aria-label="tt('Stage view', '画布视图')"
+          />
+        </template>
       </CanvasStage>
       <CodePanel
         :code="code"

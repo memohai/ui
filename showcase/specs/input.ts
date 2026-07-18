@@ -27,6 +27,7 @@ export const inputSpec: ComponentSpec = {
     { kind: 'string', key: 'value', label: 'Value', default: '' },
     { kind: 'boolean', key: 'disabled', label: 'Disabled', default: false },
   ],
+  matrix: { rows: 'size', cols: 'emphasis' },
   render: state =>
     h(Input, {
       // defaultValue + key: editing the Value control remounts the field with

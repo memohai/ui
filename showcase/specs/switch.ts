@@ -19,6 +19,7 @@ export const switchSpec: ComponentSpec = {
     { kind: 'boolean', key: 'disabled', label: 'Disabled', default: false },
     { kind: 'string', key: 'label', label: 'Label', default: 'Enable heartbeat' },
   ],
+  matrix: { rows: 'size', cols: 'checked' },
   render: state =>
     h('div', { class: 'flex items-center gap-2' }, [
       h(Switch, {

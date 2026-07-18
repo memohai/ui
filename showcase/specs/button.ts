@@ -45,6 +45,8 @@ export const buttonSpec: ComponentSpec = {
     { kind: 'boolean', key: 'disabled', label: 'Disabled', default: false },
     { kind: 'boolean', key: 'block', label: 'Block', default: false },
   ],
+  // The canonical review grid: every variant in every size.
+  matrix: { rows: 'variant', cols: 'size' },
   examples: [
     {
       name: 'With icons',

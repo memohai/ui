@@ -66,6 +66,12 @@ export interface ComponentSpec {
   descriptionZh?: string
   controls: ControlSpec[]
   examples?: ExampleSpec[]
+  // Optional stage matrix: cross two control axes over spec defaults so the
+  // full variant grid is visible at once (Button: variant × size). rows/cols
+  // are control keys — enum controls contribute their options, booleans
+  // contribute [false, true]. Opt-in per spec: only axes a reviewer actually
+  // scans belong in a matrix.
+  matrix?: { rows: string, cols: string }
   render: (state: SpecState) => VNodeChild
   // Live Vue snippet mirroring exactly what render() shows. Hand-written per
   // spec (not a generic serializer) — snippet quality is the whole point.
