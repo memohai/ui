@@ -70,19 +70,21 @@ async function copy() {
         <Copy v-else />
       </Button>
     </div>
-    <div
-      v-if="tab === 'code'"
-      class="max-h-96 overflow-auto px-3 pt-1 pb-3"
-    >
-      <CodeBlock :code="code" />
-    </div>
-    <div
-      v-else
-      class="max-h-96 overflow-auto px-3 pt-1 pb-3"
-    >
-      <p class="text-body whitespace-pre-wrap text-muted-foreground">
-        {{ usageText }}
-      </p>
+    <!-- Both tabs share one frame: bare content on the page background reads
+         as stray prose, not panel content. muted-soft lifts it one rung. -->
+    <div class="px-3 pt-1 pb-3">
+      <div class="max-h-96 overflow-auto rounded-lg border border-border-soft bg-(--muted-soft) px-3 py-2.5">
+        <CodeBlock
+          v-if="tab === 'code'"
+          :code="code"
+        />
+        <p
+          v-else
+          class="text-body whitespace-pre-wrap text-muted-foreground"
+        >
+          {{ usageText }}
+        </p>
+      </div>
     </div>
   </div>
 </template>
