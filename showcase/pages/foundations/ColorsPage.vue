@@ -25,7 +25,7 @@ import ColorStack from '../../components/ColorStack.vue'
         :key="section.title"
         :class="{ 'sm:col-span-2': section.families.length > 1 }"
       >
-        <h2 class="mb-4 text-label font-medium text-foreground">
+        <h2 class="mb-4 text-title font-semibold text-foreground">
           {{ tt(section.title, section.titleZh) }}
         </h2>
         <div

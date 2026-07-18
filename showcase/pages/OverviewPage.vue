@@ -39,7 +39,7 @@ const LEGACY = ['Badge (semantic fills)', 'Alert (semantic fills)', 'components/
     </section>
 
     <section class="mb-10">
-      <h2 class="mb-3 text-label font-medium text-foreground">
+      <h2 class="mb-3 text-title font-semibold text-foreground">
         {{ tt('Reference — copy these', '标杆——照抄这些') }}
       </h2>
       <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -50,7 +50,7 @@ const LEGACY = ['Badge (semantic fills)', 'Alert (semantic fills)', 'components/
           class="flex cursor-pointer flex-col rounded-lg border border-border-soft p-4 text-left transition-colors hover:bg-(--ui-hover)"
           @click="navigate(`components/${spec.id}`)"
         >
-          <div class="mb-1 text-label font-medium text-foreground">
+          <div class="mb-1 text-title font-semibold text-foreground">
             {{ spec.name }}
           </div>
           <p class="mb-4 line-clamp-2 text-body text-muted-foreground">
@@ -67,7 +67,7 @@ const LEGACY = ['Badge (semantic fills)', 'Alert (semantic fills)', 'components/
     </section>
 
     <section class="mb-10">
-      <h2 class="mb-3 text-label font-medium text-foreground">
+      <h2 class="mb-3 text-title font-semibold text-foreground">
         {{ tt('In progress — check before use', '进行中——用前先确认') }}
       </h2>
       <p class="text-body text-muted-foreground">
@@ -76,7 +76,7 @@ const LEGACY = ['Badge (semantic fills)', 'Alert (semantic fills)', 'components/
     </section>
 
     <section>
-      <h2 class="mb-3 text-label font-medium text-foreground">
+      <h2 class="mb-3 text-title font-semibold text-foreground">
         {{ tt('Legacy — do not pattern-match', '遗留——不要照抄') }}
       </h2>
       <p class="text-body text-muted-foreground">

@@ -40,13 +40,13 @@ function enumDisplay(c: EnumControl): 'radio-list' | 'select' {
 </script>
 
 <template>
-  <aside class="flex w-72 shrink-0 flex-col gap-5 overflow-y-auto border-l border-border p-4">
+  <div class="flex w-72 flex-1 flex-col gap-5 overflow-y-auto p-4">
     <p class="text-body text-muted-foreground">
       {{ tt(spec.description, spec.descriptionZh) }}
     </p>
 
     <div v-if="spec.examples?.length">
-      <div class="mb-1 text-body text-muted-foreground">
+      <div class="mb-1 text-body font-medium text-muted-foreground">
         {{ tt('Example', '示例') }}
       </div>
       <div class="flex flex-col gap-0.5">
@@ -67,7 +67,7 @@ function enumDisplay(c: EnumControl): 'radio-list' | 'select' {
       :class="{ 'pointer-events-none opacity-40': !enabled(c) }"
     >
       <template v-if="c.kind === 'enum' && enumDisplay(c) === 'radio-list'">
-        <div class="mb-1 text-body text-muted-foreground">
+        <div class="mb-1 text-body font-medium text-muted-foreground">
           {{ c.label }}
         </div>
         <div class="flex flex-col gap-0.5">
@@ -87,7 +87,7 @@ function enumDisplay(c: EnumControl): 'radio-list' | 'select' {
         class="flex items-center justify-between gap-3 py-1"
       >
         <label
-          class="text-control"
+          class="text-label font-medium"
           :class="enabled(c) ? 'text-foreground' : 'text-muted-foreground'"
         >{{ c.label }}</label>
         <Select
@@ -136,5 +136,5 @@ function enumDisplay(c: EnumControl): 'radio-list' | 'select' {
         />
       </div>
     </div>
-  </aside>
+  </div>
 </template>

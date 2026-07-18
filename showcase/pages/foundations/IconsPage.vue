@@ -81,7 +81,7 @@ async function copy(name: string) {
 <template>
   <div class="mx-auto max-w-4xl p-8">
     <section class="mb-10">
-      <h2 class="mb-3 text-label font-medium text-foreground">
+      <h2 class="mb-3 text-title font-semibold text-foreground">
         {{ tt('Used by the library', '库内使用的图标') }}
       </h2>
       <div class="grid grid-cols-6 gap-2">
@@ -111,7 +111,7 @@ async function copy(name: string) {
     </section>
 
     <section>
-      <h2 class="mb-3 text-label font-medium text-foreground">
+      <h2 class="mb-3 text-title font-semibold text-foreground">
         {{ tt('Size ladder', '尺寸阶梯') }}
       </h2>
       <div class="border-y border-border-soft">

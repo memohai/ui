@@ -5,7 +5,6 @@ import { initRouter, route } from './router'
 import { applyTheme, themeState } from './theme'
 import ComponentPage from './pages/ComponentPage.vue'
 import SideNav from './components/SideNav.vue'
-import TopBar from './components/TopBar.vue'
 
 initRouter('overview', id => !!pageById(id))
 
@@ -19,26 +18,20 @@ const currentSpec = computed(() => (current.value.kind === 'component' ? current
 </script>
 
 <template>
-  <div class="flex h-dvh flex-col bg-background text-foreground">
-    <TopBar
-      :title="current.title"
-      :title-zh="current.titleZh"
+  <div class="flex h-dvh bg-background text-foreground">
+    <SideNav />
+    <!-- Static pages own their scroll container; ComponentPage owns its
+         canvas/controls/code chrome. -->
+    <main
+      v-if="staticComponent"
+      class="min-w-0 flex-1 overflow-y-auto"
+    >
+      <component :is="staticComponent" />
+    </main>
+    <ComponentPage
+      v-else-if="currentSpec"
+      :key="currentSpec.id"
+      :spec="currentSpec"
     />
-    <div class="flex min-h-0 flex-1">
-      <SideNav />
-      <!-- Static pages own their scroll container; ComponentPage owns its
-           canvas/controls/code chrome. -->
-      <main
-        v-if="staticComponent"
-        class="min-w-0 flex-1 overflow-y-auto"
-      >
-        <component :is="staticComponent" />
-      </main>
-      <ComponentPage
-        v-else-if="currentSpec"
-        :key="currentSpec.id"
-        :spec="currentSpec"
-      />
-    </div>
   </div>
 </template>

@@ -6,7 +6,7 @@ import { tt } from '../../lib/i18n'
 <template>
   <div class="mx-auto max-w-3xl p-8">
     <section class="mb-10">
-      <h2 class="mb-3 text-label font-medium text-foreground">
+      <h2 class="mb-3 text-title font-semibold text-foreground">
         {{ tt('Duration palette', '时长调色板') }}
       </h2>
       <p class="mb-3 text-body text-muted-foreground">
@@ -34,7 +34,7 @@ import { tt } from '../../lib/i18n'
     </section>
 
     <section class="mb-10">
-      <h2 class="mb-3 text-label font-medium text-foreground">
+      <h2 class="mb-3 text-title font-semibold text-foreground">
         {{ tt('Easings', '缓动') }}
       </h2>
       <div class="border-y border-border-soft">
@@ -50,7 +50,7 @@ import { tt } from '../../lib/i18n'
     </section>
 
     <section>
-      <h2 class="mb-3 text-label font-medium text-foreground">
+      <h2 class="mb-3 text-title font-semibold text-foreground">
         {{ tt('Tailwind v4 gotcha', 'Tailwind v4 陷阱') }}
       </h2>
       <p class="text-body text-muted-foreground">

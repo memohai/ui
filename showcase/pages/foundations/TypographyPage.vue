@@ -9,7 +9,7 @@ const SPECIMEN_ZH = '设计的不是聊天，而是对话本身。'
 <template>
   <div class="mx-auto max-w-4xl p-8">
     <section class="mb-10">
-      <h2 class="mb-3 text-label font-medium text-foreground">
+      <h2 class="mb-3 text-title font-semibold text-foreground">
         {{ tt('Type scale', '字阶') }}
       </h2>
       <div class="border-y border-border-soft">
@@ -30,7 +30,7 @@ const SPECIMEN_ZH = '设计的不是聊天，而是对话本身。'
     </section>
 
     <section class="mb-10">
-      <h2 class="mb-3 text-label font-medium text-foreground">
+      <h2 class="mb-3 text-title font-semibold text-foreground">
         {{ tt('Weight roles', '字重角色') }}
       </h2>
       <p class="mb-3 text-body text-muted-foreground">
@@ -57,7 +57,7 @@ const SPECIMEN_ZH = '设计的不是聊天，而是对话本身。'
     </section>
 
     <section>
-      <h2 class="mb-3 text-label font-medium text-foreground">
+      <h2 class="mb-3 text-title font-semibold text-foreground">
         {{ tt('Font family', '字体族') }}
       </h2>
       <div class="border-y border-border-soft">

@@ -15,7 +15,7 @@ function rem(n: number): string {
 <template>
   <div class="mx-auto max-w-3xl p-8">
     <section class="mb-10">
-      <h2 class="mb-3 text-label font-medium text-foreground">
+      <h2 class="mb-3 text-title font-semibold text-foreground">
         {{ tt('The rem ladder', 'rem 阶梯') }}
       </h2>
       <div class="space-y-2">
@@ -35,7 +35,7 @@ function rem(n: number): string {
     </section>
 
     <section>
-      <h2 class="mb-3 text-label font-medium text-foreground">
+      <h2 class="mb-3 text-title font-semibold text-foreground">
         {{ tt('rem, not px', '用 rem，不用 px') }}
       </h2>
       <div class="space-y-2 text-body text-muted-foreground">

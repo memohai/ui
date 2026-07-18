@@ -9,7 +9,7 @@ import { tt } from '../../lib/i18n'
 <template>
   <div class="mx-auto max-w-4xl p-8">
     <section class="mb-10">
-      <h2 class="mb-3 text-label font-medium text-foreground">
+      <h2 class="mb-3 text-title font-semibold text-foreground">
         {{ tt('The ladder', '阶梯') }}
       </h2>
       <div class="grid grid-cols-2 gap-6">
@@ -44,7 +44,7 @@ import { tt } from '../../lib/i18n'
     </section>
 
     <section>
-      <h2 class="mb-3 text-label font-medium text-foreground">
+      <h2 class="mb-3 text-title font-semibold text-foreground">
         {{ tt('Rules', '规则') }}
       </h2>
       <div class="space-y-2 text-body text-muted-foreground">
