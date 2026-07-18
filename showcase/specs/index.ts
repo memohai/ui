@@ -1,7 +1,9 @@
 import type { ComponentSpec } from '../lib/spec'
 import { actionCardSpec } from './action-card'
+import { badgeSpec } from './badge'
 import { buttonSpec } from './button'
 import { checkboxSpec } from './checkbox'
+import { dialogSpec } from './dialog'
 import { fieldSpec } from './field'
 import { inputSpec } from './input'
 import { inputGroupSpec } from './input-group'
@@ -31,4 +33,6 @@ export const componentSpecs: ComponentSpec[] = [
   segmentedSpec,
   toggleSpec,
   actionCardSpec,
+  badgeSpec,
+  dialogSpec,
 ]
