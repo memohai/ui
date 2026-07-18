@@ -30,8 +30,10 @@ import RowButton from './RowButton.vue'
   >
     <div class="flex h-full w-64 flex-col">
       <!-- The wordmark is the home link; combined with the selected row below
-           it this IS the breadcrumb. -->
-      <div class="flex items-center justify-between pt-2 pr-1 pl-2">
+           it this IS the breadcrumb. The header matches the tab bar's h-11 +
+           bottom hairline exactly, so the seam runs unbroken across both
+           panels and the two titles share one baseline. -->
+      <div class="flex h-11 shrink-0 items-center justify-between border-b border-border pr-2 pl-2">
         <TextButton
           class="h-8 justify-start px-2.5 font-semibold"
           @click="navigate('overview')"
