@@ -848,12 +848,23 @@ Rules for adding or changing a component page:
 - **`code()` is hand-written per spec** (with the `strAttr`/`boolAttr`/
   `numAttr` helpers), not a generic serializer — snippet quality is the point,
   and the snippet must mirror exactly what `render()` shows.
+- **Stage modes**: the canvas has up to three views, all derived from the
+  spec — `single` (the live instance the controls drive), `examples` (every
+  preset tiled with labels, frozen at preset state), and `matrix` (two axes
+  crossed over defaults). A spec opts into the matrix by declaring
+  `matrix: { rows, cols }` with control keys — only axes a reviewer actually
+  scans (Button: variant × size). A stage toggle also renders any view twice
+  for light/dark side-by-side; the dark column is a scoped `.dark` subtree.
+- **Overlay specs pin `open`** as a boolean control (default `true`) with a
+  two-way `onUpdate:open` binding — the page exists to review the OPEN state,
+  so it must not require a hover/click to see. The trigger element stays in
+  the render as the realistic entry point.
 - **The shell dogfoods the library**: sidebar/controls/code chrome is built
   from `@felinic/ui` components and follows this contract (tokens only, rem on
   text-coupled sizes, the z ladder, `[data-ui-selected]` for selected rows).
   The host guard scans `showcase/` the same as `src/`.
-- Foundation page data is either **live** (Colors/Elevation read resolved
-  values from the cascade via `useTokenValue` — never transcribe values) or
+- Foundation page data is either **live** (Colors measures each swatch bar's
+  own computed background from the cascade — never transcribe values) or
   **static constants** (`showcase/lib/foundations-data.ts`, transcribed from
   `style.css` / this file — update it when the source changes).
 
