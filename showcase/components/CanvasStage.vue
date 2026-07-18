@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Monitor, Smartphone, Tablet } from 'lucide-vue-next'
 import type { FunctionalComponent } from 'vue'
-import { Button } from '#/components/button'
 import { tt } from '../lib/i18n'
+import ChromeIconButton from './ChromeIconButton.vue'
 
 // Viewport constrains the stage's max-width, not the browser window — desktop
 // is full width; tablet/mobile center a fixed-rem column (rem so it tracks the
@@ -33,17 +33,19 @@ const WIDTHS = { desktop: 'none', tablet: '48rem', mobile: '24rem' } as const
       </div>
     </div>
     <div class="absolute bottom-3 right-3 flex items-center gap-0.5">
-      <Button
+      <ChromeIconButton
         v-for="v in VIEWPORTS"
         :key="v.value"
-        variant="ghost"
-        size="icon-sm"
-        :aria-label="tt(v.label, v.labelZh)"
-        :class="viewport === v.value ? 'text-foreground' : 'text-muted-foreground'"
+        :label="tt(v.label, v.labelZh)"
+        :pressed="viewport === v.value"
         @click="viewport = v.value"
       >
-        <component :is="v.icon" />
-      </Button>
+        <component
+          :is="v.icon"
+          :stroke-width="1.75"
+          class="size-4"
+        />
+      </ChromeIconButton>
     </div>
   </div>
 </template>

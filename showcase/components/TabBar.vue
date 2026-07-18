@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ArrowLeft, ArrowRight, PanelLeftOpen, PanelRightClose, PanelRightOpen } from 'lucide-vue-next'
-import { Button } from '#/components/button'
+import { ChevronLeft, ChevronRight, PanelLeftOpen, PanelRightClose, PanelRightOpen } from 'lucide-vue-next'
 import { tt } from '../lib/i18n'
 import { canBack, canForward, goBack, goForward } from '../router'
 import { shellState } from '../shell'
+import ChromeIconButton from './ChromeIconButton.vue'
 
 // The content-area tab bar: page title on the left, chrome controls on the
 // right. It spans only the right section — the sidebar is a separate panel
@@ -15,47 +15,57 @@ defineProps<{ title: string, titleZh?: string, controls?: boolean }>()
 
 <template>
   <header class="flex h-11 shrink-0 items-center gap-1 border-b border-border px-3">
-    <Button
+    <ChromeIconButton
       v-if="!shellState.navOpen"
-      variant="ghost"
-      size="icon-sm"
-      :aria-label="tt('Show sidebar', '展开侧栏')"
+      :label="tt('Show sidebar', '展开侧栏')"
       @click="shellState.navOpen = true"
     >
-      <PanelLeftOpen />
-    </Button>
+      <PanelLeftOpen
+        :stroke-width="1.75"
+        class="size-4"
+      />
+    </ChromeIconButton>
     <h1 class="text-control font-semibold">
       {{ tt(title, titleZh) }}
     </h1>
     <div class="ml-auto flex items-center gap-0.5">
-      <Button
-        variant="ghost"
-        size="icon-sm"
+      <ChromeIconButton
+        :label="tt('Back', '后退')"
         :disabled="!canBack"
-        :aria-label="tt('Back', '后退')"
         @click="goBack"
       >
-        <ArrowLeft />
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon-sm"
+        <ChevronLeft
+          :stroke-width="1.75"
+          class="size-4"
+        />
+      </ChromeIconButton>
+      <ChromeIconButton
+        :label="tt('Forward', '前进')"
         :disabled="!canForward"
-        :aria-label="tt('Forward', '前进')"
         @click="goForward"
       >
-        <ArrowRight />
-      </Button>
-      <Button
+        <ChevronRight
+          :stroke-width="1.75"
+          class="size-4"
+        />
+      </ChromeIconButton>
+      <ChromeIconButton
         v-if="controls"
-        variant="ghost"
-        size="icon-sm"
-        :aria-label="shellState.controlsOpen ? tt('Hide controls', '收起控件面板') : tt('Show controls', '展开控件面板')"
+        :label="shellState.controlsOpen ? tt('Hide controls', '收起控件面板') : tt('Show controls', '展开控件面板')"
+        :pressed="shellState.controlsOpen"
         @click="shellState.controlsOpen = !shellState.controlsOpen"
       >
-        <PanelRightClose v-if="shellState.controlsOpen" />
-        <PanelRightOpen v-else />
-      </Button>
+        <PanelRightClose
+          v-if="shellState.controlsOpen"
+          :stroke-width="1.75"
+          class="size-4"
+        />
+        <PanelRightOpen
+          v-else
+          :stroke-width="1.75"
+          class="size-4"
+        />
+      </ChromeIconButton>
     </div>
   </header>
 </template>

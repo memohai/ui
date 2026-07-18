@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { Check, Copy } from 'lucide-vue-next'
-import { Button } from '#/components/button'
 import { Tabs, TabsList, TabsTrigger } from '#/components/tabs'
 import { tt } from '../lib/i18n'
+import ChromeIconButton from './ChromeIconButton.vue'
 import CodeBlock from './CodeBlock.vue'
 
 const props = defineProps<{ code: string, usage?: string, usageZh?: string }>()
@@ -56,19 +56,22 @@ async function copy() {
           </TabsTrigger>
         </TabsList>
       </Tabs>
-      <Button
-        variant="ghost"
-        size="icon-sm"
+      <ChromeIconButton
         class="ml-auto"
-        :aria-label="tt('Copy code', '复制代码')"
+        :label="tt('Copy code', '复制代码')"
         @click="copy"
       >
         <Check
           v-if="copied"
-          class="text-(--accent-green)"
+          :stroke-width="1.75"
+          class="size-4 text-(--accent-green)"
         />
-        <Copy v-else />
-      </Button>
+        <Copy
+          v-else
+          :stroke-width="1.75"
+          class="size-4"
+        />
+      </ChromeIconButton>
     </div>
     <!-- Both tabs share one frame: bare content on the page background reads
          as stray prose, not panel content. muted-soft lifts it one rung. -->

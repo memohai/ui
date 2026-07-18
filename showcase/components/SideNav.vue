@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Moon, PanelLeftClose, Sun } from 'lucide-vue-next'
-import { Button } from '#/components/button'
 import {
   Select,
   SelectContent,
@@ -17,6 +16,7 @@ import { shellState } from '../shell'
 import { tt, setLocale, localeState } from '../lib/i18n'
 import type { Scheme } from '../theme'
 import { SCHEMES, setScheme, setTheme, themeState } from '../theme'
+import ChromeIconButton from './ChromeIconButton.vue'
 import RowButton from './RowButton.vue'
 </script>
 
@@ -38,14 +38,15 @@ import RowButton from './RowButton.vue'
         >
           Felinic UI
         </TextButton>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          :aria-label="tt('Hide sidebar', '收起侧栏')"
+        <ChromeIconButton
+          :label="tt('Hide sidebar', '收起侧栏')"
           @click="shellState.navOpen = false"
         >
-          <PanelLeftClose />
-        </Button>
+          <PanelLeftClose
+            :stroke-width="1.75"
+            class="size-4"
+          />
+        </ChromeIconButton>
       </div>
       <ScrollArea class="min-h-0 flex-1">
         <div class="p-2">
@@ -85,15 +86,21 @@ import RowButton from './RowButton.vue'
           class="pointer-events-none absolute inset-x-0 -top-6 h-6 bg-linear-to-t from-background to-transparent"
           aria-hidden="true"
         />
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          :aria-label="themeState.theme === 'dark' ? tt('Switch to light theme', '切换到亮色主题') : tt('Switch to dark theme', '切换到暗色主题')"
+        <ChromeIconButton
+          :label="themeState.theme === 'dark' ? tt('Switch to light theme', '切换到亮色主题') : tt('Switch to dark theme', '切换到暗色主题')"
           @click="setTheme(themeState.theme === 'dark' ? 'light' : 'dark')"
         >
-          <Sun v-if="themeState.theme === 'dark'" />
-          <Moon v-else />
-        </Button>
+          <Sun
+            v-if="themeState.theme === 'dark'"
+            :stroke-width="1.75"
+            class="size-4"
+          />
+          <Moon
+            v-else
+            :stroke-width="1.75"
+            class="size-4"
+          />
+        </ChromeIconButton>
         <TextButton
           :aria-label="tt('Switch language', '切换语言')"
           @click="setLocale(localeState.locale === 'zh' ? 'en' : 'zh')"
