@@ -20,8 +20,11 @@ const WIDTHS = { desktop: 'none', tablet: '48rem', mobile: '24rem' } as const
 
 // Light/dark side-by-side: the right column is a `.dark` subtree (the
 // custom variant is scoped, `&:is(.dark *)`), so dark tokens resolve inside
-// it without touching the page theme. The default slot renders TWICE — each
-// column gets independent component instances over the same live state.
+// it without touching the page theme. The default slot renders TWICE with a
+// `column` prop (0 = light, 1 = dark) — the page gives each column an
+// INDEPENDENT instance with its own interaction state (shared live state
+// across two reka roots made a click on one trigger open the other column's
+// overlay). Config still syncs through the page's canonical state.
 // Two things make the dark column REAL rather than a paint-over:
 //  1. text-foreground + color-scheme on the column itself — `color` is an
 //     inherited property whose computed value is locked at <body> (light), so
@@ -51,7 +54,10 @@ const darkPortal = ref<HTMLElement | null>(null)
             :style="{ maxWidth: WIDTHS[viewport] }"
           >
             <PortalScope :target="null">
-              <slot />
+              <slot
+                :column="0"
+                :split="split"
+              />
             </PortalScope>
           </div>
         </div>
@@ -66,7 +72,10 @@ const darkPortal = ref<HTMLElement | null>(null)
             :style="{ maxWidth: WIDTHS[viewport] }"
           >
             <PortalScope :target="darkPortal">
-              <slot />
+              <slot
+                :column="1"
+                :split="split"
+              />
             </PortalScope>
           </div>
         </div>

@@ -858,6 +858,15 @@ Rules for adding or changing a component page:
   that MUST carry `text-foreground` + `color-scheme: dark` itself (`color` is
   inherited with its computed value locked at `<body>`, so without the explicit
   restart, components relying on inheritance render light text-on-dark).
+- **Split columns never share interaction state**: the page keeps a canonical
+  state (rail + code panel) plus one state PER column. Config keys sync
+  two-way through the canonical state; `open` is per-column local (each
+  trigger owns its overlay) with the rail's Open switch acting as a
+  pin/clear-both command. Sharing one live state across both columns makes
+  two reka roots arbitrate the same controlled `open` — a click on one
+  trigger opens the OTHER column's overlay and two overlays can never
+  coexist. Examples/matrix walls build fresh frozen states per column for
+  the same reason.
 - **Overlay portals follow their column** (`src/lib/portal.ts`): every
   overlay wrapper resolves `usePortalTarget()` and passes it as the reka
   portal's `to`; the split stage's dark column provides a body-level `.dark`
