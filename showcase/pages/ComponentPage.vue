@@ -93,7 +93,11 @@ const matrixBody = computed(() => {
 const body = computed(() => {
   if (stageMode.value === 'examples' && props.spec.examples?.length) return examplesBody.value
   if (stageMode.value === 'matrix' && props.spec.matrix) return matrixBody.value
-  return rendered.value
+  // <component :is> renders a single VNode but NOT an array — specs whose
+  // render returns [trigger, overlay] (dialog, sonner) would blank the
+  // canvas. Normalize through a display:contents wrapper (layout-transparent,
+  // and h() accepts it without the Fragment typing gymnastics).
+  return h('div', { class: 'contents' }, [rendered.value])
 })
 </script>
 

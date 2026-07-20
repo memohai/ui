@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Monitor, Smartphone, SunMoon, Tablet } from 'lucide-vue-next'
+import { Contrast, Monitor, Smartphone, Tablet } from 'lucide-vue-next'
 import type { FunctionalComponent } from 'vue'
 import { ref } from 'vue'
 import { tt } from '../lib/i18n'
@@ -32,8 +32,10 @@ const split = ref(false)
       <div class="min-w-0 flex-1 overflow-auto">
         <!-- m-auto centering (not grid place-items-center): with content taller
              than the stage, grid centering clips the top edge instead of
-             scrolling to it. -->
-        <div class="flex min-h-full p-8">
+             scrolling to it. pt-14/pb-16 reserve clearance for the floating
+             chrome (mode switcher top-left, viewport buttons bottom-right) so
+             tall walls never slide under it. -->
+        <div class="flex min-h-full px-8 pt-14 pb-16">
           <div
             class="m-auto w-full transition-[max-width] duration-200"
             :style="{ maxWidth: WIDTHS[viewport] }"
@@ -46,7 +48,7 @@ const split = ref(false)
         v-if="split"
         class="dark min-w-0 flex-1 overflow-auto border-l border-border bg-background"
       >
-        <div class="flex min-h-full p-8">
+        <div class="flex min-h-full px-8 pt-14 pb-16">
           <div
             class="m-auto w-full transition-[max-width] duration-200"
             :style="{ maxWidth: WIDTHS[viewport] }"
@@ -56,22 +58,23 @@ const split = ref(false)
         </div>
       </div>
     </div>
-    <div class="absolute top-3 left-3">
+    <!-- Floating chrome stays over the LIGHT column: anchored right, the split
+         toggle would sit on the dark column in light theme and go unreadable.
+         The viewport row lives bottom-left for the same reason. -->
+    <div class="absolute top-3 left-3 flex items-center gap-2">
       <slot name="modes" />
-    </div>
-    <div class="absolute top-3 right-3">
       <ChromeIconButton
         :label="tt('Compare dark theme side by side', '亮/暗同屏对照')"
         :pressed="split"
         @click="split = !split"
       >
-        <SunMoon
+        <Contrast
           :stroke-width="1.75"
           class="size-4"
         />
       </ChromeIconButton>
     </div>
-    <div class="absolute bottom-3 right-3 flex items-center gap-0.5">
+    <div class="absolute bottom-3 left-3 flex items-center gap-0.5">
       <ChromeIconButton
         v-for="v in VIEWPORTS"
         :key="v.value"
