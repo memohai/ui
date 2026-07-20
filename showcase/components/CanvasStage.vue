@@ -4,6 +4,7 @@ import type { FunctionalComponent } from 'vue'
 import { ref } from 'vue'
 import { tt } from '../lib/i18n'
 import ChromeIconButton from './ChromeIconButton.vue'
+import PortalScope from './PortalScope.vue'
 
 // Viewport constrains the stage's max-width, not the browser window — desktop
 // is full width; tablet/mobile center a fixed-rem column (rem so it tracks the
@@ -21,9 +22,18 @@ const WIDTHS = { desktop: 'none', tablet: '48rem', mobile: '24rem' } as const
 // custom variant is scoped, `&:is(.dark *)`), so dark tokens resolve inside
 // it without touching the page theme. The default slot renders TWICE — each
 // column gets independent component instances over the same live state.
-// Known seam: overlays that teleport to <body> (Select content, tooltips)
-// escape the .dark scope and keep the page theme.
+// Two things make the dark column REAL rather than a paint-over:
+//  1. text-foreground + color-scheme on the column itself — `color` is an
+//     inherited property whose computed value is locked at <body> (light), so
+//     components without an explicit text color would keep rendering black
+//     text; the column must restart the inheritance chain inside .dark.
+//  2. PortalScope — overlays teleport to <body> and would escape the .dark
+//     scope entirely, so the dark column redirects its portals into
+//     `darkPortal`, a body-level .dark container (kept at body level, NOT
+//     inside the column, so floating-ui positioning/fixed overlays and
+//     overflow scrolling are unaffected).
 const split = ref(false)
+const darkPortal = ref<HTMLElement | null>(null)
 </script>
 
 <template>
@@ -40,24 +50,38 @@ const split = ref(false)
             class="m-auto w-full transition-[max-width] duration-200"
             :style="{ maxWidth: WIDTHS[viewport] }"
           >
-            <slot />
+            <PortalScope :target="null">
+              <slot />
+            </PortalScope>
           </div>
         </div>
       </div>
       <div
         v-if="split"
-        class="dark min-w-0 flex-1 overflow-auto border-l border-border bg-background"
+        class="dark min-w-0 flex-1 overflow-auto border-l border-border bg-background text-foreground [color-scheme:dark]"
       >
         <div class="flex min-h-full px-8 pt-14 pb-16">
           <div
             class="m-auto w-full transition-[max-width] duration-200"
             :style="{ maxWidth: WIDTHS[viewport] }"
           >
-            <slot />
+            <PortalScope :target="darkPortal">
+              <slot />
+            </PortalScope>
           </div>
         </div>
       </div>
     </div>
+    <!-- Body-level portal container for the DARK column's overlays: carries the
+         same .dark + text-foreground scope so teleported menus/dialogs/tooltips
+         theme identically to in-column content. -->
+    <Teleport to="body">
+      <div
+        v-if="split"
+        ref="darkPortal"
+        class="dark text-foreground [color-scheme:dark]"
+      />
+    </Teleport>
     <!-- Floating chrome stays over the LIGHT column: anchored right, the split
          toggle would sit on the dark column in light theme and go unreadable.
          The viewport row lives bottom-left for the same reason. -->

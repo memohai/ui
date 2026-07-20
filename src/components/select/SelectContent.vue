@@ -11,6 +11,7 @@ import {
 } from 'reka-ui'
 import { onBeforeUnmount, ref, watch } from 'vue'
 import { menuContentClass, menuAlignOffset, menuSlideClass, menuViewportClass } from '#/lib/menu'
+import { usePortalTarget } from '#/lib/portal'
 import { cn } from '#/lib/utils'
 import { SelectScrollDownButton, SelectScrollUpButton } from '.'
 
@@ -85,10 +86,12 @@ const emits = defineEmits<SelectContentEmits>()
 const delegatedProps = reactiveOmit(props, 'class', 'size')
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
+
+const portalTo = usePortalTarget()
 </script>
 
 <template>
-  <SelectPortal>
+  <SelectPortal :to="portalTo">
     <SelectContent
       data-slot="select-content"
       v-bind="{ ...$attrs, ...forwarded }"

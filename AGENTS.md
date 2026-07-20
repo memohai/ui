@@ -854,7 +854,17 @@ Rules for adding or changing a component page:
   crossed over defaults). A spec opts into the matrix by declaring
   `matrix: { rows, cols }` with control keys — only axes a reviewer actually
   scans (Button: variant × size). A stage toggle also renders any view twice
-  for light/dark side-by-side; the dark column is a scoped `.dark` subtree.
+  for light/dark side-by-side; the dark column is a scoped `.dark` subtree
+  that MUST carry `text-foreground` + `color-scheme: dark` itself (`color` is
+  inherited with its computed value locked at `<body>`, so without the explicit
+  restart, components relying on inheritance render light text-on-dark).
+- **Overlay portals follow their column** (`src/lib/portal.ts`): every
+  overlay wrapper resolves `usePortalTarget()` and passes it as the reka
+  portal's `to`; the split stage's dark column provides a body-level `.dark`
+  container so teleported menus/dialogs/tooltips render under dark tokens
+  instead of escaping to the light page theme. Any NEW overlay component must
+  wire `usePortalTarget()` the same way — without it the component silently
+  breaks scoped-theme hosts.
 - **Overlay specs carry an `open` control, default CLOSED** — the page enters
   calm (a scrim modal must never fire on arrival), the trigger element stays
   as the realistic entry point, and the two-way `onUpdate:open` binding keeps

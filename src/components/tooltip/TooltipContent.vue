@@ -3,6 +3,7 @@ import type { TooltipContentEmits, TooltipContentProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
 import { reactiveOmit } from '@vueuse/core'
 import { TooltipContent, TooltipPortal, useForwardPropsEmits } from 'reka-ui'
+import { usePortalTarget } from '#/lib/portal'
 import { cn } from '#/lib/utils'
 
 defineOptions({
@@ -17,14 +18,17 @@ const emits = defineEmits<TooltipContentEmits>()
 
 const delegatedProps = reactiveOmit(props, 'class')
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
+
+const portalTo = usePortalTarget()
 </script>
 
 <template>
-  <TooltipPortal>
-    <!-- A terse hint, NOT a content surface: an inverted TRUE-black bubble (--tooltip,
-         a standalone near-pure-black ink that flips to near-white in dark mode) clearly
-         separates it from the light Popover / HoverCard cards. No border (the fill is
-         its own edge), no arrow and no shadow, for a clean flat pill. Small radius +
+  <TooltipPortal :to="portalTo">
+    <!-- A terse hint, NOT a content surface: a near-black bubble (--tooltip, a
+         standalone ink that stays dark in BOTH schemes — dark mode only softens it
+         to 0.22 and adds a --border-menu ring in style.css) clearly separates it
+         from the light Popover / HoverCard cards. No border (the fill is its own
+         edge), no arrow and no shadow, for a clean flat pill. Small radius +
          tight padding keep the hint compact. -->
     <TooltipContent
       data-slot="tooltip-content"
