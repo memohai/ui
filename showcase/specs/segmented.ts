@@ -89,11 +89,11 @@ ${itemsCode(BASIC_ITEMS)}
   usage: `SegmentedControl ≠ Tabs. Segmented returns ONE value (role="radiogroup") and owns no content; Tabs switch panels and carry the tab a11y contract.
 
 - Day/Week/Month, List/Board, view toggles → SegmentedControl.
-- Switching panels of content → Tabs (underline style, never re-skinned as a pill).
+- Switching panels of content → Tabs (underline rail by default; the pill variant is Tabs' own enclosed chrome for surfaces where a rail clashes).
 - The thumb is measured from the active item — widths just work, don't force equal widths.`,
   usageZh: `SegmentedControl ≠ Tabs。Segmented 返回一个值(role="radiogroup"),不拥有内容;Tabs 切换面板并携带 tab 无障碍契约。
 
 - 日/周/月、列表/看板、视图切换 → SegmentedControl。
-- 切换内容面板 → Tabs(下划线样式,永远不要重画成药丸)。
+- 切换内容面板 → Tabs(默认 underline 轨道;pill 变体是 Tabs 自己的内嵌封闭铬,用于不适合底部轨道的表面)。
 - 滑块拇指从激活项实测定位——宽度自然对齐,不要强行等宽。`,
 }
