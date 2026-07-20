@@ -11,10 +11,10 @@ const outputDir = path.resolve(rootDir, './index.ts')
 // them from src/index.ts. They are spliced after the command barrel to keep the
 // output byte-identical to the historical hand-written ordering.
 const libExportLines = [
-  `export { menuItemClass, menuLabelClass, menuContentClass, menuViewportClass, menuChromeClass, virtualListboxClass, menuAlignOffset, menuSearchHeaderClass, menuSearchInputClass, menuSeparatorClass, menuSlideClass } from './lib/menu'`,
-  `export { selectTriggerClass } from './lib/trigger'`,
+  'export { menuItemClass, menuLabelClass, menuContentClass, menuViewportClass, menuChromeClass, virtualListboxClass, menuAlignOffset, menuSearchHeaderClass, menuSearchInputClass, menuSeparatorClass, menuSlideClass } from \'./lib/menu\'',
+  'export { selectTriggerClass } from \'./lib/trigger\'',
 ]
-const libExportAnchor = `export * from './components/command/index'`
+const libExportAnchor = 'export * from \'./components/command/index\''
 
 async function readDirName(){  
   const pathList:Awaited<string[]> = await new Promise((resolve, reject) => {
