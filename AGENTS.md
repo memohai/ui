@@ -855,10 +855,14 @@ Rules for adding or changing a component page:
   `matrix: { rows, cols }` with control keys — only axes a reviewer actually
   scans (Button: variant × size). A stage toggle also renders any view twice
   for light/dark side-by-side; the dark column is a scoped `.dark` subtree.
-- **Overlay specs pin `open`** as a boolean control (default `true`) with a
-  two-way `onUpdate:open` binding — the page exists to review the OPEN state,
-  so it must not require a hover/click to see. The trigger element stays in
-  the render as the realistic entry point.
+- **Overlay specs carry an `open` control, default CLOSED** — the page enters
+  calm (a scrim modal must never fire on arrival), the trigger element stays
+  as the realistic entry point, and the two-way `onUpdate:open` binding keeps
+  the overlay open while the reviewer tweaks other controls. Examples pin
+  `open: true` in their preset state, and matrix mode forces it per cell —
+  showing the open surface is THEIR job, not the default's. Anywhere a spec is
+  rendered outside its own page (Overview preview cards), open is forced
+  closed.
 - **The shell dogfoods the library**: sidebar/controls/code chrome is built
   from `@felinic/ui` components and follows this contract (tokens only, rem on
   text-coupled sizes, the z ladder, `[data-ui-selected]` for selected rows).

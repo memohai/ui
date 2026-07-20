@@ -13,10 +13,11 @@ import {
 } from '#/components/dialog'
 import { Input } from '#/components/input'
 
-// Overlay specs pin `open` as a control so the canvas can show the overlay
-// WITHOUT a click — the whole point of the page is reviewing the open state.
-// The trigger button stays as the realistic entry point; the two-way binding
-// keeps Esc/scrim-close and the control in sync.
+// Overlay specs carry an `open` control, default CLOSED: the page enters calm
+// (a scrim modal must never fire on arrival), the trigger button is the
+// realistic entry point, and the two-way binding keeps the overlay open while
+// the reviewer tweaks other controls. Examples and the matrix pin open in
+// their own state — showing the open surface is THEIR job, not the default's.
 export const dialogSpec: ComponentSpec = {
   id: 'dialog',
   name: 'Dialog',
@@ -25,13 +26,14 @@ export const dialogSpec: ComponentSpec = {
   descriptionZh:
     'scrim 之上的模态表面,用于确认决策和短表单。由 Header/Title/Description/Body/Footer 组合;Esc 和点击 scrim 关闭。',
   controls: [
-    { kind: 'boolean', key: 'open', label: 'Open', default: true },
+    { kind: 'boolean', key: 'open', label: 'Open', default: false },
     { kind: 'boolean', key: 'showClose', label: 'Close button', default: true },
   ],
   examples: [
     {
       name: 'Destructive confirm',
       nameZh: '危险确认',
+      state: { open: true },
       render: state => dialog(state, {
         title: 'Delete session',
         description: 'This permanently deletes the session and its history. There is no undo.',
@@ -56,6 +58,7 @@ export const dialogSpec: ComponentSpec = {
     {
       name: 'Short form',
       nameZh: '短表单',
+      state: { open: true },
       render: state => dialog(state, {
         title: 'Rename session',
         description: 'The title shows in the session list.',

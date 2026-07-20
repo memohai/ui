@@ -25,7 +25,7 @@ export const popoverSpec: ComponentSpec = {
   descriptionZh:
     '锚定在触发器上的小型非模态面板——参考信息、快速筛选、单字段表单。Esc 和点击外部关闭;页面保持可交互。',
   controls: [
-    { kind: 'boolean', key: 'open', label: 'Open', default: true },
+    { kind: 'boolean', key: 'open', label: 'Open', default: false },
     { kind: 'enum', key: 'side', label: 'Side', options: popoverSideKeys, default: 'bottom' },
     { kind: 'enum', key: 'align', label: 'Align', options: popoverAlignKeys, default: 'center', display: 'radio-list' },
     { kind: 'enum', key: 'motion', label: 'Motion', options: popoverMotionKeys, default: 'menu', display: 'radio-list' },
@@ -36,6 +36,7 @@ export const popoverSpec: ComponentSpec = {
     {
       name: 'Form in a popover',
       nameZh: '表单弹层',
+      state: { open: true },
       render: state =>
         popover(state, () => [
           h('p', { class: 'mb-2 text-body font-medium' }, 'Rename session'),
@@ -60,6 +61,7 @@ export const popoverSpec: ComponentSpec = {
     {
       name: 'Menu host',
       nameZh: '菜单宿主',
+      state: { open: true },
       render: state =>
         popover(state, () =>
           h(Command, null, () => [

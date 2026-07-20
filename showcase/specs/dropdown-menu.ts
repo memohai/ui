@@ -54,7 +54,7 @@ export const dropdownMenuSpec: ComponentSpec = {
   descriptionZh:
     '锚定在触发器上的动作菜单。行、分隔线、标签和面板外观全部来自共享的菜单词汇;Esc 和点击外部关闭。',
   controls: [
-    { kind: 'boolean', key: 'open', label: 'Open', default: true },
+    { kind: 'boolean', key: 'open', label: 'Open', default: false },
     {
       kind: 'enum',
       key: 'variant',
@@ -69,6 +69,7 @@ export const dropdownMenuSpec: ComponentSpec = {
     {
       name: 'Groups and labels',
       nameZh: '分组与标签',
+      state: { open: true },
       render: state =>
         h(
           DropdownMenu,
@@ -111,7 +112,7 @@ export const dropdownMenuSpec: ComponentSpec = {
     {
       name: 'Disabled row',
       nameZh: '禁用行',
-      state: { disabled: true },
+      state: { disabled: true, open: true },
     },
   ],
   render: state =>

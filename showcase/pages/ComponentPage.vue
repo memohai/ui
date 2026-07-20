@@ -75,6 +75,9 @@ const matrixBody = computed(() => {
   const m = props.spec.matrix!
   const rowVals = axisValues(m.rows)
   const colVals = axisValues(m.cols)
+  // A matrix is a review wall: overlay specs (open-pin control) render every
+  // cell pinned open — a positioner grid of closed triggers reviews nothing.
+  const pin = props.spec.controls.some(c => c.key === 'open') ? { open: true } : {}
   return h('div', {
     class: 'inline-grid items-center gap-x-6 gap-y-4',
     style: { gridTemplateColumns: `repeat(${colVals.length + 1}, auto)` },
@@ -84,7 +87,7 @@ const matrixBody = computed(() => {
     ...rowVals.flatMap(r => [
       h('span', { class: 'text-body font-medium text-muted-foreground' }, String(r)),
       ...colVals.map(c => h('span', { class: 'flex items-center justify-center' }, [
-        props.spec.render(Object.assign(defaultState(props.spec), { [m.rows]: r, [m.cols]: c })),
+        props.spec.render(Object.assign(defaultState(props.spec), { [m.rows]: r, [m.cols]: c }, pin)),
       ])),
     ]),
   ])
