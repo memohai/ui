@@ -11,11 +11,12 @@ import { tt } from '../lib/i18n'
 // per card; nothing here ever mutates it.
 const cards = componentSpecs.map((spec) => {
   const state = defaultState(spec)
-  // Overlay specs pin open=true so their OWN page can review the open
-  // surface — but an Overview thumbnail must never fire a real modal (or a
-  // floating tooltip/menu) over the landing page. The trigger element is the
-  // honest thumbnail for an overlay.
-  if ('open' in state) state.open = false
+  // Overlay specs render UNCONTROLLED — the closed trigger IS the honest
+  // thumbnail. The one exception is Tooltip, which seeds itself open via
+  // defaultOpen for its own page; the __preview flag tells it (and any future
+  // resting-open overlay) to stay closed in a thumbnail so the landing page
+  // never sprouts a floating pill over an unrelated card.
+  state.__preview = true
   return { spec, render: () => spec.render(state) }
 })
 

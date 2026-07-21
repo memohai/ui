@@ -3,6 +3,7 @@ import { h } from 'vue'
 import { Button } from '#/components/button'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '#/components/command'
 import { Input } from '#/components/input'
+import { PopoverClose } from 'reka-ui'
 import {
   Popover,
   PopoverContent,
@@ -13,39 +14,38 @@ import {
 } from '#/components/popover'
 import { numAttr, strAttr } from '../lib/codegen'
 
-// Overlay specs pin `open` as a control so the canvas can show the overlay
-// WITHOUT a click — the whole point of the page is reviewing the open state.
-// The trigger button stays as the realistic entry point; the two-way binding
-// keeps Esc/outside-click close and the control in sync.
+// Uncontrolled (interactive: true): PopoverTrigger opens, Esc/outside-click
+// closes. The canvas shows the closed trigger you click. NO `open` control —
+// pinning writes into a per-render throwaway state (can never be closed) and,
+// for modal overlays, freezes the page. Non-modal Popover wouldn't dead-lock,
+// but the uncontrolled trigger is the honest, copy-pasteable demo anyway.
 export const popoverSpec: ComponentSpec = {
   id: 'popover',
   name: 'Popover',
+  interactive: true,
   description:
     'A small non-modal panel anchored to its trigger — reference info, a quick filter, a one-field form. Closes on Esc and outside click; the page stays interactive.',
   descriptionZh:
     '锚定在触发器上的小型非模态面板——参考信息、快速筛选、单字段表单。Esc 和点击外部关闭;页面保持可交互。',
   controls: [
-    { kind: 'boolean', key: 'open', label: 'Open', default: false },
     { kind: 'enum', key: 'side', label: 'Side', options: popoverSideKeys, default: 'bottom' },
     { kind: 'enum', key: 'align', label: 'Align', options: popoverAlignKeys, default: 'center', display: 'radio-list' },
     { kind: 'enum', key: 'motion', label: 'Motion', options: popoverMotionKeys, default: 'menu', display: 'radio-list' },
     { kind: 'number', key: 'sideOffset', label: 'Side offset', default: 4, min: 0, max: 24 },
   ],
-  matrix: { rows: 'side', cols: 'align' },
   examples: [
     {
       name: 'Form in a popover',
       nameZh: '表单弹层',
-      state: { open: true },
       render: state =>
         popover(state, () => [
           h('p', { class: 'mb-2 text-body font-medium' }, 'Rename session'),
           h(Input, { modelValue: 'Launch plan', 'aria-label': 'Session title' }),
           h('div', { class: 'mt-3 flex justify-end' }, [
-            h(Button, { size: 'sm', onClick: () => (state.open = false) }, () => 'Save'),
+            h(PopoverClose, { asChild: true }, () => h(Button, { size: 'sm' }, () => 'Save')),
           ]),
         ]),
-      code: () => `<Popover v-model:open="open">
+      code: () => `<Popover>
   <PopoverTrigger as-child>
     <Button variant="outline">Open popover</Button>
   </PopoverTrigger>
@@ -53,7 +53,9 @@ export const popoverSpec: ComponentSpec = {
     <p class="mb-2 text-body font-medium">Rename session</p>
     <Input v-model="title" aria-label="Session title" />
     <div class="mt-3 flex justify-end">
-      <Button size="sm" @click="open = false">Save</Button>
+      <PopoverClose as-child>
+        <Button size="sm">Save</Button>
+      </PopoverClose>
     </div>
   </PopoverContent>
 </Popover>`,
@@ -61,7 +63,6 @@ export const popoverSpec: ComponentSpec = {
     {
       name: 'Menu host',
       nameZh: '菜单宿主',
-      state: { open: true },
       render: state =>
         popover(state, () =>
           h(Command, null, () => [
@@ -75,7 +76,7 @@ export const popoverSpec: ComponentSpec = {
               ]),
             ]),
           ]), { menu: true }),
-      code: () => `<Popover v-model:open="open">
+      code: () => `<Popover>
   <PopoverTrigger as-child>
     <Button variant="outline">Open popover</Button>
   </PopoverTrigger>
@@ -106,7 +107,7 @@ export const popoverSpec: ComponentSpec = {
       + strAttr('align', String(state.align), 'center')
       + strAttr('motion', String(state.motion), 'menu')
       + numAttr('side-offset', Number(state.sideOffset), 4)
-    return `<Popover v-model:open="open">
+    return `<Popover>
   <PopoverTrigger as-child>
     <Button variant="outline">Open popover</Button>
   </PopoverTrigger>
@@ -130,30 +131,24 @@ export const popoverSpec: ComponentSpec = {
 - 纯 hover 的提示(释义、预览)用 HoverCard 或 Tooltip;Popover 点击打开,驻留到被关闭。`,
 }
 
+// Uncontrolled: PopoverTrigger opens, Esc/outside-click/PopoverClose closes.
 function popover(
   state: Record<string, unknown>,
   content: () => unknown,
   contentProps: Record<string, unknown> = {},
 ) {
-  return h(
-    Popover,
-    {
-      open: Boolean(state.open),
-      'onUpdate:open': (v: boolean) => (state.open = v),
-    },
-    () => [
-      h(PopoverTrigger, { asChild: true }, () => h(Button, { variant: 'outline' }, () => 'Open popover')),
-      h(
-        PopoverContent,
-        {
-          side: state.side as never,
-          align: state.align as never,
-          motion: state.motion as never,
-          sideOffset: Number(state.sideOffset),
-          ...contentProps,
-        },
-        content as never,
-      ),
-    ],
-  )
+  return h(Popover, null, () => [
+    h(PopoverTrigger, { asChild: true }, () => h(Button, { variant: 'outline' }, () => 'Open popover')),
+    h(
+      PopoverContent,
+      {
+        side: state.side as never,
+        align: state.align as never,
+        motion: state.motion as never,
+        sideOffset: Number(state.sideOffset),
+        ...contentProps,
+      },
+      content as never,
+    ),
+  ])
 }

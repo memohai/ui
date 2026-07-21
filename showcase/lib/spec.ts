@@ -72,6 +72,16 @@ export interface ComponentSpec {
   // contribute [false, true]. Opt-in per spec: only axes a reviewer actually
   // scans belong in a matrix.
   matrix?: { rows: string, cols: string }
+  // OVERLAY spec: the component owns its own open/close (reka Select, Dialog,
+  // DropdownMenu, Tooltip, Popover — trigger opens, Esc/outside-click closes).
+  // The showcase renders these UNCONTROLLED — a closed, live trigger you click
+  // to open, exactly like the real component. It must NOT expose an `open`
+  // control pinning the surface open: pinning writes into a per-render throwaway
+  // state, so the overlay can never be closed, and its DismissableLayer freezes
+  // the whole page's pointer-events → the canvas dead-locks. (This flag also
+  // hides the light/dark compare toggle: two open overlays can't coexist under
+  // reka's document-level DismissableLayer — see CanvasStage.)
+  interactive?: boolean
   render: (state: SpecState) => VNodeChild
   // Live Vue snippet mirroring exactly what render() shows. Hand-written per
   // spec (not a generic serializer) — snippet quality is the whole point.

@@ -854,28 +854,33 @@ Rules for adding or changing a component page:
   crossed over defaults). A spec opts into the matrix by declaring
   `matrix: { rows, cols }` with control keys — only axes a reviewer actually
   scans (Button: variant × size).
+- **Overlay specs render UNCONTROLLED — `interactive: true`, NO `open` control.**
+  Select/Dialog/DropdownMenu/Tooltip/Popover own their own open/close via their
+  reka trigger (click opens, Esc/outside-click closes). The showcase renders
+  exactly that: a closed, live trigger you click — like the real component, and
+  the honest copy-pasteable demo. It must NOT thread a controlled `open`:
+  `render()` rebuilds a fresh throwaway state each call, so `onUpdate:open`
+  writes into an object that's immediately discarded — the overlay can NEVER be
+  closed, and its DismissableLayer freezes the whole page's `pointer-events`.
+  That is the exact dead-lock that shipped three times (Overview auto-Delete,
+  Dialog auto-open, Select Examples wedged); mark the spec `interactive` and
+  render uncontrolled instead. Tooltip is the one resting-open exception, via
+  reka's UNCONTROLLED `defaultOpen` (a hint has no scrim/DismissableLayer, so it
+  can't wedge the page); suppress it under `state.__preview` (Overview
+  thumbnails) so the landing page never sprouts a floating pill.
 - **Light/dark side-by-side is NON-overlay only.** A stage toggle renders the
   view twice, the dark column being a scoped `.dark` subtree that MUST carry
   `text-foreground` + `color-scheme: dark` itself (`color` is inherited with
   its computed value locked at `<body>`, so without the explicit restart a
   component relying on inheritance renders dark text on the dark column).
-  OVERLAY specs (anything with an `open` control) DON'T get the toggle
-  (`ComponentPage` passes `:can-split="!isOverlay"`): reka's DismissableLayer
-  is a document-level singleton, so two open overlays can't coexist — the body
-  inert layer strips `pointer-events` from whichever opened first and its menu
-  can't be hovered. That's a primitive constraint, not a bug to CSS around; to
-  view an overlay in dark, flip the whole page theme (shell toggle). Do NOT
-  reintroduce per-column state or portal redirection to force overlay
-  compare — that path was tried and reverted (it only papered over the
-  singleton).
-- **Overlay specs carry an `open` control, default CLOSED** — the page enters
-  calm (a scrim modal must never fire on arrival), the trigger element stays
-  as the realistic entry point, and the two-way `onUpdate:open` binding keeps
-  the overlay open while the reviewer tweaks other controls. Examples pin
-  `open: true` in their preset state, and matrix mode forces it per cell —
-  showing the open surface is THEIR job, not the default's. Anywhere a spec is
-  rendered outside its own page (Overview preview cards), open is forced
-  closed.
+  `interactive` (overlay) specs DON'T get the toggle (`ComponentPage` passes
+  `:can-split="!isOverlay"`, keyed off `spec.interactive`): reka's
+  DismissableLayer is a document-level singleton, so two open overlays can't
+  coexist. To view an overlay in dark, flip the whole page theme (shell
+  toggle). Do NOT reintroduce per-column state or portal redirection to force
+  overlay compare — tried and reverted, it only papered over the singleton.
+- **Matrix is non-overlay only** — an uncontrolled trigger can't be frozen open
+  per cell, so `interactive` specs never declare `matrix`.
 - **The shell dogfoods the library**: sidebar/controls/code chrome is built
   from `@felinic/ui` components and follows this contract (tokens only, rem on
   text-coupled sizes, the z ladder, `[data-ui-selected]` for selected rows).

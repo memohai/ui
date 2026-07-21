@@ -12,33 +12,29 @@ import {
 } from '#/components/tooltip'
 import { strAttr } from '../lib/codegen'
 
-// Overlay specs pin `open` as a control so the canvas can show the overlay
-// WITHOUT a hover — the whole point of the page is reviewing the open state.
-// The trigger button stays as the realistic entry point; the two-way binding
-// keeps pointer-leave close and the control in sync. The code snippet omits
-// the pin on purpose: real tooltip usage is uncontrolled (hover/focus), so
-// v-model:open would be noise for the copy-pasting reader.
+// Tooltip is the one overlay the canvas shows OPEN by default — but via reka's
+// UNCONTROLLED `defaultOpen`, never a controlled `open` pin. A hint has no
+// scrim and no DismissableLayer, so a resting-open pill can't wedge the page;
+// `defaultOpen` seeds the first paint open and the trigger's own hover/focus
+// still drives it afterwards. The code snippet omits defaultOpen on purpose:
+// real usage is plain hover/focus.
 export const tooltipSpec: ComponentSpec = {
   id: 'tooltip',
   name: 'Tooltip',
+  interactive: true,
   description:
     'A short hover/focus hint for a control: an inverted flat pill, portaled above the canvas. Supplementary text only — unreachable on touch.',
   descriptionZh:
     '控件悬停/聚焦时的简短提示:反色扁平胶囊,portal 到画布上层。只放补充文字——触屏不可达。',
   controls: [
-    { kind: 'boolean', key: 'open', label: 'Open', default: false },
     { kind: 'enum', key: 'side', label: 'Side', options: tooltipSideKeys, default: 'top', display: 'radio-list' },
     { kind: 'enum', key: 'align', label: 'Align', options: tooltipAlignKeys, default: 'center', display: 'radio-list' },
     { kind: 'string', key: 'label', label: 'Label', default: 'Save changes' },
   ],
-  // side × align is the positioner grid a reviewer actually scans on an
-  // overlay — every cell stays pinned open over its own trigger.
-  matrix: { rows: 'side', cols: 'align' },
   examples: [
     {
       name: 'Icon button',
       nameZh: '图标按钮',
-      state: { open: true },
       render: state => tooltip(state, {
         trigger: () => h(Button, { variant: 'outline', size: 'icon', 'aria-label': 'Import' }, () => h(Upload)),
         label: 'Import',
@@ -57,7 +53,6 @@ export const tooltipSpec: ComponentSpec = {
     {
       name: 'Disabled control',
       nameZh: '禁用元素',
-      state: { open: true },
       // A disabled button swallows pointer events, so the trigger wraps it in
       // a plain span that still receives hover.
       render: state => tooltip(state, {
@@ -109,6 +104,9 @@ export const tooltipSpec: ComponentSpec = {
 - 画布为了 review 把 tooltip 钉在开态;真实用法是非受控的。`,
 }
 
+// defaultOpen (UNCONTROLLED) seeds the hint open for review; hover/focus still
+// drives it afterwards. Suppressed under __preview (Overview thumbnails) so the
+// landing page never sprouts a floating pill over an unrelated card.
 function tooltip(
   state: Record<string, unknown>,
   content: { trigger: () => unknown, label: string },
@@ -116,10 +114,7 @@ function tooltip(
   return h(TooltipProvider, null, () =>
     h(
       Tooltip,
-      {
-        open: Boolean(state.open),
-        'onUpdate:open': (v: boolean) => (state.open = v),
-      },
+      { defaultOpen: !state.__preview },
       () => [
         h(TooltipTrigger, { asChild: true }, content.trigger as never),
         h(

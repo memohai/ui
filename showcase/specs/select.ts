@@ -40,6 +40,7 @@ function triggerAndContent(state: Record<string, unknown>, items: () => unknown)
 export const selectSpec: ComponentSpec = {
   id: 'select',
   name: 'Select',
+  interactive: true,
   description:
     'Single-value picker on a trigger + floating menu. The trigger follows the field-edge contract; the menu is the shared floating surface.',
   descriptionZh:
@@ -47,22 +48,19 @@ export const selectSpec: ComponentSpec = {
   controls: [
     { kind: 'enum', key: 'size', label: 'Size', options: SIZES, default: 'default' },
     { kind: 'string', key: 'value', label: 'Value', default: 'fable-5' },
-    { kind: 'boolean', key: 'open', label: 'Open', default: false },
     { kind: 'boolean', key: 'disabled', label: 'Disabled', default: false },
   ],
   examples: [
     {
       name: 'Groups and separators',
       nameZh: '分组与分隔线',
-      state: { value: 'opus-4-8', open: true },
+      state: { value: 'opus-4-8' },
       render: state =>
         h(
           Select,
           {
             modelValue: String(state.value),
             'onUpdate:modelValue': (v: unknown) => (state.value = String(v)),
-            open: Boolean(state.open),
-            'onUpdate:open': (v: boolean) => (state.open = v),
           },
           () =>
             triggerAndContent(state, () => [
@@ -101,8 +99,6 @@ export const selectSpec: ComponentSpec = {
       {
         modelValue: String(state.value),
         'onUpdate:modelValue': (v: unknown) => (state.value = String(v)),
-        open: Boolean(state.open),
-        'onUpdate:open': (v: boolean) => (state.open = v),
         disabled: Boolean(state.disabled),
       },
       () => triggerAndContent(state, () => ALL_MODELS.map(m => h(SelectItem, { value: m.value }, () => h(SelectItemText, null, () => m.label)))),

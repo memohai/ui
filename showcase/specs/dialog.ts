@@ -10,30 +10,30 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '#/components/dialog'
 import { Input } from '#/components/input'
 
-// Overlay specs carry an `open` control, default CLOSED: the page enters calm
-// (a scrim modal must never fire on arrival), the trigger button is the
-// realistic entry point, and the two-way binding keeps the overlay open while
-// the reviewer tweaks other controls. Examples and the matrix pin open in
-// their own state — showing the open surface is THEIR job, not the default's.
+// Overlay specs render UNCONTROLLED (interactive: true): the canvas shows a
+// closed, live trigger you click to open, and Esc / scrim-click closes it —
+// exactly the real component. NO `open` control: pinning a controlled overlay
+// open writes into a per-render throwaway state (can never be closed) and its
+// scrim freezes the page → dead-lock.
 export const dialogSpec: ComponentSpec = {
   id: 'dialog',
   name: 'Dialog',
+  interactive: true,
   description:
     'A modal surface over a scrim for decisions and short forms. Composed from Header/Title/Description/Body/Footer; closes on Esc and scrim click.',
   descriptionZh:
     'scrim 之上的模态表面,用于确认决策和短表单。由 Header/Title/Description/Body/Footer 组合;Esc 和点击 scrim 关闭。',
   controls: [
-    { kind: 'boolean', key: 'open', label: 'Open', default: false },
     { kind: 'boolean', key: 'showClose', label: 'Close button', default: true },
   ],
   examples: [
     {
       name: 'Destructive confirm',
       nameZh: '危险确认',
-      state: { open: true },
       render: state => dialog(state, {
         title: 'Delete session',
         description: 'This permanently deletes the session and its history. There is no undo.',
@@ -58,7 +58,6 @@ export const dialogSpec: ComponentSpec = {
     {
       name: 'Short form',
       nameZh: '短表单',
-      state: { open: true },
       render: state => dialog(state, {
         title: 'Rename session',
         description: 'The title shows in the session list.',
@@ -117,30 +116,24 @@ export const dialogSpec: ComponentSpec = {
 - 不要嵌套 dialog,不要在 dialog 里放导航。`,
 }
 
+// Uncontrolled: DialogTrigger opens, Esc/scrim/Cancel closes. The canvas shows
+// the closed trigger; no `open` prop is threaded, so nothing can wedge it open.
 function dialog(
   state: Record<string, unknown>,
   content: { title: string, description: string, body: () => unknown, confirm: () => unknown },
 ) {
-  return [
-    h(Button, { onClick: () => (state.open = true) }, () => 'Open dialog'),
-    h(
-      Dialog,
-      {
-        open: Boolean(state.open),
-        'onUpdate:open': (v: boolean) => (state.open = v),
-      },
-      () =>
-        h(DialogContent, { showCloseButton: Boolean(state.showClose) }, () => [
-          h(DialogHeader, null, () => [
-            h(DialogTitle, null, () => content.title),
-            h(DialogDescription, null, () => content.description),
-          ]),
-          h(DialogBody, null, content.body as never),
-          h(DialogFooter, null, () => [
-            h(DialogClose, { asChild: true }, () => h(Button, { variant: 'outline' }, () => 'Cancel')),
-            content.confirm(),
-          ]),
-        ]),
-    ),
-  ]
+  return h(Dialog, null, () => [
+    h(DialogTrigger, { asChild: true }, () => h(Button, null, () => 'Open dialog')),
+    h(DialogContent, { showCloseButton: Boolean(state.showClose) }, () => [
+      h(DialogHeader, null, () => [
+        h(DialogTitle, null, () => content.title),
+        h(DialogDescription, null, () => content.description),
+      ]),
+      h(DialogBody, null, content.body as never),
+      h(DialogFooter, null, () => [
+        h(DialogClose, { asChild: true }, () => h(Button, { variant: 'outline' }, () => 'Cancel')),
+        content.confirm(),
+      ]),
+    ]),
+  ])
 }

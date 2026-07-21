@@ -16,17 +16,15 @@ import {
 } from '#/components/dropdown-menu'
 import { boolAttr, strAttr } from '../lib/codegen'
 
-// Overlay pinning, same contract as the Dialog spec: `open` is a control so
-// the canvas reviews the EXPANDED menu — the open surface is the review
-// object, not the trigger. The trigger button stays as the realistic entry
-// point; the two-way binding keeps Esc / outside-click close in sync with
-// the control.
-function menu(state: SpecState, items: () => VNodeChild) {
-  return [
+// Uncontrolled (interactive: true): DropdownMenuTrigger opens, Esc/outside-click
+// closes. The canvas shows the closed trigger you click — no `open` prop is
+// threaded, so the menu can never wedge open and freeze the page.
+function menu(items: () => VNodeChild) {
+  return h(DropdownMenu, null, () => [
     h(DropdownMenuTrigger, { asChild: true }, () =>
       h(Button, { variant: 'outline' }, () => 'Open menu')),
     h(DropdownMenuContent, null, items),
-  ]
+  ])
 }
 
 // The default composition doubles as the "icons + shortcut + destructive row"
@@ -49,12 +47,12 @@ function defaultItems(state: SpecState) {
 export const dropdownMenuSpec: ComponentSpec = {
   id: 'dropdown-menu',
   name: 'DropdownMenu',
+  interactive: true,
   description:
     'A trigger-anchored menu of actions. Rows, separators, labels and the panel chrome all come from the shared menu vocabulary; Esc and outside click close it.',
   descriptionZh:
     '锚定在触发器上的动作菜单。行、分隔线、标签和面板外观全部来自共享的菜单词汇;Esc 和点击外部关闭。',
   controls: [
-    { kind: 'boolean', key: 'open', label: 'Open', default: false },
     {
       kind: 'enum',
       key: 'variant',
@@ -69,29 +67,20 @@ export const dropdownMenuSpec: ComponentSpec = {
     {
       name: 'Groups and labels',
       nameZh: '分组与标签',
-      state: { open: true },
-      render: state =>
-        h(
-          DropdownMenu,
-          {
-            open: Boolean(state.open),
-            'onUpdate:open': (v: boolean) => (state.open = v),
-          },
-          () =>
-            menu(state, () => [
-              h(DropdownMenuGroup, null, () => [
-                h(DropdownMenuLabel, null, () => 'Session'),
-                h(DropdownMenuItem, null, () => 'Rename'),
-                h(DropdownMenuItem, null, () => 'Duplicate'),
-              ]),
-              h(DropdownMenuSeparator),
-              h(DropdownMenuGroup, null, () => [
-                h(DropdownMenuLabel, null, () => 'Danger zone'),
-                h(DropdownMenuItem, { variant: 'destructive' }, () => 'Delete session'),
-              ]),
-            ]),
-        ),
-      code: () => `<DropdownMenu v-model:open="open">
+      render: () =>
+        menu(() => [
+          h(DropdownMenuGroup, null, () => [
+            h(DropdownMenuLabel, null, () => 'Session'),
+            h(DropdownMenuItem, null, () => 'Rename'),
+            h(DropdownMenuItem, null, () => 'Duplicate'),
+          ]),
+          h(DropdownMenuSeparator),
+          h(DropdownMenuGroup, null, () => [
+            h(DropdownMenuLabel, null, () => 'Danger zone'),
+            h(DropdownMenuItem, { variant: 'destructive' }, () => 'Delete session'),
+          ]),
+        ]),
+      code: () => `<DropdownMenu>
   <DropdownMenuTrigger as-child>
     <Button variant="outline">Open menu</Button>
   </DropdownMenuTrigger>
@@ -112,22 +101,14 @@ export const dropdownMenuSpec: ComponentSpec = {
     {
       name: 'Disabled row',
       nameZh: '禁用行',
-      state: { disabled: true, open: true },
+      state: { disabled: true },
     },
   ],
-  render: state =>
-    h(
-      DropdownMenu,
-      {
-        open: Boolean(state.open),
-        'onUpdate:open': (v: boolean) => (state.open = v),
-      },
-      () => menu(state, defaultItems(state)),
-    ),
+  render: state => menu(defaultItems(state)),
   code: (state) => {
     const duplicateAttrs = boolAttr('disabled', Boolean(state.disabled))
     const deleteAttrs = strAttr('variant', String(state.variant), 'default')
-    return `<DropdownMenu v-model:open="open">
+    return `<DropdownMenu>
   <DropdownMenuTrigger as-child>
     <Button variant="outline">Open menu</Button>
   </DropdownMenuTrigger>

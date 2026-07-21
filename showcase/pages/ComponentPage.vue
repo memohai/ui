@@ -38,12 +38,11 @@ function selectExample(name: string) {
 const rendered = computed(() => (activeExample.value?.render ?? props.spec.render)(state))
 const code = computed(() => (activeExample.value?.code ?? props.spec.code)(state))
 
-// An overlay spec owns a controlled `open` (Select/Dialog/Dropdown/Tooltip/
-// Popover). Those opt out of the light/dark split: two open overlays can't
-// coexist under reka's document-level DismissableLayer singleton (see
-// CanvasStage). The single `open` control is the canonical detector — it's what
-// the stage's open-pin logic already keys off.
-const isOverlay = computed(() => props.spec.controls.some(c => c.key === 'open'))
+// An overlay spec (interactive: true) renders uncontrolled — a closed, live
+// trigger you click to open. It opts out of the light/dark split: two open
+// overlays can't coexist under reka's document-level DismissableLayer singleton
+// (see CanvasStage).
+const isOverlay = computed(() => props.spec.interactive === true)
 
 // ── Stage modes ─────────────────────────────────────────────────────────────
 // 'single' is the live instance the controls drive. 'examples' tiles every
@@ -78,13 +77,13 @@ const examplesBody = computed(() =>
   ),
 )
 
+// Matrix is a static review wall — non-overlay specs only (Button/Badge/…);
+// overlay specs are `interactive` and never declare a matrix, since an
+// uncontrolled trigger can't be frozen open per cell.
 const matrixBody = computed(() => {
   const m = props.spec.matrix!
   const rowVals = axisValues(m.rows)
   const colVals = axisValues(m.cols)
-  // A matrix is a review wall: overlay specs (open-pin control) render every
-  // cell pinned open — a positioner grid of closed triggers reviews nothing.
-  const pin = props.spec.controls.some(c => c.key === 'open') ? { open: true } : {}
   return h('div', {
     class: 'inline-grid items-center gap-x-6 gap-y-4',
     style: { gridTemplateColumns: `repeat(${colVals.length + 1}, auto)` },
@@ -94,7 +93,7 @@ const matrixBody = computed(() => {
     ...rowVals.flatMap(r => [
       h('span', { class: 'text-body font-medium text-muted-foreground' }, String(r)),
       ...colVals.map(c => h('span', { class: 'flex items-center justify-center' }, [
-        props.spec.render(Object.assign(defaultState(props.spec), { [m.rows]: r, [m.cols]: c }, pin)),
+        props.spec.render(Object.assign(defaultState(props.spec), { [m.rows]: r, [m.cols]: c })),
       ])),
     ]),
   ])
