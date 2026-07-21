@@ -3,7 +3,6 @@ import type { TooltipContentEmits, TooltipContentProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
 import { reactiveOmit } from '@vueuse/core'
 import { TooltipContent, TooltipPortal, useForwardPropsEmits } from 'reka-ui'
-import { usePortalTarget } from '#/lib/portal'
 import { cn } from '#/lib/utils'
 
 defineOptions({
@@ -18,12 +17,10 @@ const emits = defineEmits<TooltipContentEmits>()
 
 const delegatedProps = reactiveOmit(props, 'class')
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
-
-const portalTo = usePortalTarget()
 </script>
 
 <template>
-  <TooltipPortal :to="portalTo">
+  <TooltipPortal>
     <!-- A terse hint, NOT a content surface: a near-black bubble (--tooltip, a
          standalone ink that stays dark in BOTH schemes — dark mode only softens it
          to 0.22 and adds a --border-menu ring in style.css) clearly separates it

@@ -8,7 +8,6 @@ import {
   DialogPortal,
   useForwardPropsEmits,
 } from 'reka-ui'
-import { usePortalTarget } from '#/lib/portal'
 import { cn } from '#/lib/utils'
 import DialogCloseButton from './DialogCloseButton.vue'
 
@@ -22,12 +21,10 @@ const emits = defineEmits<DialogContentEmits>()
 const delegatedProps = reactiveOmit(props, 'class')
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
-
-const portalTo = usePortalTarget()
 </script>
 
 <template>
-  <DialogPortal :to="portalTo">
+  <DialogPortal>
     <DialogOverlay
       class="fixed inset-0 z-(--z-overlay) grid place-items-center overflow-y-auto bg-[var(--scrim)] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
     >

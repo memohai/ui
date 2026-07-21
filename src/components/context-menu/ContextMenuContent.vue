@@ -8,7 +8,6 @@ import {
   useForwardPropsEmits,
 } from 'reka-ui'
 import { menuContentClass, menuViewportClass } from '#/lib/menu'
-import { usePortalTarget } from '#/lib/portal'
 import { cn } from '#/lib/utils'
 
 defineOptions({
@@ -21,12 +20,10 @@ const emits = defineEmits<ContextMenuContentEmits>()
 const delegatedProps = reactiveOmit(props, 'class')
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
-
-const portalTo = usePortalTarget()
 </script>
 
 <template>
-  <ContextMenuPortal :to="portalTo">
+  <ContextMenuPortal>
     <ContextMenuContent
       data-slot="context-menu-content"
       v-bind="{ ...$attrs, ...forwarded }"

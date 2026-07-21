@@ -5,7 +5,6 @@ import { reactiveOmit } from '@vueuse/core'
 import { PopoverContent, PopoverPortal, useForwardProps } from 'reka-ui'
 import { injectHoverCardContext } from './context'
 import { menuSlideClass } from '#/lib/menu'
-import { usePortalTarget } from '#/lib/portal'
 import { cn } from '#/lib/utils'
 
 defineOptions({
@@ -31,11 +30,10 @@ const props = withDefaults(
 const delegatedProps = reactiveOmit(props, 'class')
 const forwarded = useForwardProps(delegatedProps)
 const ctx = injectHoverCardContext()
-const portalTo = usePortalTarget()
 </script>
 
 <template>
-  <PopoverPortal :to="portalTo">
+  <PopoverPortal>
     <!-- Floating SURFACE shared with the menu family: same tokenised hairline
          (--border-menu), shell radius (rounded-menu-shell) and dropdown shadow as
          Select / DropdownMenu / Combobox, with a fast fade + 1-unit directional

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ComponentSpec, SpecState } from '../lib/spec'
-import { computed, h, reactive, ref, watch } from 'vue'
+import { computed, h, reactive, ref } from 'vue'
 import { SegmentedControl } from '#/components/segmented'
 import { defaultState } from '../lib/spec'
 import { shellState } from '../shell'
@@ -16,45 +16,6 @@ const state = reactive<SpecState>(defaultState(props.spec))
 const example = ref<string>()
 const viewport = ref<'desktop' | 'tablet' | 'mobile'>('desktop')
 const stageMode = ref<'single' | 'examples' | 'matrix'>('single')
-
-// ── Split-stage state architecture ─────────────────────────────────────────
-// The stage renders the spec TWICE (light column 0, dark column 1). Giving
-// both instances ONE shared state is broken by design: a controlled `open`
-// gets arbitrated between two reka roots, so clicking one trigger opens the
-// OTHER column's overlay and two overlays can never coexist (and the same
-// fight breaks hover-pinned tooltips). Instead:
-//   - CONFIG keys (value/size/variant/disabled/…) sync two ways through
-//     `state` (the canonical state the rail and code panel read): a control
-//     tweak reaches both columns, an interaction in either column writes back.
-//   - `open` is PER-COLUMN local interaction state — each trigger owns its
-//     own overlay. The rail's Open switch is a pin/clear-BOTH command
-//     (`state.open` is written only by the rail and preset selection), never
-//     a mirror of what a trigger did; after a manual close the switch simply
-//     re-pins on its next flip.
-// Non-split mode binds the canonical state directly (single live instance —
-// the rail switch tracks the trigger as before); the columns only take over
-// when the stage actually splits.
-const columnStates: [SpecState, SpecState] = [
-  reactive<SpecState>({ ...state }),
-  reactive<SpecState>({ ...state }),
-]
-
-function assignConfig(from: SpecState, to: SpecState): void {
-  for (const k of Object.keys(from)) {
-    const v = from[k]
-    if (k !== 'open' && v !== undefined && to[k] !== v) to[k] = v
-  }
-}
-
-// canonical → columns (config only; open has its own pin channel below)
-watch(state, () => columnStates.forEach(c => assignConfig(state, c)), { deep: true })
-// columns → canonical (an interaction in either column updates rail + code)
-columnStates.forEach(c => watch(c, () => assignConfig(c, state), { deep: true }))
-// rail/preset open = pin command pushed to both columns
-watch(() => state.open, (v) => {
-  if (v === undefined) return
-  columnStates.forEach((c) => { c.open = v })
-})
 
 const activeExample = computed(() => props.spec.examples?.find(e => e.name === example.value))
 
@@ -72,12 +33,17 @@ function selectExample(name: string) {
   // Reset to spec defaults before applying the preset: keys left over from a
   // previous example (or manual play) never leak into the new one.
   Object.assign(state, defaultState(props.spec), ex.state)
-  // state.open may be unchanged between two pinned examples (true→true), so
-  // the pin watcher wouldn't fire — force both columns to the preset's open.
-  if (state.open !== undefined) columnStates.forEach((c) => { c.open = state.open! })
 }
 
+const rendered = computed(() => (activeExample.value?.render ?? props.spec.render)(state))
 const code = computed(() => (activeExample.value?.code ?? props.spec.code)(state))
+
+// An overlay spec owns a controlled `open` (Select/Dialog/Dropdown/Tooltip/
+// Popover). Those opt out of the light/dark split: two open overlays can't
+// coexist under reka's document-level DismissableLayer singleton (see
+// CanvasStage). The single `open` control is the canonical detector — it's what
+// the stage's open-pin logic already keys off.
+const isOverlay = computed(() => props.spec.controls.some(c => c.key === 'open'))
 
 // ── Stage modes ─────────────────────────────────────────────────────────────
 // 'single' is the live instance the controls drive. 'examples' tiles every
@@ -97,11 +63,8 @@ function axisValues(key: string): Array<string | boolean> {
   return []
 }
 
-// Examples/matrix render FROZEN preset states; in split mode each column calls
-// these separately so the two walls never share a state object (same twin
-// arbitration bug as the live instance, just frozen-flavored).
-function examplesBody() {
-  return h('div', { class: 'flex w-full flex-col gap-8' },
+const examplesBody = computed(() =>
+  h('div', { class: 'flex w-full flex-col gap-8' },
     (props.spec.examples ?? []).map(ex =>
       h('div', {}, [
         h('div', { class: 'mb-2 text-body font-medium text-muted-foreground' }, tt(ex.name, ex.nameZh)),
@@ -112,10 +75,10 @@ function examplesBody() {
         ]),
       ]),
     ),
-  )
-}
+  ),
+)
 
-function matrixBody() {
+const matrixBody = computed(() => {
   const m = props.spec.matrix!
   const rowVals = axisValues(m.rows)
   const colVals = axisValues(m.cols)
@@ -135,31 +98,27 @@ function matrixBody() {
       ])),
     ]),
   ])
-}
+})
 
-function bodyFor(column: number, split: boolean) {
-  if (stageMode.value === 'examples' && props.spec.examples?.length) return examplesBody()
-  if (stageMode.value === 'matrix' && props.spec.matrix) return matrixBody()
+const body = computed(() => {
+  if (stageMode.value === 'examples' && props.spec.examples?.length) return examplesBody.value
+  if (stageMode.value === 'matrix' && props.spec.matrix) return matrixBody.value
   // <component :is> renders a single VNode but NOT an array — specs whose
   // render returns [trigger, overlay] (dialog, sonner) would blank the
   // canvas. Normalize through a display:contents wrapper (layout-transparent,
   // and h() accepts it without the Fragment typing gymnastics).
-  // column is always 0|1 from the stage slot; the ?? only satisfies
-  // noUncheckedIndexedAccess on tuple indexing.
-  const liveState = split ? (columnStates[column] ?? state) : state
-  return h('div', { class: 'contents' }, [
-    (activeExample.value?.render ?? props.spec.render)(liveState),
-  ])
-}
+  return h('div', { class: 'contents' }, [rendered.value])
+})
 </script>
 
 <template>
   <div class="flex min-h-0 min-w-0 flex-1">
     <div class="flex min-w-0 flex-1 flex-col">
-      <CanvasStage v-model="viewport">
-        <template #default="{ column, split }">
-          <component :is="bodyFor(column, split)" />
-        </template>
+      <CanvasStage
+        v-model="viewport"
+        :can-split="!isOverlay"
+      >
+        <component :is="body" />
         <template
           v-if="modeItems.length > 1"
           #modes

@@ -9,7 +9,6 @@ import {
 } from 'reka-ui'
 import { computed } from 'vue'
 import { menuSlideClass } from '#/lib/menu'
-import { usePortalTarget } from '#/lib/portal'
 import { cn } from '#/lib/utils'
 
 defineOptions({
@@ -48,8 +47,6 @@ const delegatedProps = reactiveOmit(props, 'class', 'menu', 'motion')
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 
-const portalTo = usePortalTarget()
-
 // Card chrome is dropped only for the menu HOST (`menu`), which lets its inner
 // surface own the border/shadow/radius. Otherwise the popover wears the SAME
 // tokenised menu surface as DropdownMenu/Select/HoverCard — hairline (--border-menu),
@@ -82,7 +79,7 @@ const baseClass = computed(() => cn(
 </script>
 
 <template>
-  <PopoverPortal :to="portalTo">
+  <PopoverPortal>
     <PopoverContent
       data-slot="popover-content"
       v-bind="{ ...$attrs, ...forwarded }"

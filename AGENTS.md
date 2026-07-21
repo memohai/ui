@@ -853,27 +853,21 @@ Rules for adding or changing a component page:
   preset tiled with labels, frozen at preset state), and `matrix` (two axes
   crossed over defaults). A spec opts into the matrix by declaring
   `matrix: { rows, cols }` with control keys — only axes a reviewer actually
-  scans (Button: variant × size). A stage toggle also renders any view twice
-  for light/dark side-by-side; the dark column is a scoped `.dark` subtree
-  that MUST carry `text-foreground` + `color-scheme: dark` itself (`color` is
-  inherited with its computed value locked at `<body>`, so without the explicit
-  restart, components relying on inheritance render light text-on-dark).
-- **Split columns never share interaction state**: the page keeps a canonical
-  state (rail + code panel) plus one state PER column. Config keys sync
-  two-way through the canonical state; `open` is per-column local (each
-  trigger owns its overlay) with the rail's Open switch acting as a
-  pin/clear-both command. Sharing one live state across both columns makes
-  two reka roots arbitrate the same controlled `open` — a click on one
-  trigger opens the OTHER column's overlay and two overlays can never
-  coexist. Examples/matrix walls build fresh frozen states per column for
-  the same reason.
-- **Overlay portals follow their column** (`src/lib/portal.ts`): every
-  overlay wrapper resolves `usePortalTarget()` and passes it as the reka
-  portal's `to`; the split stage's dark column provides a body-level `.dark`
-  container so teleported menus/dialogs/tooltips render under dark tokens
-  instead of escaping to the light page theme. Any NEW overlay component must
-  wire `usePortalTarget()` the same way — without it the component silently
-  breaks scoped-theme hosts.
+  scans (Button: variant × size).
+- **Light/dark side-by-side is NON-overlay only.** A stage toggle renders the
+  view twice, the dark column being a scoped `.dark` subtree that MUST carry
+  `text-foreground` + `color-scheme: dark` itself (`color` is inherited with
+  its computed value locked at `<body>`, so without the explicit restart a
+  component relying on inheritance renders dark text on the dark column).
+  OVERLAY specs (anything with an `open` control) DON'T get the toggle
+  (`ComponentPage` passes `:can-split="!isOverlay"`): reka's DismissableLayer
+  is a document-level singleton, so two open overlays can't coexist — the body
+  inert layer strips `pointer-events` from whichever opened first and its menu
+  can't be hovered. That's a primitive constraint, not a bug to CSS around; to
+  view an overlay in dark, flip the whole page theme (shell toggle). Do NOT
+  reintroduce per-column state or portal redirection to force overlay
+  compare — that path was tried and reverted (it only papered over the
+  singleton).
 - **Overlay specs carry an `open` control, default CLOSED** — the page enters
   calm (a scrim modal must never fire on arrival), the trigger element stays
   as the realistic entry point, and the two-way `onUpdate:open` binding keeps
