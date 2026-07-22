@@ -21,10 +21,11 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
 
 <template>
   <TooltipPortal>
-    <!-- A terse hint, NOT a content surface: an inverted TRUE-black bubble (--tooltip,
-         a standalone near-pure-black ink that flips to near-white in dark mode) clearly
-         separates it from the light Popover / HoverCard cards. No border (the fill is
-         its own edge), no arrow and no shadow, for a clean flat pill. Small radius +
+    <!-- A terse hint, NOT a content surface: a near-black bubble (--tooltip, a
+         standalone ink that stays dark in BOTH schemes — dark mode only softens it
+         to 0.22 and adds a --border-menu ring in style.css) clearly separates it
+         from the light Popover / HoverCard cards. No border (the fill is its own
+         edge), no arrow and no shadow, for a clean flat pill. Small radius +
          tight padding keep the hint compact. -->
     <TooltipContent
       data-slot="tooltip-content"

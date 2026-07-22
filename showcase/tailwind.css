@@ -1,0 +1,44 @@
+/* Showcase Tailwind entry — mirrors apps/web (and the old .storybook/tailwind.css)
+   so the showcase renders with the exact same utilities + design tokens as the
+   real app. The token law in AGENTS.md applies to showcase/ the same as src/. */
+@import "tailwindcss";
+@import "../src/style.css";
+/* Bundled MiSans Variable as the CJK fallback (same vendored wrapper as the
+   host app: weight clamped 150..450, size-adjust 96%) so zh showcase text
+   renders identically to the app instead of per-OS system fonts. */
+@import "./fonts/misans-vf.css";
+
+/* Tailwind v4 content scan: library source + the showcase app itself. */
+@source "../src";
+@source "../showcase";
+
+/* Inter-script spacing (W3C CLREQ): standard ~1/8em gap between CJK and
+   adjacent Latin, same as the host app. Inherited; no effect on single-script
+   runs. */
+:root {
+  text-autospace: normal;
+}
+
+/* CJK font-weight de-emphasis, vendored from apps/web/src/style.css (keep in
+   sync). CJK glyphs are stroke-dense and read heavier than Inter at the same
+   numeric weight, so when the UI language is Chinese each weight rung is
+   remapped down a monotonic compress-the-top curve. Scoped to <html lang="zh">
+   (the showcase locale toggle sets it); English is untouched. */
+@layer utilities {
+  :lang(zh) .font-light { font-weight: 280; }     /* 300 */
+  :lang(zh) .font-normal { font-weight: 315; }    /* 400 */
+  :lang(zh) .font-medium { font-weight: 370; }    /* 500 */
+  :lang(zh) .font-semibold { font-weight: 410; }  /* 600 */
+  :lang(zh) .font-bold { font-weight: 450; }      /* 700 */
+  :lang(zh) .font-\[360\] { font-weight: 315; }
+  :lang(zh) .font-\[380\] { font-weight: 330; }
+  :lang(zh) .font-\[400\] { font-weight: 345; }
+  :lang(zh) .font-\[420\] { font-weight: 360; }
+  :lang(zh) .font-\[430\] { font-weight: 368; }
+  :lang(zh) .font-\[450\] { font-weight: 380; }
+  :lang(zh) .font-\[475\] { font-weight: 398; }
+  :lang(zh) .font-\[550\] { font-weight: 432; }
+}
+:lang(zh) body {
+  font-weight: 335;
+}

@@ -16,7 +16,7 @@ workspace resolves it by path with zero build/publish step.
 | `AGENTS.md` | The atom-level design-token law. Read it before touching any component. |
 | `skills/web/` | Page-level design-language skill (AI agent skill) |
 | `skills/ui-owners/` | Spacing-owner vocabulary skill (AI agent skill) |
-| `.storybook/` | The module's own living reference |
+| `showcase/` | The module's own living reference — a custom spec-driven component showcase (`pnpm dev`) |
 
 ## Consuming as a submodule
 
@@ -40,8 +40,14 @@ PR. Framework versions are the host's job too — this package declares
 pnpm install
 pnpm type-check
 pnpm build
-pnpm storybook
+pnpm dev        # the showcase: http://localhost:5173
 ```
+
+`pnpm dev` serves the showcase (`showcase/` + root `index.html`) — a custom,
+spec-driven living reference: foundations (tokens) pages and one page per
+component with live controls, live Vue code generation, and theme/scheme
+switching. Each component page is a single spec in `showcase/specs/`; see
+AGENTS.md § The showcase for how to add one.
 
 Day-to-day development happens inside a host checkout (`packages/ui/` is a
 full git repo there — branch, commit, and push from within it), so changes

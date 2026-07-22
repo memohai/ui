@@ -827,6 +827,69 @@ Remaining (non-blocking) TODOs:
 - SegmentedControl disabled uses CSS `opacity: 0.5`; the contract says 40 — unify
   to `0.4` if/when the maintainer agrees it's not part of its personality.
 
+## The showcase (`showcase/`)
+
+`pnpm dev` serves the module's living reference: a custom, spec-driven
+showcase (foundations pages + one page per component with live controls, live
+Vue code generation, and light/dark × 5-scheme switching). It replaced
+Storybook (removed — 3 stale stories, zero remaining value over the dev wall).
+
+Rules for adding or changing a component page:
+
+- **One spec per component** in `showcase/specs/<name>.ts`, registered in
+  `showcase/specs/index.ts` (order = sidebar order). The spec declares
+  `controls`, optional `examples`, `render(state)`, `code(state)`, and
+  optional `usage` — the Controls panel, canvas, and Code panel all derive
+  from it.
+- **Control options come from the component's exported key arrays**
+  (`buttonVariantKeys`, `toggleVariantKeys`, …) — never a hand-copied list.
+  If a component doesn't export its keys, add the export next to its cva call
+  (the `*Keys` pattern) rather than duplicating the list in the spec.
+- **`code()` is hand-written per spec** (with the `strAttr`/`boolAttr`/
+  `numAttr` helpers), not a generic serializer — snippet quality is the point,
+  and the snippet must mirror exactly what `render()` shows.
+- **Stage modes**: the canvas has up to three views, all derived from the
+  spec — `single` (the live instance the controls drive), `examples` (every
+  preset tiled with labels, frozen at preset state), and `matrix` (two axes
+  crossed over defaults). A spec opts into the matrix by declaring
+  `matrix: { rows, cols }` with control keys — only axes a reviewer actually
+  scans (Button: variant × size).
+- **Overlay specs render UNCONTROLLED — `interactive: true`, NO `open` control.**
+  Select/Dialog/DropdownMenu/Tooltip/Popover own their own open/close via their
+  reka trigger (click opens, Esc/outside-click closes). The showcase renders
+  exactly that: a closed, live trigger you click — like the real component, and
+  the honest copy-pasteable demo. It must NOT thread a controlled `open`:
+  `render()` rebuilds a fresh throwaway state each call, so `onUpdate:open`
+  writes into an object that's immediately discarded — the overlay can NEVER be
+  closed, and its DismissableLayer freezes the whole page's `pointer-events`.
+  That is the exact dead-lock that shipped three times (Overview auto-Delete,
+  Dialog auto-open, Select Examples wedged); mark the spec `interactive` and
+  render uncontrolled instead. Tooltip is the one resting-open exception, via
+  reka's UNCONTROLLED `defaultOpen` (a hint has no scrim/DismissableLayer, so it
+  can't wedge the page); suppress it under `state.__preview` (Overview
+  thumbnails) so the landing page never sprouts a floating pill.
+- **Light/dark side-by-side is NON-overlay only.** A stage toggle renders the
+  view twice, the dark column being a scoped `.dark` subtree that MUST carry
+  `text-foreground` + `color-scheme: dark` itself (`color` is inherited with
+  its computed value locked at `<body>`, so without the explicit restart a
+  component relying on inheritance renders dark text on the dark column).
+  `interactive` (overlay) specs DON'T get the toggle (`ComponentPage` passes
+  `:can-split="!isOverlay"`, keyed off `spec.interactive`): reka's
+  DismissableLayer is a document-level singleton, so two open overlays can't
+  coexist. To view an overlay in dark, flip the whole page theme (shell
+  toggle). Do NOT reintroduce per-column state or portal redirection to force
+  overlay compare — tried and reverted, it only papered over the singleton.
+- **Matrix is non-overlay only** — an uncontrolled trigger can't be frozen open
+  per cell, so `interactive` specs never declare `matrix`.
+- **The shell dogfoods the library**: sidebar/controls/code chrome is built
+  from `@felinic/ui` components and follows this contract (tokens only, rem on
+  text-coupled sizes, the z ladder, `[data-ui-selected]` for selected rows).
+  The host guard scans `showcase/` the same as `src/`.
+- Foundation page data is either **live** (Colors measures each swatch bar's
+  own computed background from the cascade — never transcribe values) or
+  **static constants** (`showcase/lib/foundations-data.ts`, transcribed from
+  `style.css` / this file — update it when the source changes).
+
 ## Extending this contract
 
 When you lock a new cross-cutting decision (a color role, a duration, an icon
