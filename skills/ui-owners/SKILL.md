@@ -1,6 +1,6 @@
 ---
 name: ui-owners
-description: Read this BEFORE writing or editing any apps/web settings page, bot-detail tab, dialog/popover/sheet form, config panel, list row, or detail surface — i.e. almost any Vue markup that is not pure chat. The host app has a core owner vocabulary (SettingsRow, SettingsSection, FieldStack, PageShell, MetricReadout, PersonaTile, CalloutBanner, ExpandableSettingsRow, BackendCard, ModelListRow, FormStack, PanePlaceholder, InlineLoadingRow, ConfirmDeleteDialog, SectionGroup) that owns all recurring spacing. Use this skill whenever you are about to build a settings row, a form field (label + input), a section card, a Save/Cancel footer, a stat tile, a warning banner, an "Advanced" disclosure, an empty state, a loading state, a delete confirm, or a whole page frame — even if the user just says "add a settings page", "make a dialog", "add a toggle row", "build this form", or "add a field", without mentioning spacing or components. Hand-writing a row/field/card/tile out of raw `<div class="flex … border-b …">` is the #1 recurring mistake in this codebase (同形异码); compose an owner instead so spacing can never drift. The skill also says when a shape must STAY hand-written (a genuinely different spatial relationship, e.g. a denser list row). Pairs with web (page-level) and packages/ui/AGENTS.md (atom-level).
+description: Read this BEFORE writing or editing any apps/web settings page, bot-detail tab, dialog/popover/sheet form, config panel, list row, or detail surface — i.e. almost any Vue markup that is not pure chat — and BEFORE adding or editing the chat composer dock (composer-dock / composer-panel / composer-capsule and their approval, command-result, error, and ask_user members), which is chat but still owned here. The host app has a core owner vocabulary (SettingsRow, SettingsSection, FieldStack, PageShell, MetricReadout, PersonaTile, CalloutBanner, ExpandableSettingsRow, BackendCard, ModelListRow, FormStack, PanePlaceholder, InlineLoadingRow, ConfirmDeleteDialog, SectionGroup) that owns all recurring spacing. Use this skill whenever you are about to build a settings row, a form field (label + input), a section card, a Save/Cancel footer, a stat tile, a warning banner, an "Advanced" disclosure, an empty state, a loading state, a delete confirm, or a whole page frame — even if the user just says "add a settings page", "make a dialog", "add a toggle row", "build this form", or "add a field", without mentioning spacing or components. Hand-writing a row/field/card/tile out of raw `<div class="flex … border-b …">` is the #1 recurring mistake in this codebase (同形异码); compose an owner instead so spacing can never drift. The skill also says when a shape must STAY hand-written (a genuinely different spatial relationship, e.g. a denser list row). Pairs with web (page-level) and packages/ui/AGENTS.md (atom-level).
 ---
 
 # UI — Spacing Owner Vocabulary
@@ -276,12 +276,18 @@ Same discipline, narrower home — compose these when working on their surface:
   (ComposerPanel, the stack tier: approvals / command results / composer
   errors as hairline-separated sections of ONE capsule), and
   `composer-capsule.vue` (ComposerCapsule, the ONLY dock shell — the
-  input-group edge + surface-composer + 20px radius lives nowhere else).
-  Adding a new dock member = write a `composer-panel-*.vue` section component
-  (content only, like `composer-panel-error.vue`'s 17 lines) + register one
-  branch in the panel's `sections` computed. Never hand-write the capsule
-  chrome, the mask measurement, or ad-hoc `v-if` stacking above the composer
-  again — that is how the four hand-shelled cards this replaced drifted.
+  input-group edge + surface-composer + its radius live nowhere else).
+  Adding a new STACK-tier member (a decision surface that hugs the box —
+  approvals, command results, errors, and their peers) = write a
+  `composer-panel-*.vue` section component (content only, like
+  `composer-panel-error.vue`'s 17 lines) + register one branch in the panel's
+  `sections` computed. A new BOX-tier member (a mutually exclusive occupant of
+  the input slot, like the ask_user capsule) does NOT go in `sections` — it
+  extends ComposerDock's box-slot mutex and height logic instead, so it
+  REPLACES the composer rather than stacking above it. Never hand-write the
+  capsule chrome, the mask measurement, or ad-hoc `v-if` stacking above the
+  composer again — that is how the four hand-shelled cards this replaced
+  drifted.
 - **chat tool-call** (`pages/home/components/tool-detail/`): `empty-row.vue`,
   `preview-box.vue` (max-h-48), `header-row.vue` (collapsible row, tone axis,
   `nested` for button-in-button), `expand-chevron.vue`, `capsule.vue`
