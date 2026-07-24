@@ -30,7 +30,7 @@ export const segmentedSpec: ComponentSpec = {
   descriptionZh:
     '从短行中选一个值，滑块拇指带浮起感。它是模式/筛选选择器——不拥有面板。',
   controls: [
-    { kind: 'enum', key: 'value', label: 'Value', options: BASIC_ITEMS.map(i => i.value), default: 'week', display: 'radio-list' },
+    { kind: 'enum', key: 'value', label: 'Value', options: BASIC_ITEMS.map(i => i.value), default: 'week', display: 'segmented' },
   ],
   examples: [
     {

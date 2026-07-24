@@ -13,8 +13,8 @@ export const badgeSpec: ComponentSpec = {
     '安静的状态徽章:柔和浅色填充、无描边、同色系深色文字。状态色取自 accent 色板,暗色模式自动适配。',
   controls: [
     { kind: 'enum', key: 'variant', label: 'Variant', options: badgeVariantKeys, default: 'default' },
-    { kind: 'enum', key: 'size', label: 'Size', options: badgeSizeKeys, default: 'default', display: 'radio-list' },
-    { kind: 'enum', key: 'font', label: 'Font', options: badgeFontKeys, default: 'sans', display: 'radio-list' },
+    { kind: 'enum', key: 'size', label: 'Size', options: badgeSizeKeys, default: 'default', display: 'segmented' },
+    { kind: 'enum', key: 'font', label: 'Font', options: badgeFontKeys, default: 'sans', display: 'segmented' },
     { kind: 'string', key: 'label', label: 'Label', default: 'Beta' },
   ],
   matrix: { rows: 'variant', cols: 'size' },

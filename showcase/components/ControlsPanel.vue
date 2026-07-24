@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import type { ComponentSpec, ControlSpec, EnumControl, SpecState } from '../lib/spec'
+import type { ComponentSpec, ControlSpec, EnumControl } from '../lib/spec'
 import { Input } from '#/components/input'
 import { NumberField } from '#/components/number-field'
+import { SegmentedControl } from '#/components/segmented'
 import {
   Select,
   SelectContent,
@@ -11,130 +12,98 @@ import {
   SelectValue,
 } from '#/components/select'
 import { Switch } from '#/components/switch'
-import { exampleAnchor } from '../lib/spec'
-import { tt } from '../lib/i18n'
-import RowButton from './RowButton.vue'
 
-// The rail is the PLAYGROUND's console: knobs drive the live instance at the
-// top of the doc spine. The description lives in the page header (one home);
-// the Example list is anchor navigation down the spine, not a state selector —
-// loading a preset into the Playground is the section's own "tweak" action.
+// The Playground's inline control grid — sits on the page directly above the
+// canvas (the page spine is: intro → controls → playground → example
+// sections). Every control is one grid cell: label on top, widget below.
+// Short enums (≤5 options) render as the library SegmentedControl — one click,
+// all options visible; longer lists use the Select. A spec can force either
+// via the control's `display` option.
 const props = defineProps<{
   spec: ComponentSpec
-  state: SpecState
+  state: Record<string, string | number | boolean>
 }>()
 
 const emit = defineEmits<{
   set: [key: string, value: string | number | boolean]
-  jumpExample: [anchor: string]
 }>()
 
 // Inapplicable controls render disabled-in-place (opacity-40, the contract's
-// disabled treatment) rather than unmounting — the panel layout stays stable
-// while toggling a prerequisite like "Loading".
+// disabled treatment) rather than unmounting — the grid stays stable while
+// toggling a prerequisite like "Loading".
 function enabled(c: ControlSpec): boolean {
   return !c.when || c.when(props.state)
 }
 
-// ≤5 options → menu-vocabulary radio rows (OptionRows); longer lists → the
-// library's own Select (never the OS-native popup).
-function enumDisplay(c: EnumControl): 'radio-list' | 'select' {
-  return c.display ?? (c.options.length <= 5 ? 'radio-list' : 'select')
+function enumDisplay(c: EnumControl): 'segmented' | 'select' {
+  return c.display ?? (c.options.length <= 5 ? 'segmented' : 'select')
 }
 </script>
 
 <template>
-  <div class="flex w-72 flex-1 flex-col gap-5 overflow-y-auto p-4">
-    <div v-if="spec.examples?.length">
-      <div class="mb-1 text-body font-medium text-muted-foreground">
-        {{ tt('Examples', '示例') }}
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <RowButton
-          v-for="(ex, i) in spec.examples"
-          :key="ex.name"
-          :active="false"
-          @select="emit('jumpExample', exampleAnchor(i))"
-        >
-          {{ tt(ex.name, ex.nameZh) }}
-        </RowButton>
-      </div>
-    </div>
-
+  <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
     <div
       v-for="c in spec.controls"
       :key="c.key"
       :class="{ 'pointer-events-none opacity-40': !enabled(c) }"
     >
-      <template v-if="c.kind === 'enum' && enumDisplay(c) === 'radio-list'">
-        <div class="mb-1 text-body font-medium text-muted-foreground">
-          {{ c.label }}
-        </div>
-        <div class="flex flex-col gap-0.5">
-          <RowButton
+      <div
+        class="mb-1 text-body font-medium"
+        :class="enabled(c) ? 'text-foreground' : 'text-muted-foreground'"
+      >
+        {{ c.label }}
+      </div>
+      <SegmentedControl
+        v-if="c.kind === 'enum' && enumDisplay(c) === 'segmented'"
+        :model-value="String(state[c.key])"
+        :items="c.options.map(o => ({ value: o, label: o }))"
+        :aria-label="c.label"
+        @update:model-value="emit('set', c.key, String($event))"
+      />
+      <Select
+        v-else-if="c.kind === 'enum'"
+        :model-value="String(state[c.key])"
+        @update:model-value="emit('set', c.key, String($event))"
+      >
+        <SelectTrigger
+          size="sm"
+          class="w-full"
+        >
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent size="sm">
+          <SelectItem
             v-for="opt in c.options"
             :key="opt"
-            :active="state[c.key] === opt"
-            @select="emit('set', c.key, opt)"
+            :value="opt"
           >
-            {{ opt }}
-          </RowButton>
-        </div>
-      </template>
-
-      <div
+            <SelectItemText>{{ opt }}</SelectItemText>
+          </SelectItem>
+        </SelectContent>
+      </Select>
+      <Switch
+        v-else-if="c.kind === 'boolean'"
+        size="sm"
+        :model-value="Boolean(state[c.key])"
+        @update:model-value="emit('set', c.key, $event)"
+      />
+      <NumberField
+        v-else-if="c.kind === 'number'"
+        size="sm"
+        class="w-full"
+        :min="c.min"
+        :max="c.max"
+        :model-value="Number(state[c.key])"
+        @update:model-value="emit('set', c.key, $event)"
+      />
+      <Input
         v-else
-        class="flex items-center justify-between gap-3 py-1"
-      >
-        <label
-          class="text-label font-medium"
-          :class="enabled(c) ? 'text-foreground' : 'text-muted-foreground'"
-        >{{ c.label }}</label>
-        <Select
-          v-if="c.kind === 'enum'"
-          :model-value="String(state[c.key])"
-          @update:model-value="emit('set', c.key, String($event))"
-        >
-          <SelectTrigger
-            size="sm"
-            class="w-32"
-          >
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent size="sm">
-            <SelectItem
-              v-for="opt in c.options"
-              :key="opt"
-              :value="opt"
-            >
-              <SelectItemText>{{ opt }}</SelectItemText>
-            </SelectItem>
-          </SelectContent>
-        </Select>
-        <Switch
-          v-else-if="c.kind === 'boolean'"
-          size="sm"
-          :model-value="Boolean(state[c.key])"
-          @update:model-value="emit('set', c.key, $event)"
-        />
-        <NumberField
-          v-else-if="c.kind === 'number'"
-          size="sm"
-          class="w-24"
-          :min="c.min"
-          :max="c.max"
-          :model-value="Number(state[c.key])"
-          @update:model-value="emit('set', c.key, $event)"
-        />
-        <Input
-          v-else-if="c.kind === 'string'"
-          size="sm"
-          class="w-32"
-          :model-value="String(state[c.key])"
-          :placeholder="c.placeholder"
-          @update:model-value="emit('set', c.key, String($event))"
-        />
-      </div>
+        size="sm"
+        class="w-full"
+        :model-value="String(state[c.key])"
+        :placeholder="c.placeholder"
+        @update:model-value="emit('set', c.key, String($event))"
+      />
     </div>
   </div>
 </template>

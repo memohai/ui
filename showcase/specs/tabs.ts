@@ -75,8 +75,8 @@ export const tabsSpec: ComponentSpec = {
   descriptionZh:
     '面板切换器,指示器按激活项实测滑动。underline 是通栏区块导航栏(默认);pill 是内嵌于卡片等表面、不适合底部轨道的封闭铬。',
   controls: [
-    { kind: 'enum', key: 'variant', label: 'Variant', options: tabsListVariantKeys, default: 'underline', display: 'radio-list' },
-    { kind: 'enum', key: 'value', label: 'Active tab', options: TABS.map(t => t.value), default: 'account', display: 'radio-list' },
+    { kind: 'enum', key: 'variant', label: 'Variant', options: tabsListVariantKeys, default: 'underline', display: 'segmented' },
+    { kind: 'enum', key: 'value', label: 'Active tab', options: TABS.map(t => t.value), default: 'account', display: 'segmented' },
     { kind: 'boolean', key: 'disabled', label: 'Disabled tab', default: false },
   ],
   matrix: { rows: 'variant', cols: 'disabled' },

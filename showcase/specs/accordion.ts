@@ -62,7 +62,7 @@ export const accordionSpec: ComponentSpec = {
   descriptionZh:
     '标题带动画的纵向折叠分区，可单开或多开——用于次要内容的渐进披露。',
   controls: [
-    { kind: 'enum', key: 'type', label: 'Type', options: accordionTypeKeys, default: 'single', display: 'radio-list' },
+    { kind: 'enum', key: 'type', label: 'Type', options: accordionTypeKeys, default: 'single', display: 'segmented' },
     { kind: 'boolean', key: 'collapsible', label: 'Collapsible', default: true, when: state => state.type === 'single' },
   ],
   examples: [

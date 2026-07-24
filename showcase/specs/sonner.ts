@@ -22,7 +22,7 @@ export const sonnerSpec: ComponentSpec = {
   descriptionZh:
     '命令式触发的瞬时反馈 toast。宿主应用在根部挂载一次 <Toaster>,各功能代码在任意位置调用 toast.success() / toast.error() 等。',
   controls: [
-    { kind: 'enum', key: 'variant', label: 'Variant', options: toastVariantKeys, default: 'message', display: 'radio-list' },
+    { kind: 'enum', key: 'variant', label: 'Variant', options: toastVariantKeys, default: 'message', display: 'segmented' },
     { kind: 'string', key: 'title', label: 'Title', default: 'Changes saved' },
     { kind: 'string', key: 'description', label: 'Description', default: '' },
     { kind: 'boolean', key: 'action', label: 'Undo action', default: false },

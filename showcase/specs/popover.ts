@@ -29,8 +29,8 @@ export const popoverSpec: ComponentSpec = {
     '锚定在触发器上的小型非模态面板——参考信息、快速筛选、单字段表单。Esc 和点击外部关闭;页面保持可交互。',
   controls: [
     { kind: 'enum', key: 'side', label: 'Side', options: popoverSideKeys, default: 'bottom' },
-    { kind: 'enum', key: 'align', label: 'Align', options: popoverAlignKeys, default: 'center', display: 'radio-list' },
-    { kind: 'enum', key: 'motion', label: 'Motion', options: popoverMotionKeys, default: 'menu', display: 'radio-list' },
+    { kind: 'enum', key: 'align', label: 'Align', options: popoverAlignKeys, default: 'center', display: 'segmented' },
+    { kind: 'enum', key: 'motion', label: 'Motion', options: popoverMotionKeys, default: 'menu', display: 'segmented' },
     { kind: 'number', key: 'sideOffset', label: 'Side offset', default: 4, min: 0, max: 24 },
   ],
   examples: [

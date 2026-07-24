@@ -21,7 +21,7 @@ export const inputSpec: ComponentSpec = {
       label: 'Focus emphasis',
       options: EMPHASES,
       default: 'solid',
-      display: 'radio-list',
+      display: 'segmented',
     },
     { kind: 'string', key: 'placeholder', label: 'Placeholder', default: 'Email address' },
     { kind: 'string', key: 'value', label: 'Value', default: '' },

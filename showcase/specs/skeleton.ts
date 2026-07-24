@@ -41,8 +41,8 @@ export const skeletonSpec: ComponentSpec = {
   descriptionZh:
     '已知布局内容的加载占位块：扁平 bg-muted 填充，同一簇内所有块共享一道同步微光。用 class 塑形——文本用行、头像用圆、媒体用块。',
   controls: [
-    { kind: 'enum', key: 'shape', label: 'Shape', options: ['line', 'circle', 'block'], default: 'line', display: 'radio-list' },
-    { kind: 'enum', key: 'size', label: 'Size', options: ['sm', 'default', 'lg'], default: 'default', display: 'radio-list' },
+    { kind: 'enum', key: 'shape', label: 'Shape', options: ['line', 'circle', 'block'], default: 'line', display: 'segmented' },
+    { kind: 'enum', key: 'size', label: 'Size', options: ['sm', 'default', 'lg'], default: 'default', display: 'segmented' },
   ],
   // shape × size is a grid a reviewer actually scans: does each shape read as
   // its content at every size, and does the circle stay square.

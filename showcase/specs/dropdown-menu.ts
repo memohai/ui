@@ -59,7 +59,7 @@ export const dropdownMenuSpec: ComponentSpec = {
       label: 'Last row variant',
       options: dropdownMenuItemVariantKeys,
       default: 'destructive',
-      display: 'radio-list',
+      display: 'segmented',
     },
     { kind: 'boolean', key: 'disabled', label: 'Disable "Duplicate"', default: false },
   ],

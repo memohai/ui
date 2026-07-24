@@ -27,8 +27,8 @@ export const tooltipSpec: ComponentSpec = {
   descriptionZh:
     '控件悬停/聚焦时的简短提示:反色扁平胶囊,portal 到画布上层。只放补充文字——触屏不可达。',
   controls: [
-    { kind: 'enum', key: 'side', label: 'Side', options: tooltipSideKeys, default: 'top', display: 'radio-list' },
-    { kind: 'enum', key: 'align', label: 'Align', options: tooltipAlignKeys, default: 'center', display: 'radio-list' },
+    { kind: 'enum', key: 'side', label: 'Side', options: tooltipSideKeys, default: 'top', display: 'segmented' },
+    { kind: 'enum', key: 'align', label: 'Align', options: tooltipAlignKeys, default: 'center', display: 'segmented' },
     { kind: 'string', key: 'label', label: 'Label', default: 'Save changes' },
   ],
   examples: [

@@ -9,11 +9,11 @@ import CodeBlock from './CodeBlock.vue'
 
 // Collapsible code snippet for one doc section (shadcn's "View Code" pattern):
 // a low-emphasis text trigger keeps the page dense — the reader scans live
-// instances first and expands only the snippet they want. The Playground
-// section passes default-open: its live snippet is the point of the page.
-const props = withDefaults(defineProps<{ code: string, defaultOpen?: boolean }>(), { defaultOpen: false })
+// instances first and expands only the snippet they want. Always starts
+// collapsed, Playground included.
+const props = defineProps<{ code: string }>()
 
-const open = ref(props.defaultOpen)
+const open = ref(false)
 
 const copied = ref(false)
 let timer: number | undefined

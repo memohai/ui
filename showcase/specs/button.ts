@@ -23,7 +23,6 @@ export const buttonSpec: ComponentSpec = {
     'Triggers an action. The charcoal default is the high-emphasis CTA; brand purple is scarce and reserved for rare moments.',
   descriptionZh:
     '触发一个动作。深炭色 default 是高强调 CTA;brand 紫色稀缺，只留给极少数时刻。',
-  imports: 'import { Button } from \'@felinic/ui\'',
   controls: [
     {
       kind: 'enum',
@@ -103,8 +102,12 @@ export const buttonSpec: ComponentSpec = {
 <Button size="icon-sm" aria-label="Add"><Plus /></Button>`,
     },
   ],
-  render: state =>
-    h(
+  render: (state) => {
+    // Icon sizes take an icon child + aria-label, never a text label — a
+    // label inside a square button overflows the box (the All variants grid
+    // crosses every variant with the icon sizes, so this must hold there too).
+    const iconOnly = String(state.size).startsWith('icon')
+    return h(
       Button,
       {
         variant: state.variant as never,
@@ -113,12 +116,15 @@ export const buttonSpec: ComponentSpec = {
         loadingMode: state.loadingMode as never,
         disabled: Boolean(state.disabled),
         block: Boolean(state.block),
+        ...(iconOnly ? { 'aria-label': String(state.label) } : {}),
         ...linkAttrs(state.variant),
       },
-      () => String(state.label),
-    ),
+      iconOnly ? () => h(Plus) : () => String(state.label),
+    )
+  },
   code: (state) => {
     const variant = String(state.variant)
+    const iconOnly = String(state.size).startsWith('icon')
     const link = isLink(variant) ? ' as="a" href="#"' : ''
     const attrs
       = strAttr('variant', variant, 'default')
@@ -128,6 +134,7 @@ export const buttonSpec: ComponentSpec = {
       + (state.loading ? strAttr('loading-mode', String(state.loadingMode), 'overlay') : '')
       + boolAttr('disabled', Boolean(state.disabled))
       + boolAttr('block', Boolean(state.block))
+    if (iconOnly) return `<Button${attrs} aria-label="${state.label}"><Plus /></Button>`
     return `<Button${attrs}>${state.label}</Button>`
   },
   usage: `Reach for variant + size, never hand-written classes.

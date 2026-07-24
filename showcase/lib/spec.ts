@@ -20,9 +20,10 @@ export interface EnumControl extends ControlBase {
   kind: 'enum'
   options: readonly string[]
   default: string
-  // radio-list = full-width menu-vocabulary rows (≤5 options); select = a
-  // right-aligned dropdown for longer lists. Default picks by option count.
-  display?: 'radio-list' | 'select'
+  // segmented = the library SegmentedControl (≤5 options, one click, all
+  // visible); select = a dropdown for longer lists. Default picks by option
+  // count.
+  display?: 'segmented' | 'select'
 }
 
 export interface BooleanControl extends ControlBase {
@@ -71,10 +72,6 @@ export interface ComponentSpec {
   description: string
   // zh translation of description; falls back to description when absent.
   descriptionZh?: string
-  // The import line shown in the page header, e.g.
-  // `import { Button } from '@felinic/ui'`. Optional; omitted for specs whose
-  // import surface is still settling.
-  imports?: string
   controls: ControlSpec[]
   examples?: ExampleSpec[]
   // Optional "All variants" section: cross two control axes over spec defaults
@@ -106,8 +103,8 @@ export function defaultState(spec: ComponentSpec): SpecState {
   return Object.fromEntries(spec.controls.map(c => [c.key, c.default]))
 }
 
-// Section anchor id for the i-th example — the single naming source shared by
-// ComponentPage (renders the section id) and ControlsPanel (jump targets).
+// Section anchor id for the i-th example — the single naming source for the
+// ids ComponentPage stamps on example sections.
 export function exampleAnchor(index: number): string {
   return `ex-${index}`
 }

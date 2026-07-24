@@ -21,13 +21,11 @@ const currentSpec = computed(() => (current.value.kind === 'component' ? current
 <template>
   <div class="flex h-dvh bg-background text-foreground">
     <SideNav />
-    <!-- The right section is one panel: tab bar on top, content below. The
-         controls toggle only exists when the page HAS a controls rail. -->
+    <!-- The right section is one panel: tab bar on top, content below. -->
     <div class="flex min-w-0 flex-1 flex-col">
       <TabBar
         :title="current.title"
         :title-zh="current.titleZh"
-        :controls="!!currentSpec"
       />
       <!-- Static pages own their scroll container; ComponentPage owns its
            canvas/controls/code chrome. -->

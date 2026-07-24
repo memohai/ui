@@ -12,7 +12,7 @@ export const toggleSpec: ComponentSpec = {
   descriptionZh:
     '工具栏式开关按钮（加粗、置顶、静音）。它自身就是持久的选择——没有指示器槽。',
   controls: [
-    { kind: 'enum', key: 'variant', label: 'Variant', options: toggleVariantKeys, default: 'default', display: 'radio-list' },
+    { kind: 'enum', key: 'variant', label: 'Variant', options: toggleVariantKeys, default: 'default', display: 'segmented' },
     { kind: 'enum', key: 'size', label: 'Size', options: toggleSizeKeys, default: 'default' },
     { kind: 'boolean', key: 'pressed', label: 'Pressed', default: true },
     { kind: 'boolean', key: 'disabled', label: 'Disabled', default: false },

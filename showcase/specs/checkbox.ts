@@ -19,7 +19,7 @@ export const checkboxSpec: ComponentSpec = {
   descriptionZh:
     '多选勾选控件。对勾与 Switch、Radio 共用同一个选择蓝填充——一处蓝，处处蓝。',
   controls: [
-    { kind: 'enum', key: 'state', label: 'State', options: STATES, default: 'checked', display: 'radio-list' },
+    { kind: 'enum', key: 'state', label: 'State', options: STATES, default: 'checked', display: 'segmented' },
     { kind: 'boolean', key: 'disabled', label: 'Disabled', default: false },
     { kind: 'string', key: 'label', label: 'Label', default: 'Include archived bots' },
   ],
