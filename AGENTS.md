@@ -839,7 +839,7 @@ Rules for adding or changing a component page:
 - **One spec per component** in `showcase/specs/<name>.ts`, registered in
   `showcase/specs/index.ts` (order = sidebar order). The spec declares
   `controls`, optional `examples`, `render(state)`, `code(state)`, and
-  optional `usage` — the Controls panel, canvas, and Code panel all derive
+  optional `usage` — the page's sections and the controls rail all derive
   from it.
 - **Control options come from the component's exported key arrays**
   (`buttonVariantKeys`, `toggleVariantKeys`, …) — never a hand-copied list.
@@ -848,12 +848,22 @@ Rules for adding or changing a component page:
 - **`code()` is hand-written per spec** (with the `strAttr`/`boolAttr`/
   `numAttr` helpers), not a generic serializer — snippet quality is the point,
   and the snippet must mirror exactly what `render()` shows.
-- **Stage modes**: the canvas has up to three views, all derived from the
-  spec — `single` (the live instance the controls drive), `examples` (every
-  preset tiled with labels, frozen at preset state), and `matrix` (two axes
-  crossed over defaults). A spec opts into the matrix by declaring
-  `matrix: { rows, cols }` with control keys — only axes a reviewer actually
-  scans (Button: variant × size).
+- **The component page is a doc spine, not a mode-switched stage.** One
+  vertical scroll: header (name + description + `imports` line) →
+  **Playground** (the live instance the controls rail drives, plus its live
+  snippet) → **one section per example** (title + optional `note` + instances
+  frozen at preset state + collapsible snippet) → **All variants** (the
+  `matrix` wall, only when declared) → **Usage** (only when the spec has
+  `usage`). All example sections render at once down the scroll — that density
+  is the point; there is no "stage mode" switcher. The rail's Example list is
+  anchor navigation; loading a preset into the Playground happens from the
+  section's own tweak action, and only on examples without a `render`
+  override (an override composition can't be expressed by the controls).
+- **Example `note` is one line of when/why, never a restated title.** Optional
+  per example — a section with nothing to teach renders no note line rather
+  than filler. Same copy discipline as the rest of the library.
+- **A spec opts into the matrix** by declaring `matrix: { rows, cols }` with
+  control keys — only axes a reviewer actually scans (Button: variant × size).
 - **Overlay specs render UNCONTROLLED — `interactive: true`, NO `open` control.**
   Select/Dialog/DropdownMenu/Tooltip/Popover own their own open/close via their
   reka trigger (click opens, Esc/outside-click closes). The showcase renders

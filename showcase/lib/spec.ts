@@ -45,11 +45,18 @@ export interface StringControl extends ControlBase {
 
 export type ControlSpec = EnumControl | BooleanControl | NumberControl | StringControl
 
-// A named preset (the "Example" radio-list atop the Controls panel). Selecting
-// one replaces the current state; further manual tweaks keep working.
+// A named example — one semantic section on the component page (the page is a
+// vertical doc spine: Playground first, then one section per example). Each
+// section renders its instances frozen at the preset state, with its own
+// collapsible code snippet.
 export interface ExampleSpec {
   name: string
   nameZh?: string
+  // ONE line of when/why ("icon-only buttons must carry an aria-label"), not
+  // a restatement of the title. Optional — a section with nothing to teach
+  // renders no note line rather than filler (copy discipline).
+  note?: string
+  noteZh?: string
   state?: Partial<SpecState>
   // Optional overrides for cases the default render/code can't express (e.g.
   // slot-heavy compositions like InputGroup adornments).
@@ -60,17 +67,21 @@ export interface ExampleSpec {
 export interface ComponentSpec {
   id: string // 'button' → route '#/components/button'
   name: string // 'Button'
-  // 1–2 lines atop the Controls panel: what it IS, not how to use it.
+  // 1–2 lines under the page title: what it IS, not how to use it.
   description: string
   // zh translation of description; falls back to description when absent.
   descriptionZh?: string
+  // The import line shown in the page header, e.g.
+  // `import { Button } from '@felinic/ui'`. Optional; omitted for specs whose
+  // import surface is still settling.
+  imports?: string
   controls: ControlSpec[]
   examples?: ExampleSpec[]
-  // Optional stage matrix: cross two control axes over spec defaults so the
-  // full variant grid is visible at once (Button: variant × size). rows/cols
-  // are control keys — enum controls contribute their options, booleans
-  // contribute [false, true]. Opt-in per spec: only axes a reviewer actually
-  // scans belong in a matrix.
+  // Optional "All variants" section: cross two control axes over spec defaults
+  // so the full variant grid is visible at once (Button: variant × size).
+  // rows/cols are control keys — enum controls contribute their options,
+  // booleans contribute [false, true]. Opt-in per spec: only axes a reviewer
+  // actually scans belong in a matrix.
   matrix?: { rows: string, cols: string }
   // OVERLAY spec: the component owns its own open/close (reka Select, Dialog,
   // DropdownMenu, Tooltip, Popover — trigger opens, Esc/outside-click closes).
@@ -93,4 +104,10 @@ export interface ComponentSpec {
 
 export function defaultState(spec: ComponentSpec): SpecState {
   return Object.fromEntries(spec.controls.map(c => [c.key, c.default]))
+}
+
+// Section anchor id for the i-th example — the single naming source shared by
+// ComponentPage (renders the section id) and ControlsPanel (jump targets).
+export function exampleAnchor(index: number): string {
+  return `ex-${index}`
 }

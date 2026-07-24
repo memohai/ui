@@ -23,6 +23,7 @@ export const buttonSpec: ComponentSpec = {
     'Triggers an action. The charcoal default is the high-emphasis CTA; brand purple is scarce and reserved for rare moments.',
   descriptionZh:
     '触发一个动作。深炭色 default 是高强调 CTA;brand 紫色稀缺，只留给极少数时刻。',
+  imports: 'import { Button } from \'@felinic/ui\'',
   controls: [
     {
       kind: 'enum',
@@ -51,6 +52,8 @@ export const buttonSpec: ComponentSpec = {
     {
       name: 'With icons',
       nameZh: '带图标',
+      note: 'An icon sharpens scanning and never replaces the label — except the icon-only button, which must carry an aria-label instead.',
+      noteZh: '图标帮助扫读，但不替代文字——纯图标按钮例外，它必须带 aria-label。',
       render: () => [
         h(Button, () => [h(Plus), 'New']),
         h(Button, { variant: 'secondary' }, () => ['Continue', h(ArrowRight)]),
@@ -71,6 +74,8 @@ export const buttonSpec: ComponentSpec = {
     {
       name: 'Loading modes',
       nameZh: '加载模式',
+      note: 'overlay covers the whole label so width never shifts; icon and leading place the spinner where the eye already is. loading blocks clicks — busy is not disabled.',
+      noteZh: 'overlay 覆盖整个标签、宽度不抖动;icon 和 leading 把 spinner 放在视线已在的位置。loading 会屏蔽点击——忙 ≠ 禁用。',
       render: () => [
         h(Button, { loading: true }, () => 'Save changes'),
         h(Button, { variant: 'secondary', loading: true, loadingMode: 'icon' }, () => [h(RefreshCw), 'Sync']),
@@ -86,6 +91,8 @@ export const buttonSpec: ComponentSpec = {
     {
       name: 'Icon buttons',
       nameZh: '图标按钮',
+      note: 'Three square sizes for toolbars and chrome. No visible label, so the aria-label is the contract.',
+      noteZh: '三个方形尺寸，用于工具栏和界面铬件。没有可见文字，aria-label 就是契约。',
       render: () => [
         h(Button, { size: 'icon-lg', 'aria-label': 'Add' }, () => h(Plus)),
         h(Button, { size: 'icon', 'aria-label': 'Add' }, () => h(Plus)),

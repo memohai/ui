@@ -11,18 +11,22 @@ import {
   SelectValue,
 } from '#/components/select'
 import { Switch } from '#/components/switch'
+import { exampleAnchor } from '../lib/spec'
 import { tt } from '../lib/i18n'
 import RowButton from './RowButton.vue'
 
+// The rail is the PLAYGROUND's console: knobs drive the live instance at the
+// top of the doc spine. The description lives in the page header (one home);
+// the Example list is anchor navigation down the spine, not a state selector —
+// loading a preset into the Playground is the section's own "tweak" action.
 const props = defineProps<{
   spec: ComponentSpec
   state: SpecState
-  example?: string
 }>()
 
 const emit = defineEmits<{
   set: [key: string, value: string | number | boolean]
-  selectExample: [name: string]
+  jumpExample: [anchor: string]
 }>()
 
 // Inapplicable controls render disabled-in-place (opacity-40, the contract's
@@ -41,20 +45,16 @@ function enumDisplay(c: EnumControl): 'radio-list' | 'select' {
 
 <template>
   <div class="flex w-72 flex-1 flex-col gap-5 overflow-y-auto p-4">
-    <p class="text-body text-muted-foreground">
-      {{ tt(spec.description, spec.descriptionZh) }}
-    </p>
-
     <div v-if="spec.examples?.length">
       <div class="mb-1 text-body font-medium text-muted-foreground">
-        {{ tt('Example', '示例') }}
+        {{ tt('Examples', '示例') }}
       </div>
       <div class="flex flex-col gap-0.5">
         <RowButton
-          v-for="ex in spec.examples"
+          v-for="(ex, i) in spec.examples"
           :key="ex.name"
-          :active="example === ex.name"
-          @select="emit('selectExample', ex.name)"
+          :active="false"
+          @select="emit('jumpExample', exampleAnchor(i))"
         >
           {{ tt(ex.name, ex.nameZh) }}
         </RowButton>
