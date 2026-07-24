@@ -849,17 +849,20 @@ Rules for adding or changing a component page:
   `numAttr` helpers), not a generic serializer — snippet quality is the point,
   and the snippet must mirror exactly what `render()` shows.
 - **The component page is a doc spine, not a mode-switched stage.** One
-  vertical scroll: intro (name + description) → **controls** (the inline
-  grid, directly above the canvas) → **Playground** (the live instance the
-  controls drive, snippet collapsed by default) → **one section per example**
-  (title + optional `note` + instances frozen at preset state + collapsible
-  snippet) → **All variants** (the `matrix` wall, only when declared) →
-  **Usage** (only when the spec has `usage`). All example sections render at
-  once down the scroll — that density is the point; there is no "stage mode"
-  switcher and no right rail. Loading a preset into the Playground happens
-  from the section's own tweak action, and only on examples without a
-  `render` override (an override composition can't be expressed by the
-  controls).
+  vertical scroll: intro (name + description) → **controls** (a card that
+  mirrors the host's SettingsSection/SettingsRow geometry — the showcase
+  can't import the host owners, so it transcribes them: --radius-menu-shell
+  bg-card shell, mx-4 min-h-[3.75rem] py-3 rows with an inset hairline,
+  label left / DEFAULT-size widget right) → **Playground** (the live instance
+  the controls drive, snippet collapsed by default) → **one section per
+  example** (title + optional `note` + instances frozen at preset state +
+  collapsible snippet) → **All variants** (the `matrix` wall, only when
+  declared) → **Usage** (only when the spec has `usage`). All example
+  sections render at once down the scroll — that density is the point; there
+  is no "stage mode" switcher and no right rail. NEVER invent a third
+  control-board layout (a label-over-widget grid, sm-size widgets) — the
+  settings row is the one shape, and drifting from it is the 同形异码
+  failure the owner vocabulary exists to prevent.
 - **Example `note` is one line of when/why, never a restated title.** Optional
   per example — a section with nothing to teach renders no note line rather
   than filler. Same copy discipline as the rest of the library.

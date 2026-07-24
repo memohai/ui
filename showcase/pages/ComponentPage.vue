@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import type { ComponentSpec, ExampleSpec, SpecState } from '../lib/spec'
+import type { ComponentSpec, SpecState } from '../lib/spec'
 import { computed, h, reactive, ref } from 'vue'
-import { SlidersHorizontal } from 'lucide-vue-next'
 import { defaultState, exampleAnchor } from '../lib/spec'
 import { tt } from '../lib/i18n'
 import CanvasStage from '../components/CanvasStage.vue'
-import ChromeIconButton from '../components/ChromeIconButton.vue'
 import ControlsPanel from '../components/ControlsPanel.vue'
 import ViewCode from '../components/ViewCode.vue'
 
@@ -20,19 +18,9 @@ const props = defineProps<{ spec: ComponentSpec }>()
 // App keys this page by spec.id, so all state here resets on page change.
 const state = reactive<SpecState>(defaultState(props.spec))
 const viewport = ref<'desktop' | 'tablet' | 'mobile'>('desktop')
-const docEl = ref<HTMLElement>()
 
 function set(key: string, value: string | number | boolean) {
   state[key] = value
-}
-
-// Load a state-only preset into the Playground and scroll back to it. Only
-// offered on examples WITHOUT a render override: an override composition
-// (InputGroup adornments, Dialog content) can't be expressed by the controls,
-// so "tweak in Playground" there would silently show a different component.
-function openInPlayground(ex: ExampleSpec) {
-  Object.assign(state, defaultState(props.spec), ex.state)
-  docEl.value?.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 const rendered = computed(() => props.spec.render(state))
@@ -62,7 +50,6 @@ const exampleSections = computed(() =>
     return {
       ex,
       anchor: exampleAnchor(i),
-      tunable: !ex.render,
       // Children wrapped in an array: a bare VNodeChild can be null, which
       // h()'s RawChildren rejects; VNodeArrayChildren allows it.
       body: h('div', { class: 'flex flex-wrap items-center gap-3' }, [
@@ -105,10 +92,7 @@ function axisValues(key: string): Array<string | boolean> {
 
 <template>
   <!-- The doc column owns the page scroll. -->
-  <div
-    ref="docEl"
-    class="min-w-0 flex-1 overflow-y-auto"
-  >
+  <div class="min-w-0 flex-1 overflow-y-auto">
     <div class="mx-auto flex max-w-3xl flex-col gap-12 px-8 py-10">
       <header>
         <h1 class="text-heading font-semibold text-foreground">
@@ -151,22 +135,9 @@ function axisValues(key: string): Array<string | boolean> {
         :key="s.ex.name"
         class="scroll-mt-6"
       >
-        <div class="mb-1 flex items-center">
-          <h2 class="text-title font-semibold text-foreground">
-            {{ tt(s.ex.name, s.ex.nameZh) }}
-          </h2>
-          <ChromeIconButton
-            v-if="s.tunable"
-            class="ml-auto"
-            :label="tt('Tweak in Playground', '在 Playground 中调整')"
-            @click="openInPlayground(s.ex)"
-          >
-            <SlidersHorizontal
-              :stroke-width="1.75"
-              class="size-4"
-            />
-          </ChromeIconButton>
-        </div>
+        <h2 class="mb-1 text-title font-semibold text-foreground">
+          {{ tt(s.ex.name, s.ex.nameZh) }}
+        </h2>
         <p
           v-if="s.ex.note"
           class="mb-3 text-body text-muted-foreground"
