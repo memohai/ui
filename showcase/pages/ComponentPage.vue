@@ -103,8 +103,9 @@ function axisValues(key: string): Array<string | boolean> {
        grid is the owners': the px-2 title inset exists relative to a surface
        beneath (staged sections), bare bodies (Usage) share one flush edge.
        Vertical rhythm: gap-8 between page-level sections (the host's
-       settings-page rhythm). -->
-  <div class="min-w-0 flex-1 overflow-y-auto">
+       settings-page rhythm). scrollbar-gutter:stable keeps the column
+       geometry identical on pages too short to scroll (see App.vue). -->
+  <div class="min-w-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]">
     <PageShell
       :title="spec.name"
       :description="tt(spec.description, spec.descriptionZh)"

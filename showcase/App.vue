@@ -28,10 +28,14 @@ const currentSpec = computed(() => (current.value.kind === 'component' ? current
         :title-zh="current.titleZh"
       />
       <!-- Static pages own their scroll container; ComponentPage owns its
-           canvas/controls/code chrome. -->
+           canvas/controls/code chrome. scrollbar-gutter:stable on BOTH scroll
+           containers — a page shorter than the viewport (e.g. Textarea, no
+           examples) shows no scrollbar, and without the reserved gutter its
+           column renders wider than scrollable pages, so the whole layout
+           jumps sideways when switching pages. -->
       <main
         v-if="staticComponent"
-        class="min-h-0 min-w-0 flex-1 overflow-y-auto"
+        class="min-h-0 min-w-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]"
       >
         <component :is="staticComponent" />
       </main>
