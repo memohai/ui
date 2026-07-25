@@ -110,8 +110,14 @@ function axisValues(key: string): Array<string | boolean> {
       :description="tt(spec.description, spec.descriptionZh)"
     >
       <div class="flex flex-col gap-8">
+        <!-- Playground is a FUNCTIONAL section, not a doc chapter: it takes
+             the settings-section label tier (13px muted — the same tier as
+             "Server Workspace" on the host's tool-approval page) via
+             SectionGroup's muted tone. Its body is bare (controls card +
+             canvas frame), so no card of its own. Doc chapters below use
+             `heading` (the PageHeader pair); the two tiers never mix. -->
         <SectionGroup
-          heading
+          tone="muted"
           :title="tt('Playground', '试一试')"
         >
           <div class="flex flex-col gap-2.5">
@@ -170,7 +176,9 @@ function axisValues(key: string): Array<string | boolean> {
           bare
           :title="tt('Usage', '用法')"
         >
-          <p class="text-body whitespace-pre-wrap text-muted-foreground">
+          <!-- Usage prose sits at the description tier (text-control) —
+               text-body (12px) is a caption rung, never long-form copy. -->
+          <p class="text-control whitespace-pre-wrap text-muted-foreground">
             {{ usageText }}
           </p>
         </SectionGroup>

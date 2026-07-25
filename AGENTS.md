@@ -855,10 +855,15 @@ Rules for adding or changing a component page:
   gutter, and header→body rhythm are pixel-identical by construction. Inside
   it, one vertical scroll: **Playground** → **one section per example** →
   **All variants** (the `matrix` wall, only when declared) → **Usage** (only
-  when the spec has `usage`). Every section is a SectionGroup in `heading`
-  mode — its title/hint is the shared PageHeader (the same component
-  PageShell's title block composes), so a chapter heading can never drift
-  from the page header it mirrors — "looks alike" is not reuse. The
+  when the spec has `usage`). Section headings follow the tier law, and the
+  two tiers never mix: the **Playground** is a FUNCTIONAL section, not a doc
+  chapter — it takes the settings-section label tier (SectionGroup
+  `tone="muted"`, the 13px muted label, same as "Server Workspace" on the
+  host's tool-approval page); **doc chapters** (every example, All variants,
+  Usage) are SectionGroups in `heading` mode — their title/hint is the
+  shared PageHeader (the same component PageShell's title block composes),
+  so a chapter heading can never drift from the page header it mirrors —
+  "looks alike" is not reuse. The
   Playground's controls are a SettingsSection of SettingsRows (widgets in
   the trailing slot at DEFAULT size). The
   horizontal grid is the owners': the px-2 title inset exists RELATIVE TO A
@@ -867,7 +872,9 @@ Rules for adding or changing a component page:
   content, no viewport/theme chrome) inset their titles px-2; sections with
   a truly bare body (All variants, Usage — no card at all) set `bare` and
   keep title, hint, and body on one flush edge with a roomier title→body
-  gap. Never hand-align a title with its card, and never hand-write a
+  gap. Usage/body prose sits at the description rung (`text-control`) —
+  `text-body` (12px) is a caption rung and is never long-form copy. Never
+  hand-align a title with its card, and never hand-write a
   section title at a stronger weight (text-title/semibold is NOT the
   section-title tier). All example sections render at once down the
   scroll — that density is the point; there is no "stage mode" switcher and
