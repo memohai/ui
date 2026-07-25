@@ -101,12 +101,16 @@ function axisValues(key: string): Array<string | boolean> {
         <h1 class="text-heading font-semibold text-foreground">
           {{ spec.name }}
         </h1>
-        <p class="text-body text-muted-foreground">
+        <!-- Matches PageShell's subtitle rung (text-sm on the host). -->
+        <p class="text-control text-muted-foreground">
           {{ tt(spec.description, spec.descriptionZh) }}
         </p>
       </header>
 
-      <SectionGroup :title="tt('Playground', '试一试')">
+      <SectionGroup
+        tone="muted"
+        :title="tt('Playground', '试一试')"
+      >
         <div class="flex flex-col gap-2.5">
           <ControlsPanel
             :spec="spec"
@@ -132,6 +136,7 @@ function axisValues(key: string): Array<string | boolean> {
         :id="s.anchor"
         :key="s.ex.name"
         class="scroll-mt-6"
+        tone="muted"
         :title="tt(s.ex.name, s.ex.nameZh)"
         :description="s.ex.note ? tt(s.ex.note, s.ex.noteZh) : undefined"
       >
@@ -142,6 +147,7 @@ function axisValues(key: string): Array<string | boolean> {
         v-if="spec.matrix"
         id="all-variants"
         class="scroll-mt-6"
+        tone="muted"
         :title="tt('All variants', '全部变体')"
       >
         <!-- Wide grids (Button: variant × 7 sizes) outgrow the measure;
@@ -155,6 +161,7 @@ function axisValues(key: string): Array<string | boolean> {
         v-if="spec.usage"
         id="usage"
         class="scroll-mt-6"
+        tone="muted"
         :title="tt('Usage', '用法')"
       >
         <p class="px-2 text-body whitespace-pre-wrap text-muted-foreground">

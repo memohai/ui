@@ -854,20 +854,31 @@ Rules for adding or changing a component page:
   section per example** → **All variants** (the `matrix` wall, only when
   declared) → **Usage** (only when the spec has `usage`). Every section is
   composed from the settings owner vocabulary (`src/components/settings`):
-  a SectionGroup owns each section's title/hint (foreground label, title
-  inset px-2, space-y-2.5 to its body); the Playground's controls are a
-  SettingsSection of SettingsRows (widgets in the trailing slot at DEFAULT
-  size). The horizontal grid is the owners': titles and running text sit on
-  the px-2 text column, surfaces (cards, the canvas) are flush — never
-  hand-align a title with its card, and never hand-write a section title at
-  a stronger weight (text-title/semibold is NOT the section-title tier).
-  All example sections render at once down the scroll — that density is the
-  point; there is no "stage mode" switcher and no right rail. Vertical
-  rhythm: gap-8 between page-level sections (the host's settings-page
-  rhythm). NEVER invent a control-board or section layout (a
-  label-over-widget grid, a transcribed settings row, sm-size widgets) —
-  the owner components are the one shape, and hand-writing their look is
-  the 同形异码 failure the owner vocabulary exists to prevent.
+  a SectionGroup owns each section's title/hint (MUTED tone — the same tier
+  as SettingsSection titles on the host's settings pages; same-level
+  sections never mix tones), title inset px-2, space-y-2.5 to its body; the
+  Playground's controls are a SettingsSection of SettingsRows (widgets in
+  the trailing slot at DEFAULT size). The horizontal grid is the owners':
+  titles and running text sit on the px-2 text column, surfaces (cards, the
+  canvas) are flush — never hand-align a title with its card, and never
+  hand-write a section title at a stronger weight (text-title/semibold is
+  NOT the section-title tier). All example sections render at once down the
+  scroll — that density is the point; there is no "stage mode" switcher and
+  no right rail. Vertical rhythm: gap-8 between page-level sections (the
+  host's settings-page rhythm). NEVER invent a control-board or section
+  layout (a label-over-widget grid, a transcribed settings row, sm-size
+  widgets) — the owner components are the one shape, and hand-writing their
+  look is the 同形异码 failure the owner vocabulary exists to prevent.
+- **Every visual decision must trace to an owner — or extend the
+  vocabulary.** Layout, color, type rung, and inset alike: if a shape on
+  the page is not covered by an owner component or a documented tier, the
+  ONLY legal moves are (1) add a prop to the owner (e.g. SectionGroup's
+  `tone`) or (2) add a new owner. Approximating the shape by hand —
+  "close enough" classes that merely look right — is reward hacking: it
+  passes self-review until someone does a same-level comparison against
+  the real page type. When in doubt, diff against the host surface that
+  IS the same level (a settings page, a provider grid) before writing a
+  single class.
 - **Example `note` is one line of when/why, never a restated title.** Optional
   per example — a section with nothing to teach renders no note line rather
   than filler. Same copy discipline as the rest of the library.

@@ -58,7 +58,10 @@ its body already carries its own borders, so it adds no card and there is no
 card-in-card. Use ONLY on pages stacking SEVERAL such groups (voice TTS/STT,
 web-search search/fetch); a single-group gallery page lets PageShell own the
 title/hint/action directly — wrapping its one group here would duplicate the page
-title at a second tier.
+title at a second tier. **`tone: 'foreground' | 'muted'`** (default `foreground`):
+`muted` is the SettingsSection title's tier — use it when the group's level on the
+page is a settings-style section (e.g. the showcase's doc spine), never mix tones
+between same-level sections on one page.
 
 ### Rows (things inside a section card)
 
