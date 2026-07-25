@@ -137,6 +137,7 @@ function axisValues(key: string): Array<string | boolean> {
         :key="s.ex.name"
         class="scroll-mt-6"
         tone="muted"
+        bare
         :title="tt(s.ex.name, s.ex.nameZh)"
         :description="s.ex.note ? tt(s.ex.note, s.ex.noteZh) : undefined"
       >
@@ -148,6 +149,7 @@ function axisValues(key: string): Array<string | boolean> {
         id="all-variants"
         class="scroll-mt-6"
         tone="muted"
+        bare
         :title="tt('All variants', '全部变体')"
       >
         <!-- Wide grids (Button: variant × 7 sizes) outgrow the measure;
@@ -162,9 +164,10 @@ function axisValues(key: string): Array<string | boolean> {
         id="usage"
         class="scroll-mt-6"
         tone="muted"
+        bare
         :title="tt('Usage', '用法')"
       >
-        <p class="px-2 text-body whitespace-pre-wrap text-muted-foreground">
+        <p class="text-body whitespace-pre-wrap text-muted-foreground">
           {{ usageText }}
         </p>
       </SectionGroup>

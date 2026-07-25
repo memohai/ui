@@ -61,7 +61,11 @@ title/hint/action directly — wrapping its one group here would duplicate the p
 title at a second tier. **`tone: 'foreground' | 'muted'`** (default `foreground`):
 `muted` is the SettingsSection title's tier — use it when the group's level on the
 page is a settings-style section (e.g. the showcase's doc spine), never mix tones
-between same-level sections on one page.
+between same-level sections on one page. **`bare`**: set it when the body carries NO
+bordered surface of its own (plain text, a row of buttons, a matrix) — the px-2
+title inset exists relative to a CARD beneath, so a bare body drops the inset
+(title/hint/body share one flush edge) and the title→body gap grows to give the
+section the air the card would have provided.
 
 ### Rows (things inside a section card)
 

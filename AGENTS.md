@@ -856,11 +856,14 @@ Rules for adding or changing a component page:
   composed from the settings owner vocabulary (`src/components/settings`):
   a SectionGroup owns each section's title/hint (MUTED tone — the same tier
   as SettingsSection titles on the host's settings pages; same-level
-  sections never mix tones), title inset px-2, space-y-2.5 to its body; the
-  Playground's controls are a SettingsSection of SettingsRows (widgets in
-  the trailing slot at DEFAULT size). The horizontal grid is the owners':
-  titles and running text sit on the px-2 text column, surfaces (cards, the
-  canvas) are flush — never hand-align a title with its card, and never
+  sections never mix tones), the Playground's controls are a SettingsSection
+  of SettingsRows (widgets in the trailing slot at DEFAULT size). The
+  horizontal grid is the owners': the px-2 title inset exists RELATIVE TO A
+  CARD beneath — sections whose body is a surface (Playground's controls
+  card, the canvas) inset their titles px-2, sections with a bare body
+  (examples, All variants, Usage — text and buttons, no card) set
+  `bare` and keep title, hint, and body on one flush edge with a roomier
+  title→body gap. Never hand-align a title with its card, and never
   hand-write a section title at a stronger weight (text-title/semibold is
   NOT the section-title tier). All example sections render at once down the
   scroll — that density is the point; there is no "stage mode" switcher and

@@ -17,16 +17,25 @@ import { computed } from 'vue'
 // a settings page). Same-level sections on one page must share one tone;
 // picking the tone by eye instead of by tier is the recurring drift this
 // prop exists to prevent.
+//
+// bare: the body carries NO bordered surface of its own (plain text, a row
+// of buttons, a matrix). The px-2 title inset exists to offset a title from
+// the CARD beneath it — with no card there is nothing to offset, so title,
+// hint, and body share one flush edge, and the title→body gap grows (4 over
+// the card rhythm's 2.5) to give the bare section the air the card would
+// have provided.
 const props = withDefaults(defineProps<{
   title?: string
   // An optional muted one-line hint under the section label (e.g. what this
   // group is for). Sits directly under the title.
   description?: string
   tone?: 'foreground' | 'muted'
+  bare?: boolean
 }>(), {
   title: '',
   description: '',
   tone: 'foreground',
+  bare: false,
 })
 
 const titleClass = computed(() =>
@@ -35,14 +44,15 @@ const titleClass = computed(() =>
 </script>
 
 <template>
-  <section class="space-y-2.5">
+  <section :class="bare ? 'space-y-4' : 'space-y-2.5'">
     <div
       v-if="title || description || $slots.actions"
       class="flex items-center justify-between gap-4"
     >
       <div
         v-if="title || description"
-        class="min-w-0 px-2"
+        class="min-w-0"
+        :class="bare ? '' : 'px-2'"
       >
         <h2
           v-if="title"
