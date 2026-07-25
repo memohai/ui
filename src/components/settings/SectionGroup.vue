@@ -61,7 +61,7 @@ const titleClass = computed(() =>
         v-if="heading && (title || description)"
         :title="title"
         :description="description"
-        :class="bare ? '' : 'px-2'"
+        :inset="!bare"
       />
       <div
         v-else-if="title || description"

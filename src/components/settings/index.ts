@@ -1,4 +1,5 @@
 export { default as PageHeader } from './PageHeader.vue'
+export { default as PageShell } from './PageShell.vue'
 export { default as SectionGroup } from './SectionGroup.vue'
 export { default as SettingsRow } from './SettingsRow.vue'
 export { default as SettingsSection } from './SettingsSection.vue'

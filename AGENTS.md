@@ -849,17 +849,18 @@ Rules for adding or changing a component page:
   as noise, and the snippet duplicated what `render()` already shows. Do not
   reintroduce per-spec snippet fields — if a copy-paste story is ever needed
   it comes back as ONE well-designed surface, not per-section disclosures.
-- **The component page is a doc spine, not a mode-switched stage.** One
-  vertical scroll: intro (name + description) → **Playground** → **one
-  section per example** → **All variants** (the `matrix` wall, only when
-  declared) → **Usage** (only when the spec has `usage`). Every section is
-  composed from the settings owner vocabulary (`src/components/settings`):
-  a SectionGroup owns each section's title/hint — in `heading` mode (the
-  doc-page tier: the title/hint pair is the SHARED PageHeader, the very
-  component the page intro uses, so a chapter heading can never drift from
-  the page header it mirrors — "looks alike" is not reuse), the Playground's
-  controls are a SettingsSection of SettingsRows (widgets in the trailing
-  slot at DEFAULT size). The
+- **The component page is a doc spine, not a mode-switched stage.** The page
+  frame is **PageShell itself** (`src/components/settings`) — the same
+  component the host's settings/plugins pages use, so the title block,
+  gutter, and header→body rhythm are pixel-identical by construction. Inside
+  it, one vertical scroll: **Playground** → **one section per example** →
+  **All variants** (the `matrix` wall, only when declared) → **Usage** (only
+  when the spec has `usage`). Every section is a SectionGroup in `heading`
+  mode — its title/hint is the shared PageHeader (the same component
+  PageShell's title block composes), so a chapter heading can never drift
+  from the page header it mirrors — "looks alike" is not reuse. The
+  Playground's controls are a SettingsSection of SettingsRows (widgets in
+  the trailing slot at DEFAULT size). The
   horizontal grid is the owners': the px-2 title inset exists RELATIVE TO A
   surface beneath — Playground (controls card) and examples (each stages its
   instances in a MINI PLAYGROUND: a plain rounded border frame with centered

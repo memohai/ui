@@ -35,7 +35,11 @@ Import paths are exact. All live under `apps/web/src/components/`.
 
 ### Structure
 
-**PageShell** · `page-shell/index.vue`
+**PageShell** · `page-shell/index.vue` — a re-export shim; the implementation
+lives in `@felinic/ui` (`src/components/settings`), shared with the component
+showcase. Import new call sites from `@felinic/ui`. Its title block is the
+shared **PageHeader** (same directory) — the ONE title + subtitle pair, also
+composed by SectionGroup's `heading` mode.
 The page header + centered `max-w-3xl` column. Props: `title`, `description`,
 `variant: 'page' | 'tab'` (`tab` for a bot-detail settings tab, `page` for a standalone
 route). Slot: `#actions` (header-right toolbar). Every settings surface starts here.

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ComponentSpec, SpecState } from '../lib/spec'
 import { computed, h, reactive, ref } from 'vue'
-import { PageHeader, SectionGroup } from '#/components/settings'
+import { PageShell, SectionGroup } from '#/components/settings'
 import { defaultState, exampleAnchor } from '../lib/spec'
 import { tt } from '../lib/i18n'
 import CanvasStage from '../components/CanvasStage.vue'
@@ -98,85 +98,85 @@ function axisValues(key: string): Array<string | boolean> {
 </script>
 
 <template>
-  <!-- The doc column owns the page scroll. The grid is the owner
-       vocabulary's, not invented here: titles and running text sit on the
-       px-2 text column (PageShell / SectionGroup / SettingsSection all inset
-       their titles px-2), surfaces (cards, the canvas) are flush. Vertical
-       rhythm: gap-8 between page-level sections (the host's settings-page
-       rhythm); each section's title→body gap is owned by SectionGroup. -->
+  <!-- The doc column owns the page scroll; the page frame is PageShell itself
+       — the same component the host's settings/plugins pages use, so the
+       title block, gutter (px-6 pt-10 pb-12), and header→body rhythm are
+       pixel-identical by construction, not by transcription. The section
+       grid is the owners': the px-2 title inset exists relative to a surface
+       beneath (staged sections), bare bodies (Usage) share one flush edge.
+       Vertical rhythm: gap-8 between page-level sections (the host's
+       settings-page rhythm). -->
   <div class="min-w-0 flex-1 overflow-y-auto">
-    <div class="mx-auto flex max-w-3xl flex-col gap-8 px-8 py-10">
-      <PageHeader
-        :title="spec.name"
-        :description="tt(spec.description, spec.descriptionZh)"
-        :level="1"
-        class="px-2"
-      />
-
-      <SectionGroup
-        heading
-        :title="tt('Playground', '试一试')"
-      >
-        <div class="flex flex-col gap-2.5">
-          <ControlsPanel
-            :spec="spec"
-            :state="state"
-            @set="set"
-          />
-          <!-- Fixed-height frame: CanvasStage is built for flex-1 fill, so the
+    <PageShell
+      :title="spec.name"
+      :description="tt(spec.description, spec.descriptionZh)"
+    >
+      <div class="flex flex-col gap-8">
+        <SectionGroup
+          heading
+          :title="tt('Playground', '试一试')"
+        >
+          <div class="flex flex-col gap-2.5">
+            <ControlsPanel
+              :spec="spec"
+              :state="state"
+              @set="set"
+            />
+            <!-- Fixed-height frame: CanvasStage is built for flex-1 fill, so the
                wrapper gives the doc-flow section a concrete height and the
                stage's columns scroll inside it. -->
-          <div class="flex h-80 flex-col overflow-hidden rounded-lg border border-border-soft">
-            <CanvasStage
-              v-model="viewport"
-              :can-split="!isOverlay"
-            >
-              <component :is="playgroundBody" />
-            </CanvasStage>
+            <div class="flex h-80 flex-col overflow-hidden rounded-lg border border-border-soft">
+              <CanvasStage
+                v-model="viewport"
+                :can-split="!isOverlay"
+              >
+                <component :is="playgroundBody" />
+              </CanvasStage>
+            </div>
           </div>
-        </div>
-      </SectionGroup>
+        </SectionGroup>
 
-      <SectionGroup
-        v-for="s in exampleSections"
-        :id="s.anchor"
-        :key="s.ex.name"
-        class="scroll-mt-6"
-        heading
-        :title="tt(s.ex.name, s.ex.nameZh)"
-        :description="s.ex.note ? tt(s.ex.note, s.ex.noteZh) : undefined"
-      >
-        <component :is="s.body" />
-      </SectionGroup>
+        <SectionGroup
+          v-for="s in exampleSections"
+          :id="s.anchor"
+          :key="s.ex.name"
+          class="scroll-mt-6"
+          heading
+          :title="tt(s.ex.name, s.ex.nameZh)"
+          :description="s.ex.note ? tt(s.ex.note, s.ex.noteZh) : undefined"
+        >
+          <component :is="s.body" />
+        </SectionGroup>
 
-      <SectionGroup
-        v-if="spec.matrix"
-        id="all-variants"
-        class="scroll-mt-6"
-        heading
-        :title="tt('All variants', '全部变体')"
-      >
-        <!-- Wide grids (Button: variant × 7 sizes) outgrow the measure;
+        <SectionGroup
+          v-if="spec.matrix"
+          id="all-variants"
+          class="scroll-mt-6"
+          heading
+          :title="tt('All variants', '全部变体')"
+        >
+          <!-- Wide grids (Button: variant × 7 sizes) outgrow the measure;
              scroll sideways rather than clip. -->
-        <div :class="STAGE_FRAME_CLASS">
-          <div class="overflow-x-auto">
-            <component :is="allVariantsBody" />
+          <div :class="STAGE_FRAME_CLASS">
+            <div class="overflow-x-auto">
+              <component :is="allVariantsBody" />
+            </div>
           </div>
-        </div>
-      </SectionGroup>
+        </SectionGroup>
 
-      <SectionGroup
-        v-if="spec.usage"
-        id="usage"
-        class="scroll-mt-6"
-        heading
-        bare
-        :title="tt('Usage', '用法')"
-      >
-        <p class="text-body whitespace-pre-wrap text-muted-foreground">
-          {{ usageText }}
-        </p>
-      </SectionGroup>
-    </div>
+        <SectionGroup
+          v-if="spec.usage"
+          id="usage"
+          class="scroll-mt-6"
+          heading
+          bare
+          :title="tt('Usage', '用法')"
+        >
+          <p class="text-body whitespace-pre-wrap text-muted-foreground">
+            {{ usageText }}
+          </p>
+        </SectionGroup>
+      </div>
+    </PageShell>
   </div>
 </template>
