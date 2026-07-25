@@ -18,6 +18,12 @@ import { computed } from 'vue'
 // picking the tone by eye instead of by tier is the recurring drift this
 // prop exists to prevent.
 //
+// heading: the doc-page section tier — the title/hint pair mirrors the page
+// intro's pattern (a strong foreground title at text-title semibold, a muted
+// hint at text-control), not the settings label. Wins over `tone`. Use for
+// documentation-style spines (the showcase's component pages) where each
+// section reads as a chapter, not a settings row group.
+//
 // bare: the body carries NO bordered surface of its own (plain text, a row
 // of buttons, a matrix). The px-2 title inset exists to offset a title from
 // the CARD beneath it — with no card there is nothing to offset, so title,
@@ -30,16 +36,23 @@ const props = withDefaults(defineProps<{
   // group is for). Sits directly under the title.
   description?: string
   tone?: 'foreground' | 'muted'
+  heading?: boolean
   bare?: boolean
 }>(), {
   title: '',
   description: '',
   tone: 'foreground',
+  heading: false,
   bare: false,
 })
 
 const titleClass = computed(() =>
-  props.tone === 'muted' ? 'text-muted-foreground' : 'text-foreground',
+  props.heading
+    ? 'text-title font-semibold text-foreground'
+    : `text-label font-medium ${props.tone === 'muted' ? 'text-muted-foreground' : 'text-foreground'}`,
+)
+const hintClass = computed(() =>
+  props.heading ? 'text-control' : 'text-body',
 )
 </script>
 
@@ -56,14 +69,14 @@ const titleClass = computed(() =>
       >
         <h2
           v-if="title"
-          class="text-label font-medium"
           :class="titleClass"
         >
           {{ title }}
         </h2>
         <p
           v-if="description"
-          class="text-body text-muted-foreground"
+          class="text-muted-foreground"
+          :class="hintClass"
         >
           {{ description }}
         </p>

@@ -38,14 +38,20 @@ const isOverlay = computed(() => props.spec.interactive === true)
 // accepts it without the Fragment typing gymnastics).
 const playgroundBody = computed(() => h('div', { class: 'contents' }, [rendered.value]))
 
+// The mini playground frame staging each example's instances (and the All
+// variants wall): a plain rounded border, content LEFT-aligned (it's a
+// reading column, not a hero), no viewport/theme chrome — that belongs to
+// the Playground alone. One home for the frame so every staged section
+// shares it.
+const STAGE_FRAME_CLASS = 'rounded-lg border border-border-soft px-6 py-6'
+
 // Each example becomes one doc section: title + optional note + its instances
-// frozen at the preset state, staged in a MINI PLAYGROUND — a plain rounded
-// frame with centered content (NO viewport/theme chrome; that belongs to the
-// Playground alone). With a surface beneath it, the section is no longer
-// bare: the title takes the card-relative px-2 inset. ALL sections render at
-// once down the scroll — safe for overlay specs because their renders are
-// closed, uncontrolled triggers (the pinning dead-lock came from controlled
-// `open`, not from having many triggers on the page).
+// frozen at the preset state, staged in the mini playground. With a surface
+// beneath it, the section is not bare: the title takes the card-relative
+// px-2 inset. ALL sections render at once down the scroll — safe for overlay
+// specs because their renders are closed, uncontrolled triggers (the pinning
+// dead-lock came from controlled `open`, not from having many triggers on
+// the page).
 const exampleSections = computed(() =>
   (props.spec.examples ?? []).map((ex, i) => {
     const exState = Object.assign(defaultState(props.spec), ex.state)
@@ -54,7 +60,7 @@ const exampleSections = computed(() =>
       anchor: exampleAnchor(i),
       // Children wrapped in an array: a bare VNodeChild can be null, which
       // h()'s RawChildren rejects; VNodeArrayChildren allows it.
-      body: h('div', { class: 'flex min-h-24 flex-wrap items-center justify-center gap-3 rounded-lg border border-border-soft px-6 py-6' }, [
+      body: h('div', { class: `flex min-h-24 flex-wrap items-center gap-3 ${STAGE_FRAME_CLASS}` }, [
         (ex.render ?? props.spec.render)(exState),
       ]),
     }
@@ -111,7 +117,7 @@ function axisValues(key: string): Array<string | boolean> {
       </header>
 
       <SectionGroup
-        tone="muted"
+        heading
         :title="tt('Playground', '试一试')"
       >
         <div class="flex flex-col gap-2.5">
@@ -139,7 +145,7 @@ function axisValues(key: string): Array<string | boolean> {
         :id="s.anchor"
         :key="s.ex.name"
         class="scroll-mt-6"
-        tone="muted"
+        heading
         :title="tt(s.ex.name, s.ex.nameZh)"
         :description="s.ex.note ? tt(s.ex.note, s.ex.noteZh) : undefined"
       >
@@ -150,14 +156,15 @@ function axisValues(key: string): Array<string | boolean> {
         v-if="spec.matrix"
         id="all-variants"
         class="scroll-mt-6"
-        tone="muted"
-        bare
+        heading
         :title="tt('All variants', '全部变体')"
       >
         <!-- Wide grids (Button: variant × 7 sizes) outgrow the measure;
              scroll sideways rather than clip. -->
-        <div class="overflow-x-auto pb-2">
-          <component :is="allVariantsBody" />
+        <div :class="STAGE_FRAME_CLASS">
+          <div class="overflow-x-auto">
+            <component :is="allVariantsBody" />
+          </div>
         </div>
       </SectionGroup>
 
@@ -165,7 +172,7 @@ function axisValues(key: string): Array<string | boolean> {
         v-if="spec.usage"
         id="usage"
         class="scroll-mt-6"
-        tone="muted"
+        heading
         bare
         :title="tt('Usage', '用法')"
       >

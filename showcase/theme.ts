@@ -47,29 +47,26 @@ function persist() {
   }
 }
 
-// Wrap in the View Transitions API to pick up the 220ms root crossfade that
-// style.css ships (it respects prefers-reduced-motion itself), matching the
-// host app's theme switch. Fall back to a hard swap when unsupported.
-function withTransition(mutate: () => void) {
-  if (typeof document.startViewTransition === 'function') {
-    document.startViewTransition(() => {
-      mutate()
-      applyTheme(themeState.theme, themeState.scheme)
-    })
-  }
-  else {
-    mutate()
-    applyTheme(themeState.theme, themeState.scheme)
-  }
+// Instant swap, no View Transitions crossfade — the host's own rationale
+// (store/settings): the control already animates its own feedback, and
+// wrapping the flip in startViewTransition freezes the page for the
+// transition's duration, swallows hover, and — worse here — captures the
+// OPEN scheme dropdown in the old snapshot, so the menu visibly morphs
+// instead of snapping shut. It also raced persistence: persist() ran
+// synchronously after startViewTransition scheduled its callback, so the
+// PREVIOUS theme was what landed in storage (state lost on every reload).
+function commit(mutate: () => void) {
+  mutate()
+  applyTheme(themeState.theme, themeState.scheme)
   persist()
 }
 
 export function setTheme(theme: ThemeMode) {
   if (themeState.theme === theme) return
-  withTransition(() => (themeState.theme = theme))
+  commit(() => (themeState.theme = theme))
 }
 
 export function setScheme(scheme: Scheme) {
   if (themeState.scheme === scheme) return
-  withTransition(() => (themeState.scheme = scheme))
+  commit(() => (themeState.scheme = scheme))
 }
