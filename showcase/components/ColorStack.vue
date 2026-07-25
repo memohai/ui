@@ -2,8 +2,15 @@
 import { nextTick, onMounted, ref, watch } from 'vue'
 import type { ColorRow } from '../lib/color-catalog'
 import { copyText } from '../lib/clipboard'
+import { STAGE_FRAME_CLASS } from '../lib/frame'
 import { tt } from '../lib/i18n'
 import { themeState } from '../theme'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '#/components/tooltip'
 
 // One token family as a vertical stack of full-width bars: the swatch is the
 // hero, the short name rides inside the bar, and the resolved value only
@@ -99,30 +106,38 @@ async function copy(token: string) {
 </script>
 
 <template>
-  <div
-    ref="cardEl"
-    class="flex flex-col gap-1 rounded-lg border border-border-soft bg-background p-1.5"
-  >
-    <button
-      v-for="(row, i) in rows"
-      :key="row.token"
-      :ref="(el) => setBar(el, i)"
-      type="button"
-      class="group relative flex h-8 cursor-pointer items-center rounded-md px-3"
-      :style="{
-        background: `var(${row.token})`,
-        color: lightInk[i] ? 'rgb(0 0 0 / 0.72)' : 'rgb(255 255 255 / 0.88)',
-      }"
-      @click="copy(row.token)"
+  <!-- Hover hint = the library's own Tooltip (the showcase dogfoods its
+       overlay, never a hand-rolled bubble). The bars live on a page that
+       follows the global theme, so the portaled pill always matches. -->
+  <TooltipProvider>
+    <div
+      ref="cardEl"
+      :class="[STAGE_FRAME_CLASS, 'flex flex-col gap-1 bg-background p-1.5']"
     >
-      <span class="font-mono text-caption">
-        {{ copied === row.token ? tt('Copied', '已复制') : row.short }}
-      </span>
-      <!-- Hover tooltip: full token + live resolved value. Pointer-events-none
-           so it never traps the cursor between bars. -->
-      <span
-        class="pointer-events-none absolute -top-7 left-1/2 z-(--z-overlay) -translate-x-1/2 rounded-md border border-border bg-popover px-2 py-0.5 font-mono text-caption whitespace-nowrap text-popover-foreground opacity-0 shadow-(--shadow-dropdown) transition-opacity duration-100 group-hover:opacity-100"
-      >{{ row.token }} · {{ resolved[i] || '—' }}</span>
-    </button>
-  </div>
+      <Tooltip
+        v-for="(row, i) in rows"
+        :key="row.token"
+      >
+        <TooltipTrigger as-child>
+          <button
+            :ref="(el) => setBar(el, i)"
+            type="button"
+            class="flex h-8 w-full cursor-pointer items-center rounded-md px-3"
+            :style="{
+              background: `var(${row.token})`,
+              color: lightInk[i] ? 'rgb(0 0 0 / 0.72)' : 'rgb(255 255 255 / 0.88)',
+            }"
+            @click="copy(row.token)"
+          >
+            <span class="font-mono text-caption">
+              {{ copied === row.token ? tt('Copied', '已复制') : row.short }}
+            </span>
+          </button>
+        </TooltipTrigger>
+        <TooltipContent class="font-mono">
+          {{ row.token }} · {{ resolved[i] || '—' }}
+        </TooltipContent>
+      </Tooltip>
+    </div>
+  </TooltipProvider>
 </template>

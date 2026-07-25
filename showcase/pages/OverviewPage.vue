@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { componentSpecs } from '../specs'
 import { defaultState } from '../lib/spec'
+import { STAGE_FRAME_CLASS } from '../lib/frame'
 import { navigate } from '../router'
 import { tt } from '../lib/i18n'
 
@@ -53,7 +54,7 @@ const LEGACY = ['Badge (semantic fills)', 'Alert (semantic fills)', 'components/
           v-for="{ spec, render } in cards"
           :key="spec.id"
           type="button"
-          class="flex cursor-pointer flex-col rounded-lg border border-border-soft p-4 text-left transition-colors hover:bg-(--ui-hover)"
+          :class="[STAGE_FRAME_CLASS, 'flex cursor-pointer flex-col p-4 text-left transition-colors hover:bg-(--ui-hover)']"
           @click="navigate(`components/${spec.id}`)"
         >
           <div class="mb-1 text-title font-semibold text-foreground">

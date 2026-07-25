@@ -3,6 +3,7 @@ import type { ComponentSpec, SpecState } from '../lib/spec'
 import { computed, h, reactive, ref } from 'vue'
 import { PageShell, SectionGroup } from '#/components/settings'
 import { defaultState, exampleAnchor } from '../lib/spec'
+import { STAGE_FRAME_CLASS } from '../lib/frame'
 import { tt } from '../lib/i18n'
 import CanvasStage from '../components/CanvasStage.vue'
 import ControlsPanel from '../components/ControlsPanel.vue'
@@ -38,12 +39,9 @@ const isOverlay = computed(() => props.spec.interactive === true)
 // accepts it without the Fragment typing gymnastics).
 const playgroundBody = computed(() => h('div', { class: 'contents' }, [rendered.value]))
 
-// The mini playground frame staging each example's instances (and the All
-// variants wall): a plain rounded border, content LEFT-aligned (it's a
-// reading column, not a hero), no viewport/theme chrome — that belongs to
-// the Playground alone. One home for the frame so every staged section
-// shares it.
-const STAGE_FRAME_CLASS = 'rounded-lg border border-border-soft px-6 py-6'
+// The staged-surface tier (rounded-lg border-border-soft) lives in
+// lib/frame.ts — one home shared by every frame on this page and across the
+// showcase. Padding is per-purpose and appended at the call site.
 
 // Each example becomes one doc section: title + optional note + its instances
 // frozen at the preset state, staged in the mini playground. With a surface
@@ -60,7 +58,7 @@ const exampleSections = computed(() =>
       anchor: exampleAnchor(i),
       // Children wrapped in an array: a bare VNodeChild can be null, which
       // h()'s RawChildren rejects; VNodeArrayChildren allows it.
-      body: h('div', { class: `flex min-h-24 flex-wrap items-center gap-3 ${STAGE_FRAME_CLASS}` }, [
+      body: h('div', { class: `flex min-h-24 flex-wrap items-center gap-3 ${STAGE_FRAME_CLASS} px-6 py-6` }, [
         (ex.render ?? props.spec.render)(exState),
       ]),
     }
@@ -125,7 +123,7 @@ function axisValues(key: string): Array<string | boolean> {
             <!-- Fixed-height frame: CanvasStage is built for flex-1 fill, so the
                wrapper gives the doc-flow section a concrete height and the
                stage's columns scroll inside it. -->
-            <div class="flex h-80 flex-col overflow-hidden rounded-lg border border-border-soft">
+            <div :class="[STAGE_FRAME_CLASS, 'flex h-80 flex-col overflow-hidden']">
               <CanvasStage
                 v-model="viewport"
                 :can-split="!isOverlay"
@@ -157,7 +155,7 @@ function axisValues(key: string): Array<string | boolean> {
         >
           <!-- Wide grids (Button: variant × 7 sizes) outgrow the measure;
              scroll sideways rather than clip. -->
-          <div :class="STAGE_FRAME_CLASS">
+          <div :class="[STAGE_FRAME_CLASS, 'px-6 py-6']">
             <div class="overflow-x-auto">
               <component :is="allVariantsBody" />
             </div>

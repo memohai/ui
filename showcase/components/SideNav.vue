@@ -10,6 +10,7 @@ import {
 } from '#/components/select'
 import { TextButton } from '#/components/text-button'
 import { ScrollArea } from '#/components/scroll-area'
+import { menuLabelClass } from '#/lib/menu'
 import { navGroups } from '../registry'
 import { navigate, route } from '../router'
 import { shellState } from '../shell'
@@ -57,10 +58,15 @@ import RowButton from './RowButton.vue'
             :key="group.id"
             class="mb-4 last:mb-0"
           >
-            <!-- Group label mirrors menuLabelClass's vocabulary (text-body,
-               medium, muted) and its optical trick: pl-2 (not the rows'
-               px-2.5) so the smaller text lines up with the row labels. -->
-            <div class="pt-3 pr-2.5 pb-1 pl-2 text-body font-medium text-muted-foreground first:pt-1">
+            <!-- The group label IS a menu section heading — consume the
+               library's menuLabelClass, never re-type it. (History: this used
+               to hand-write the same recipe with pt-3/first:pt-1, but every
+               label is the first child of its v-for group container, so
+               first:pt-1 matched ALL labels — the 12px intent never rendered;
+               the page has always shown menuLabelClass's py-1 rhythm. If the
+               12px/28px group-gap intent is ever wanted, that is a deliberate
+               visual change, not a restore.) -->
+            <div :class="menuLabelClass">
               {{ tt(group.label, group.labelZh) }}
             </div>
             <!-- The 2px seam between rows is the chat sidebar's row rhythm:
