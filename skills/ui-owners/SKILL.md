@@ -48,7 +48,9 @@ A grey section label above a bordered white card. Props: `title`. Slots: `#actio
 Save/Cancel or pagination — rendered *inside* the card with a top hairline). A card is a
 `SettingsSection`; you never hand-roll `rounded-… border bg-card`.
 
-**SectionGroup** · `section-group/index.vue`
+**SectionGroup** · `section-group/index.vue` — a re-export shim; the
+implementation lives in `@felinic/ui` (`src/components/settings`), shared
+with the component showcase. Import new call sites from `@felinic/ui`.
 A titled content group: a **foreground** section label (+ optional hint, `#actions`
 toolbar) heading a BARE body — typically a BackendCard grid. Deliberately NOT
 SettingsSection (muted label + bordered card): SectionGroup is the page-content tier,

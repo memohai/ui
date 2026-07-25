@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ComponentSpec, SpecState } from '../lib/spec'
 import { computed, h, reactive, ref } from 'vue'
+import { SectionGroup } from '#/components/settings'
 import { defaultState, exampleAnchor } from '../lib/spec'
 import { tt } from '../lib/i18n'
 import CanvasStage from '../components/CanvasStage.vue'
@@ -88,12 +89,15 @@ function axisValues(key: string): Array<string | boolean> {
 </script>
 
 <template>
-  <!-- The doc column owns the page scroll. Section rhythm uses the contract's
-       spacing rungs: gap-6 between page-level sections (the host's page
-       rhythm), gap-3 inside a section (title → note → body). -->
+  <!-- The doc column owns the page scroll. The grid is the owner
+       vocabulary's, not invented here: titles and running text sit on the
+       px-2 text column (PageShell / SectionGroup / SettingsSection all inset
+       their titles px-2), surfaces (cards, the canvas) are flush. Vertical
+       rhythm: gap-8 between page-level sections (the host's settings-page
+       rhythm); each section's title→body gap is owned by SectionGroup. -->
   <div class="min-w-0 flex-1 overflow-y-auto">
-    <div class="mx-auto flex max-w-3xl flex-col gap-6 px-8 py-10">
-      <header class="flex flex-col gap-2">
+    <div class="mx-auto flex max-w-3xl flex-col gap-8 px-8 py-10">
+      <header class="flex flex-col gap-2 px-2">
         <h1 class="text-heading font-semibold text-foreground">
           {{ spec.name }}
         </h1>
@@ -102,76 +106,61 @@ function axisValues(key: string): Array<string | boolean> {
         </p>
       </header>
 
-      <section
-        id="playground"
-        class="flex flex-col gap-3"
-      >
-        <h2 class="text-title font-semibold text-foreground">
-          {{ tt('Playground', '试一试') }}
-        </h2>
-        <ControlsPanel
-          :spec="spec"
-          :state="state"
-          @set="set"
-        />
-        <!-- Fixed-height frame: CanvasStage is built for flex-1 fill, so the
-             wrapper gives the doc-flow section a concrete height and the
-             stage's columns scroll inside it. -->
-        <div class="flex h-80 flex-col overflow-hidden rounded-lg border border-border-soft">
-          <CanvasStage
-            v-model="viewport"
-            :can-split="!isOverlay"
-          >
-            <component :is="playgroundBody" />
-          </CanvasStage>
+      <SectionGroup :title="tt('Playground', '试一试')">
+        <div class="flex flex-col gap-2.5">
+          <ControlsPanel
+            :spec="spec"
+            :state="state"
+            @set="set"
+          />
+          <!-- Fixed-height frame: CanvasStage is built for flex-1 fill, so the
+               wrapper gives the doc-flow section a concrete height and the
+               stage's columns scroll inside it. -->
+          <div class="flex h-80 flex-col overflow-hidden rounded-lg border border-border-soft">
+            <CanvasStage
+              v-model="viewport"
+              :can-split="!isOverlay"
+            >
+              <component :is="playgroundBody" />
+            </CanvasStage>
+          </div>
         </div>
-      </section>
+      </SectionGroup>
 
-      <section
+      <SectionGroup
         v-for="s in exampleSections"
         :id="s.anchor"
         :key="s.ex.name"
-        class="flex scroll-mt-6 flex-col gap-3"
+        class="scroll-mt-6"
+        :title="tt(s.ex.name, s.ex.nameZh)"
+        :description="s.ex.note ? tt(s.ex.note, s.ex.noteZh) : undefined"
       >
-        <h2 class="text-title font-semibold text-foreground">
-          {{ tt(s.ex.name, s.ex.nameZh) }}
-        </h2>
-        <p
-          v-if="s.ex.note"
-          class="text-body text-muted-foreground"
-        >
-          {{ tt(s.ex.note, s.ex.noteZh) }}
-        </p>
         <component :is="s.body" />
-      </section>
+      </SectionGroup>
 
-      <section
+      <SectionGroup
         v-if="spec.matrix"
         id="all-variants"
-        class="flex scroll-mt-6 flex-col gap-3"
+        class="scroll-mt-6"
+        :title="tt('All variants', '全部变体')"
       >
-        <h2 class="text-title font-semibold text-foreground">
-          {{ tt('All variants', '全部变体') }}
-        </h2>
         <!-- Wide grids (Button: variant × 7 sizes) outgrow the measure;
-               scroll sideways rather than clip. -->
+             scroll sideways rather than clip. -->
         <div class="overflow-x-auto pb-2">
           <component :is="allVariantsBody" />
         </div>
-      </section>
+      </SectionGroup>
 
-      <section
+      <SectionGroup
         v-if="spec.usage"
         id="usage"
-        class="flex scroll-mt-6 flex-col gap-3"
+        class="scroll-mt-6"
+        :title="tt('Usage', '用法')"
       >
-        <h2 class="text-title font-semibold text-foreground">
-          {{ tt('Usage', '用法') }}
-        </h2>
-        <p class="text-body whitespace-pre-wrap text-muted-foreground">
+        <p class="px-2 text-body whitespace-pre-wrap text-muted-foreground">
           {{ usageText }}
         </p>
-      </section>
+      </SectionGroup>
     </div>
   </div>
 </template>
