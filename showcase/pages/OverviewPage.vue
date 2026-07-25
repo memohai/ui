@@ -32,14 +32,14 @@ const LEGACY = ['Badge (semantic fills)', 'Alert (semantic fills)', 'components/
     <section class="mb-10">
       <p class="max-w-xl text-control text-foreground">
         {{ tt(
-          'The living reference for @felinic/ui — every page renders the real component, and every control drives the code snippet live.',
-          '@felinic/ui 的活文档——每一页渲染的都是真实组件,每个控件都实时驱动代码片段。',
+          'The living reference for @felinic/ui — every page renders the real component, live and tweakable.',
+          '@felinic/ui 的活文档——每一页渲染的都是真实组件,活的、可调。',
         ) }}
       </p>
       <p class="mt-2 max-w-xl text-body text-muted-foreground">
         {{ tt(
-          'Theme and color scheme switch at the bottom of the sidebar; the controls panel and code panel frame every component page.',
-          '主题与配色方案在侧栏底部切换;控件面板和代码面板框定每一个组件页。',
+          'Theme and color scheme switch at the bottom of the sidebar; each component page pairs a control board with live examples down the scroll.',
+          '主题与配色方案在侧栏底部切换;每个组件页上方是控制板,向下滚动是一节节活示例。',
         ) }}
       </p>
     </section>

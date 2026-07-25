@@ -11,7 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '#/components/select'
-import { boolAttr, strAttr } from '../lib/codegen'
 
 const SIZES = ['default', 'sm', 'lg'] as const
 
@@ -75,22 +74,6 @@ export const selectSpec: ComponentSpec = {
               ]),
             ]),
         ),
-      code: state => `<Select model-value="${state.value}">
-  <SelectTrigger class="w-64">
-    <SelectValue placeholder="${PLACEHOLDER}" />
-  </SelectTrigger>
-  <SelectContent>
-    <SelectGroup>
-      <SelectLabel>Anthropic</SelectLabel>
-      ${CLAUDE_MODELS.map(m => `<SelectItem value="${m.value}"><SelectItemText>${m.label}</SelectItemText></SelectItem>`).join('\n      ')}
-    </SelectGroup>
-    <SelectSeparator />
-    <SelectGroup>
-      <SelectLabel>OpenAI</SelectLabel>
-      ${OPENAI_MODELS.map(m => `<SelectItem value="${m.value}"><SelectItemText>${m.label}</SelectItemText></SelectItem>`).join('\n      ')}
-    </SelectGroup>
-  </SelectContent>
-</Select>`,
     },
   ],
   render: state =>
@@ -103,19 +86,6 @@ export const selectSpec: ComponentSpec = {
       },
       () => triggerAndContent(state, () => ALL_MODELS.map(m => h(SelectItem, { value: m.value }, () => h(SelectItemText, null, () => m.label)))),
     ),
-  code: (state) => {
-    const attrs
-      = (state.value ? ` model-value="${state.value}"` : '')
-      + boolAttr('disabled', Boolean(state.disabled))
-    return `<Select${attrs}>
-  <SelectTrigger${strAttr('class', 'w-64')}${strAttr('size', String(state.size), 'default')}>
-    <SelectValue placeholder="${PLACEHOLDER}" />
-  </SelectTrigger>
-  <SelectContent>
-    ${ALL_MODELS.map(m => `<SelectItem value="${m.value}"><SelectItemText>${m.label}</SelectItemText></SelectItem>`).join('\n    ')}
-  </SelectContent>
-</Select>`
-  },
   usage: `The trigger is a FIELD — it follows the field-edge contract, engaged on focus (click), never hover.
 
 - Never inject bg-* / border / hover classes into SelectTrigger; pick size, nothing else.

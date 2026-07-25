@@ -1,7 +1,6 @@
 import type { ComponentSpec } from '../lib/spec'
 import { h } from 'vue'
 import { Textarea } from '#/components/textarea'
-import { boolAttr, numAttr, strAttr } from '../lib/codegen'
 
 const SIZES = ['default', 'sm', 'lg'] as const
 
@@ -26,12 +25,4 @@ export const textareaSpec: ComponentSpec = {
       disabled: Boolean(state.disabled),
       class: 'w-80',
     }),
-  code: (state) => {
-    const attrs
-      = strAttr('size', String(state.size), 'default')
-      + strAttr('placeholder', String(state.placeholder), 'Tell the bot what to do…')
-      + numAttr('rows', Number(state.rows), 3)
-      + boolAttr('disabled', Boolean(state.disabled))
-    return `<Textarea${attrs} />`
-  },
 }

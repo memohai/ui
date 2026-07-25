@@ -2,7 +2,6 @@ import type { ComponentSpec } from '../lib/spec'
 import { h } from 'vue'
 import { ArrowRight, Plus, RefreshCw } from 'lucide-vue-next'
 import { Button, buttonSizeKeys, buttonVariantKeys } from '#/components/button'
-import { boolAttr, strAttr } from '../lib/codegen'
 
 const LOADING_MODES = ['overlay', 'icon', 'leading'] as const
 
@@ -58,34 +57,16 @@ export const buttonSpec: ComponentSpec = {
         h(Button, { variant: 'secondary' }, () => ['Continue', h(ArrowRight)]),
         h(Button, { variant: 'ghost', size: 'icon', 'aria-label': 'Refresh' }, () => h(RefreshCw)),
       ],
-      code: () => `<Button>
-  <Plus />
-  New
-</Button>
-<Button variant="secondary">
-  Continue
-  <ArrowRight />
-</Button>
-<Button variant="ghost" size="icon" aria-label="Refresh">
-  <RefreshCw />
-</Button>`,
     },
     {
       name: 'Loading modes',
       nameZh: '加载模式',
-      note: 'overlay covers the whole label so width never shifts; icon and leading place the spinner where the eye already is. loading blocks clicks — busy is not disabled.',
-      noteZh: 'overlay 覆盖整个标签、宽度不抖动;icon 和 leading 把 spinner 放在视线已在的位置。loading 会屏蔽点击——忙 ≠ 禁用。',
+      note: 'overlay hides the label and centers the spinner — width never shifts; leading grows the spinner in before the label, the full-width CTA pattern. The loading glyph is always the arrow-less Spinner, never a spinning action icon. loading blocks clicks — busy is not disabled.',
+      noteZh: 'overlay 隐藏标签并把 spinner 居中,宽度不抖;leading 让 spinner 在标签前长出来,是全宽 CTA 的形态。loading 的图形永远是不带箭头的 Spinner,绝不是一个旋转起来的动作图标。loading 会屏蔽点击——忙 ≠ 禁用。',
       render: () => [
         h(Button, { loading: true }, () => 'Save changes'),
-        h(Button, { variant: 'secondary', loading: true, loadingMode: 'icon' }, () => [h(RefreshCw), 'Sync']),
         h(Button, { loading: true, loadingMode: 'leading' }, () => 'Continue'),
       ],
-      code: () => `<Button loading>Save changes</Button>
-<Button variant="secondary" loading loading-mode="icon">
-  <RefreshCw />
-  Sync
-</Button>
-<Button loading loading-mode="leading">Continue</Button>`,
     },
     {
       name: 'Icon buttons',
@@ -97,9 +78,6 @@ export const buttonSpec: ComponentSpec = {
         h(Button, { size: 'icon', 'aria-label': 'Add' }, () => h(Plus)),
         h(Button, { size: 'icon-sm', 'aria-label': 'Add' }, () => h(Plus)),
       ],
-      code: () => `<Button size="icon-lg" aria-label="Add"><Plus /></Button>
-<Button size="icon" aria-label="Add"><Plus /></Button>
-<Button size="icon-sm" aria-label="Add"><Plus /></Button>`,
     },
   ],
   render: (state) => {
@@ -121,21 +99,6 @@ export const buttonSpec: ComponentSpec = {
       },
       iconOnly ? () => h(Plus) : () => String(state.label),
     )
-  },
-  code: (state) => {
-    const variant = String(state.variant)
-    const iconOnly = String(state.size).startsWith('icon')
-    const link = isLink(variant) ? ' as="a" href="#"' : ''
-    const attrs
-      = strAttr('variant', variant, 'default')
-      + strAttr('size', String(state.size), 'default')
-      + link
-      + boolAttr('loading', Boolean(state.loading))
-      + (state.loading ? strAttr('loading-mode', String(state.loadingMode), 'overlay') : '')
-      + boolAttr('disabled', Boolean(state.disabled))
-      + boolAttr('block', Boolean(state.block))
-    if (iconOnly) return `<Button${attrs} aria-label="${state.label}"><Plus /></Button>`
-    return `<Button${attrs}>${state.label}</Button>`
   },
   usage: `Reach for variant + size, never hand-written classes.
 

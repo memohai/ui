@@ -2,7 +2,6 @@ import type { ComponentSpec } from '../lib/spec'
 import { h } from 'vue'
 import { Bold } from 'lucide-vue-next'
 import { Toggle, toggleSizeKeys, toggleVariantKeys } from '#/components/toggle'
-import { boolAttr, strAttr } from '../lib/codegen'
 
 export const toggleSpec: ComponentSpec = {
   id: 'toggle',
@@ -30,16 +29,6 @@ export const toggleSpec: ComponentSpec = {
       },
       () => h(Bold),
     ),
-  code: (state) => {
-    const attrs
-      = strAttr('variant', String(state.variant), 'default')
-      + strAttr('size', String(state.size), 'default')
-      + (state.pressed ? ' model-value="true"' : '')
-      + boolAttr('disabled', Boolean(state.disabled))
-    return `<Toggle${attrs} aria-label="Bold">
-  <Bold />
-</Toggle>`
-  },
   usage: `Toggle's ON state is the "selected state" (§ Selected state in AGENTS.md): durable chrome on the control itself.
 
 - tint uses brand purple — rationed; the default neutral on-state covers almost every toolbar flag.

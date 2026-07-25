@@ -2,7 +2,6 @@ import type { ComponentSpec } from '../lib/spec'
 import { h } from 'vue'
 import { Check } from 'lucide-vue-next'
 import { Badge, badgeFontKeys, badgeSizeKeys, badgeVariantKeys } from '#/components/badge'
-import { strAttr } from '../lib/codegen'
 
 export const badgeSpec: ComponentSpec = {
   id: 'badge',
@@ -27,16 +26,11 @@ export const badgeSpec: ComponentSpec = {
         h(Badge, { variant: 'warning' }, () => [h(Check), 'Pending']),
         h(Badge, { variant: 'destructive' }, () => [h(Check), 'Failed']),
       ],
-      code: () => `<Badge variant="success">
-  <Check />
-  Deployed
-</Badge>`,
     },
     {
       name: 'Technical values',
       nameZh: '技术值',
       state: { font: 'mono', label: '0 4 * * *' },
-      code: () => '<Badge font="mono">0 4 * * *</Badge>',
     },
   ],
   render: state =>
@@ -49,13 +43,6 @@ export const badgeSpec: ComponentSpec = {
       },
       () => String(state.label),
     ),
-  code: (state) => {
-    const attrs
-      = strAttr('variant', String(state.variant), 'default')
-      + strAttr('size', String(state.size), 'default')
-      + strAttr('font', String(state.font), 'sans')
-    return `<Badge${attrs}>${state.label}</Badge>`
-  },
   usage: `A Badge is a READ-ONLY status chip — never a button, never a filter pick. If it needs a click, it is a Button or a Toggle.
 
 - Status hues carry meaning (success / warning / destructive); default and secondary are neutral. Do not invent new hues per page.

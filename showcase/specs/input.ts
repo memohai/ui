@@ -1,7 +1,6 @@
 import type { ComponentSpec } from '../lib/spec'
 import { h } from 'vue'
 import { Input } from '#/components/input'
-import { boolAttr, strAttr } from '../lib/codegen'
 
 const SIZES = ['default', 'sm', 'lg'] as const
 const EMPHASES = ['solid', 'subtle'] as const
@@ -40,15 +39,6 @@ export const inputSpec: ComponentSpec = {
       disabled: Boolean(state.disabled),
       class: 'w-64',
     }),
-  code: (state) => {
-    const attrs
-      = strAttr('size', String(state.size), 'default')
-      + strAttr('emphasis', String(state.emphasis), 'solid')
-      + strAttr('placeholder', String(state.placeholder), 'Email address')
-      + (state.value ? ` model-value="${state.value}"` : '')
-      + boolAttr('disabled', Boolean(state.disabled))
-    return `<Input${attrs} />`
-  },
   usage: `Fields engage on FOCUS only, never hover.
 
 - Focus swaps the field edge to --field-edge-solid in place — do not add an outer ring or grow the border width.

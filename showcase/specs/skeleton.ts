@@ -59,11 +59,6 @@ export const skeletonSpec: ComponentSpec = {
           // would lie about the layout it is standing in for.
           h(Skeleton, { class: 'h-3 w-48' }),
         ]),
-      code: () => `<div class="space-y-2">
-  <Skeleton class="h-3 w-64" />
-  <Skeleton class="h-3 w-64" />
-  <Skeleton class="h-3 w-48" />
-</div>`,
     },
     {
       name: 'Card: avatar + two lines',
@@ -76,13 +71,6 @@ export const skeletonSpec: ComponentSpec = {
             h(Skeleton, { class: 'h-3 w-24' }),
           ]),
         ]),
-      code: () => `<div class="flex items-center gap-3">
-  <Skeleton class="size-10 rounded-full" />
-  <div class="space-y-2">
-    <Skeleton class="h-3 w-32" />
-    <Skeleton class="h-3 w-24" />
-  </div>
-</div>`,
     },
     {
       name: 'List rows',
@@ -102,18 +90,11 @@ export const skeletonSpec: ComponentSpec = {
             h(Skeleton, { class: 'h-3 flex-1' }),
           ]),
         ]),
-      code: () => `<div class="space-y-4">
-  <div v-for="i in 3" :key="i" class="flex items-center gap-3">
-    <Skeleton class="size-8 rounded-full" />
-    <Skeleton class="h-3 flex-1" />
-  </div>
-</div>`,
     },
   ],
   render: state => h(Skeleton, { class: shapeSizeClass(state) }),
   // class is always shown — it IS the component's API; there is no default to
   // omit (unlike variant attrs, a bare <Skeleton /> is an empty 0×0 block).
-  code: state => `<Skeleton class="${shapeSizeClass(state)}" />`,
   usage: `Skeleton is the placeholder for content whose layout you ALREADY know. It mirrors the shape of what is coming so nothing jumps when data arrives.
 
 - Shape the block to the real content: text lines at their real line height, avatar as rounded-full, media as a block. The last line of a paragraph runs short — a full-width final line lies about the layout.

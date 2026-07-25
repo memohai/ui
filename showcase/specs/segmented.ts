@@ -16,12 +16,6 @@ const DISABLED_ITEMS: SegmentedItem<string>[] = [
   { value: 'year', label: 'Year', disabled: true },
 ]
 
-function itemsCode(items: SegmentedItem<string>[]): string {
-  return items
-    .map(i => `  { value: '${i.value}', label: '${i.label}'${i.disabled ? ', disabled: true' : ''} },`)
-    .join('\n')
-}
-
 export const segmentedSpec: ComponentSpec = {
   id: 'segmented',
   name: 'SegmentedControl',
@@ -44,13 +38,6 @@ export const segmentedSpec: ComponentSpec = {
           modelValue: String(state.value),
           'onUpdate:modelValue': (v: unknown) => (state.value = String(v)),
         }),
-      code: () => `<SegmentedControl
-  v-model="range"
-  :items="[
-${itemsCode(FOUR_ITEMS)}
-  ]"
-  aria-label="Time range"
-/>`,
     },
     {
       name: 'With a disabled item',
@@ -63,13 +50,6 @@ ${itemsCode(FOUR_ITEMS)}
           modelValue: String(state.value),
           'onUpdate:modelValue': (v: unknown) => (state.value = String(v)),
         }),
-      code: () => `<SegmentedControl
-  v-model="range"
-  :items="[
-${itemsCode(DISABLED_ITEMS)}
-  ]"
-  aria-label="Time range"
-/>`,
     },
   ],
   render: state =>
@@ -79,13 +59,6 @@ ${itemsCode(DISABLED_ITEMS)}
       modelValue: String(state.value),
       'onUpdate:modelValue': (v: unknown) => (state.value = String(v)),
     }),
-  code: () => `<SegmentedControl
-  v-model="range"
-  :items="[
-${itemsCode(BASIC_ITEMS)}
-  ]"
-  aria-label="Time range"
-/>`,
   usage: `SegmentedControl ≠ Tabs. Segmented returns ONE value (role="radiogroup") and owns no content; Tabs switch panels and carry the tab a11y contract.
 
 - Day/Week/Month, List/Board, view toggles → SegmentedControl.

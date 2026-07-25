@@ -7,7 +7,6 @@ import {
   AccordionTrigger,
   accordionTypeKeys,
 } from '#/components/accordion'
-import { boolAttr, strAttr } from '../lib/codegen'
 
 interface Entry {
   value: string
@@ -76,11 +75,9 @@ export const accordionSpec: ComponentSpec = {
       nameZh: '设置分组',
       state: { type: 'multiple', open: 'general,memory' },
       render: state => accordion(state, settingsItems),
-      code: state => codeFor(state, settingsItems),
     },
   ],
   render: state => accordion(state, faqItems),
-  code: state => codeFor(state, faqItems),
   usage: `Accordion stacks peer sections behind headers so secondary content stays out of the way — progressive disclosure, not a hiding place.
 
 - Use it for FAQs, advanced settings, and other content the reader opens on demand. A trigger is a short noun or question; the content answers it in one or two sentences.
@@ -140,25 +137,4 @@ function accordion(state: SpecState, items: Entry[]) {
       ]),
     ),
   )
-}
-
-function codeFor(state: SpecState, items: Entry[]): string {
-  const multiple = state.type === 'multiple'
-  const open = openValues(state, items)
-  const openAttr = open.length === 0
-    ? ''
-    : multiple
-      ? ` :model-value="[${open.map(v => `'${v}'`).join(', ')}]"`
-      : ` model-value="${open[0]}"`
-  const attrs
-    = strAttr('type', String(state.type))
-    + (multiple ? '' : boolAttr('collapsible', Boolean(state.collapsible)))
-    + openAttr
-  const body = items
-    .map(item => `  <AccordionItem value="${item.value}">
-    <AccordionTrigger>${item.trigger}</AccordionTrigger>
-    <AccordionContent>${item.content}</AccordionContent>
-  </AccordionItem>`)
-    .join('\n')
-  return `<Accordion${attrs}>\n${body}\n</Accordion>`
 }

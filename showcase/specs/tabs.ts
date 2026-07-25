@@ -2,7 +2,6 @@ import type { ComponentSpec, SpecState } from '../lib/spec'
 import { h } from 'vue'
 import { Bell, KeyRound, User } from 'lucide-vue-next'
 import { Tabs, TabsContent, TabsList, TabsTrigger, tabsListVariantKeys } from '#/components/tabs'
-import { boolAttr, strAttr } from '../lib/codegen'
 
 // One tab table shared by the canvas, matrix, examples, and code() — the
 // snippet must mirror the stage exactly, so both read from here.
@@ -43,30 +42,6 @@ function renderTabs(state: SpecState, withIcons = false) {
   ])
 }
 
-function tabsCode(state: SpecState, withIcons = false): string {
-  const listAttrs = strAttr('variant', String(state.variant), 'underline')
-  const triggers = TABS.map((t) => {
-    const dis = t.value === DISABLED_VALUE ? boolAttr('disabled', Boolean(state.disabled)) : ''
-    if (!withIcons)
-      return `    <TabsTrigger value="${t.value}"${dis}>${t.label}</TabsTrigger>`
-    return `    <TabsTrigger value="${t.value}"${dis}>
-      <${TAB_ICONS[t.value].name} />
-      ${t.label}
-    </TabsTrigger>`
-  }).join('\n')
-  const contents = TABS.map(t =>
-    `  <TabsContent value="${t.value}">
-    ${t.content}
-  </TabsContent>`,
-  ).join('\n')
-  return `<Tabs v-model="tab" class="w-96">
-  <TabsList${listAttrs}>
-${triggers}
-  </TabsList>
-${contents}
-</Tabs>`
-}
-
 export const tabsSpec: ComponentSpec = {
   id: 'tabs',
   name: 'Tabs',
@@ -96,11 +71,9 @@ export const tabsSpec: ComponentSpec = {
       nameZh: '图标触发器',
       state: { value: 'account' },
       render: state => renderTabs(state, true),
-      code: state => tabsCode(state, true),
     },
   ],
   render: state => renderTabs(state),
-  code: state => tabsCode(state),
   usage: `Tabs switch PANELS and own the tab a11y contract (tablist / tab / tabpanel, arrow-key roving focus). Picking ONE value from a row — Day/Week/Month, List/Board — is SegmentedControl: it returns a value and owns no content.
 
 - underline (default) is the section-nav rail: full-width bottom border with a sliding bar. The default for page- or dialog-level sections.

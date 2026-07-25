@@ -2,7 +2,6 @@ import type { ComponentSpec } from '../lib/spec'
 import { h } from 'vue'
 import { Checkbox } from '#/components/checkbox'
 import { Label } from '#/components/label'
-import { boolAttr } from '../lib/codegen'
 
 const STATES = ['unchecked', 'checked', 'indeterminate'] as const
 
@@ -34,15 +33,6 @@ export const checkboxSpec: ComponentSpec = {
       }),
       h(Label, { for: 'showcase-checkbox' }, () => String(state.label)),
     ]),
-  code: (state) => {
-    const model
-      = state.state === 'indeterminate'
-        ? ' model-value="indeterminate"'
-        : state.state === 'checked'
-          ? ' model-value="true"'
-          : ''
-    return `<Checkbox${model}${boolAttr('disabled', Boolean(state.disabled))} />`
-  },
   usage: `Selection is an indicator (the tick), never a persistent row background.
 
 - Always pair with a Label — clicking the label toggles the box via for/id.

@@ -48,8 +48,7 @@ export type ControlSpec = EnumControl | BooleanControl | NumberControl | StringC
 
 // A named example — one semantic section on the component page (the page is a
 // vertical doc spine: Playground first, then one section per example). Each
-// section renders its instances frozen at the preset state, with its own
-// collapsible code snippet.
+// section renders its instances frozen at the preset state.
 export interface ExampleSpec {
   name: string
   nameZh?: string
@@ -59,10 +58,9 @@ export interface ExampleSpec {
   note?: string
   noteZh?: string
   state?: Partial<SpecState>
-  // Optional overrides for cases the default render/code can't express (e.g.
-  // slot-heavy compositions like InputGroup adornments).
+  // Optional render override for cases the default render can't express
+  // (e.g. slot-heavy compositions like InputGroup adornments).
   render?: (state: SpecState) => VNodeChild
-  code?: (state: SpecState) => string
 }
 
 export interface ComponentSpec {
@@ -91,10 +89,7 @@ export interface ComponentSpec {
   // reka's document-level DismissableLayer — see CanvasStage.)
   interactive?: boolean
   render: (state: SpecState) => VNodeChild
-  // Live Vue snippet mirroring exactly what render() shows. Hand-written per
-  // spec (not a generic serializer) — snippet quality is the whole point.
-  code: (state: SpecState) => string
-  // Agent-facing do/don't notes; renders the Usage tab when present.
+  // Agent-facing do/don't notes; renders the Usage section when present.
   usage?: string
   usageZh?: string
 }

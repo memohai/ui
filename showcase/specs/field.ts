@@ -8,7 +8,6 @@ import {
   FieldLabel,
 } from '#/components/field'
 import { Input } from '#/components/input'
-import { boolAttr, strAttr } from '../lib/codegen'
 
 const DESCRIPTION = 'Shown in the bot list and search.'
 const ERROR = 'That name is already taken.'
@@ -34,19 +33,6 @@ export const fieldSpec: ComponentSpec = {
       state.description ? h(FieldDescription, null, () => DESCRIPTION) : undefined,
       state.invalid ? h(FieldError, null, () => ERROR) : undefined,
     ]),
-  code: (state) => {
-    const lines = [
-      `<Field${boolAttr('invalid', Boolean(state.invalid))}>`,
-      `  <FieldLabel${boolAttr('required', Boolean(state.required))}>${state.label}</FieldLabel>`,
-      '  <FieldControl>',
-      `    <Input${strAttr('placeholder', String(state.placeholder), '')} />`,
-      '  </FieldControl>',
-    ]
-    if (state.description) lines.push(`  <FieldDescription>${DESCRIPTION}</FieldDescription>`)
-    if (state.invalid) lines.push(`  <FieldError>${ERROR}</FieldError>`)
-    lines.push('</Field>')
-    return lines.join('\n')
-  },
   usage: `Always wrap form controls in Field — the label's for, the description/error aria-describedby, and the invalid styling all come from its context.
 
 - FieldError only renders when there IS an error; its presence alone flips the field to invalid (no separate invalid prop needed for that path).

@@ -1,7 +1,6 @@
 import type { ComponentSpec } from '../lib/spec'
 import { h } from 'vue'
 import { NativeSelect } from '#/components/native-select'
-import { boolAttr, strAttr } from '../lib/codegen'
 
 const SIZES = ['default', 'sm', 'lg'] as const
 
@@ -29,12 +28,4 @@ export const nativeSelectSpec: ComponentSpec = {
       },
       () => SCHEMES.map(s => h('option', { value: s }, s)),
     ),
-  code: (state) => {
-    const attrs
-      = strAttr('size', String(state.size), 'default')
-      + boolAttr('disabled', Boolean(state.disabled))
-    return `<NativeSelect${attrs}>
-  ${SCHEMES.map(s => `<option value="${s}">${s}</option>`).join('\n  ')}
-</NativeSelect>`
-  },
 }

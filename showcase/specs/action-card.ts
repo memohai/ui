@@ -2,7 +2,6 @@ import type { ComponentSpec } from '../lib/spec'
 import { h } from 'vue'
 import { ArrowUpRight, FolderCog } from 'lucide-vue-next'
 import { ActionCard } from '#/components/action-card'
-import { strAttr } from '../lib/codegen'
 
 export const actionCardSpec: ComponentSpec = {
   id: 'action-card',
@@ -32,25 +31,6 @@ export const actionCardSpec: ComponentSpec = {
           : {}),
       },
     ),
-  code: (state) => {
-    if (state.external) {
-      return `<ActionCard
-  as="a"
-  href="#"
-${strAttr('title', String(state.title), '')}
-${strAttr('description', String(state.description), '')}
->
-  <template #icon><FolderCog /></template>
-  <template #trailing><ArrowUpRight class="size-4 shrink-0 text-muted-foreground" /></template>
-</ActionCard>`
-    }
-    return `<ActionCard
-${strAttr('title', String(state.title), '')}
-${strAttr('description', String(state.description), '')}
->
-  <template #icon><FolderCog /></template>
-</ActionCard>`
-  },
   usage: `Reach for ActionCard when a row is a DOOR to a next surface (a focused dialog, a detail pane, an external URL).
 
 - The #icon slot is required — the card bakes in no glyph, so it never becomes icon-abuse it can't justify.

@@ -14,7 +14,6 @@ import {
   DropdownMenuTrigger,
   dropdownMenuItemVariantKeys,
 } from '#/components/dropdown-menu'
-import { boolAttr, strAttr } from '../lib/codegen'
 
 // Uncontrolled (interactive: true): DropdownMenuTrigger opens, Esc/outside-click
 // closes. The canvas shows the closed trigger you click — no `open` prop is
@@ -80,23 +79,6 @@ export const dropdownMenuSpec: ComponentSpec = {
             h(DropdownMenuItem, { variant: 'destructive' }, () => 'Delete session'),
           ]),
         ]),
-      code: () => `<DropdownMenu>
-  <DropdownMenuTrigger as-child>
-    <Button variant="outline">Open menu</Button>
-  </DropdownMenuTrigger>
-  <DropdownMenuContent>
-    <DropdownMenuGroup>
-      <DropdownMenuLabel>Session</DropdownMenuLabel>
-      <DropdownMenuItem>Rename</DropdownMenuItem>
-      <DropdownMenuItem>Duplicate</DropdownMenuItem>
-    </DropdownMenuGroup>
-    <DropdownMenuSeparator />
-    <DropdownMenuGroup>
-      <DropdownMenuLabel>Danger zone</DropdownMenuLabel>
-      <DropdownMenuItem variant="destructive">Delete session</DropdownMenuItem>
-    </DropdownMenuGroup>
-  </DropdownMenuContent>
-</DropdownMenu>`,
     },
     {
       name: 'Disabled row',
@@ -105,31 +87,6 @@ export const dropdownMenuSpec: ComponentSpec = {
     },
   ],
   render: state => menu(defaultItems(state)),
-  code: (state) => {
-    const duplicateAttrs = boolAttr('disabled', Boolean(state.disabled))
-    const deleteAttrs = strAttr('variant', String(state.variant), 'default')
-    return `<DropdownMenu>
-  <DropdownMenuTrigger as-child>
-    <Button variant="outline">Open menu</Button>
-  </DropdownMenuTrigger>
-  <DropdownMenuContent>
-    <DropdownMenuItem>
-      <Pencil />
-      Rename
-    </DropdownMenuItem>
-    <DropdownMenuItem${duplicateAttrs}>
-      <Copy />
-      Duplicate
-      <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
-    </DropdownMenuItem>
-    <DropdownMenuSeparator />
-    <DropdownMenuItem${deleteAttrs}>
-      <Trash2 />
-      Delete session
-    </DropdownMenuItem>
-  </DropdownMenuContent>
-</DropdownMenu>`
-  },
   usage: `DropdownMenu is a trigger-anchored ACTION menu — commands that act on the trigger's context. Picking a value is Select; navigation belongs on a page.
 
 - Rows come from the shared menu vocabulary (src/lib/menu.ts): px-2.5 / py-1.5 / text-control / rounded-menu row geometry and the [data-highlighted] row highlight. Never restyle row height, padding or highlight per menu.

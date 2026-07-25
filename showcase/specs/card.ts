@@ -68,30 +68,6 @@ export const cardSpec: ComponentSpec = {
           ])
         : null,
     ]),
-  code: (state) => {
-    const description = state.withDescription
-      ? `\n    <CardDescription>${DESCRIPTION}</CardDescription>`
-      : ''
-    const action = state.withAction
-      ? `
-    <CardAction>
-      <Button variant="outline" size="sm">Edit</Button>
-    </CardAction>`
-      : ''
-    const footer = state.withFooter
-      ? `
-  <CardFooter class="gap-2">
-    <Button variant="outline">Cancel</Button>
-    <Button>Save</Button>
-  </CardFooter>`
-      : ''
-    return `<Card class="w-96">
-  <CardHeader>
-    <CardTitle>${state.title}</CardTitle>${description}${action}
-  </CardHeader>
-  <CardContent>${CONTENT}</CardContent>${footer}
-</Card>`
-  },
   usage: `Card is a STATIC container — it groups related content on a page and is never interactive. The flat look is a contract: bg-card fill, one hairline, no shadow.
 
 - If the whole card is a door to a next surface, that is ActionCard — do not bolt a click onto Card.

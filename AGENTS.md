@@ -838,28 +838,30 @@ Rules for adding or changing a component page:
 
 - **One spec per component** in `showcase/specs/<name>.ts`, registered in
   `showcase/specs/index.ts` (order = sidebar order). The spec declares
-  `controls`, optional `examples`, `render(state)`, `code(state)`, and
-  optional `usage` — the page's sections and the controls rail all derive
-  from it.
+  `controls`, optional `examples`, `render(state)`, and optional `usage` —
+  the page's sections and the controls board all derive from it.
 - **Control options come from the component's exported key arrays**
   (`buttonVariantKeys`, `toggleVariantKeys`, …) — never a hand-copied list.
   If a component doesn't export its keys, add the export next to its cva call
   (the `*Keys` pattern) rather than duplicating the list in the spec.
-- **`code()` is hand-written per spec** (with the `strAttr`/`boolAttr`/
-  `numAttr` helpers), not a generic serializer — snippet quality is the point,
-  and the snippet must mirror exactly what `render()` shows.
+- **The page carries NO code snippets.** Live snippet generation (a per-spec
+  `code()`) shipped and was removed: a snippet row under every section read
+  as noise, and the snippet duplicated what `render()` already shows. Do not
+  reintroduce per-spec snippet fields — if a copy-paste story is ever needed
+  it comes back as ONE well-designed surface, not per-section disclosures.
 - **The component page is a doc spine, not a mode-switched stage.** One
   vertical scroll: intro (name + description) → **controls** (a card that
   mirrors the host's SettingsSection/SettingsRow geometry — the showcase
   can't import the host owners, so it transcribes them: --radius-menu-shell
   bg-card shell, mx-4 min-h-[3.75rem] py-3 rows with an inset hairline,
   label left / DEFAULT-size widget right) → **Playground** (the live instance
-  the controls drive, snippet collapsed by default) → **one section per
-  example** (title + optional `note` + instances frozen at preset state +
-  collapsible snippet) → **All variants** (the `matrix` wall, only when
-  declared) → **Usage** (only when the spec has `usage`). All example
-  sections render at once down the scroll — that density is the point; there
-  is no "stage mode" switcher and no right rail. NEVER invent a third
+  the controls drive) → **one section per example** (title + optional `note`
+  + instances frozen at preset state) → **All variants** (the `matrix` wall,
+  only when declared) → **Usage** (only when the spec has `usage`). All
+  example sections render at once down the scroll — that density is the
+  point; there is no "stage mode" switcher and no right rail. Section rhythm
+  uses the contract's spacing rungs: gap-6 between page-level sections (the
+  host's page rhythm), gap-3 inside a section. NEVER invent a third
   control-board layout (a label-over-widget grid, sm-size widgets) — the
   settings row is the one shape, and drifting from it is the 同形异码
   failure the owner vocabulary exists to prevent.

@@ -2,7 +2,6 @@ import type { ComponentSpec } from '../lib/spec'
 import { h } from 'vue'
 import { Label } from '#/components/label'
 import { Switch } from '#/components/switch'
-import { boolAttr, strAttr } from '../lib/codegen'
 
 const SIZES = ['default', 'sm'] as const
 
@@ -32,13 +31,6 @@ export const switchSpec: ComponentSpec = {
       }),
       h(Label, { for: 'showcase-switch' }, () => String(state.label)),
     ]),
-  code: (state) => {
-    const attrs
-      = strAttr('size', String(state.size), 'default')
-      + (state.checked ? ' model-value="true"' : '')
-      + boolAttr('disabled', Boolean(state.disabled))
-    return `<Switch${attrs} />`
-  },
   usage: `On = --accent-blue-fill, applied as a solid fill. Never restyle the checked state per call site.
 
 - Always pair with a Label (or an aria-label) — a bare switch announces nothing.

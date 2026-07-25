@@ -40,20 +40,6 @@ export const dialogSpec: ComponentSpec = {
         body: () => [],
         confirm: () => h(Button, { variant: 'destructive' }, () => 'Delete'),
       }),
-      code: () => `<Dialog v-model:open="open">
-  <DialogContent>
-    <DialogHeader>
-      <DialogTitle>Delete session</DialogTitle>
-      <DialogDescription>This permanently deletes the session and its history. There is no undo.</DialogDescription>
-    </DialogHeader>
-    <DialogFooter>
-      <DialogClose as-child>
-        <Button variant="outline">Cancel</Button>
-      </DialogClose>
-      <Button variant="destructive">Delete</Button>
-    </DialogFooter>
-  </DialogContent>
-</Dialog>`,
     },
     {
       name: 'Short form',
@@ -64,23 +50,6 @@ export const dialogSpec: ComponentSpec = {
         body: () => h(Input, { modelValue: 'Launch plan', 'aria-label': 'Session title' }),
         confirm: () => h(Button, null, () => 'Save'),
       }),
-      code: () => `<Dialog v-model:open="open">
-  <DialogContent>
-    <DialogHeader>
-      <DialogTitle>Rename session</DialogTitle>
-      <DialogDescription>The title shows in the session list.</DialogDescription>
-    </DialogHeader>
-    <DialogBody>
-      <Input v-model="title" aria-label="Session title" />
-    </DialogBody>
-    <DialogFooter>
-      <DialogClose as-child>
-        <Button variant="outline">Cancel</Button>
-      </DialogClose>
-      <Button>Save</Button>
-    </DialogFooter>
-  </DialogContent>
-</Dialog>`,
     },
   ],
   render: state => dialog(state, {
@@ -89,21 +58,6 @@ export const dialogSpec: ComponentSpec = {
     body: () => [],
     confirm: () => h(Button, { variant: 'destructive' }, () => 'Delete'),
   }),
-  code: state =>
-    `<Dialog v-model:open="open">
-  <DialogContent${state.showClose ? '' : ' :show-close-button="false"'}>
-    <DialogHeader>
-      <DialogTitle>Delete session</DialogTitle>
-      <DialogDescription>This permanently deletes the session and its history. There is no undo.</DialogDescription>
-    </DialogHeader>
-    <DialogFooter>
-      <DialogClose as-child>
-        <Button variant="outline">Cancel</Button>
-      </DialogClose>
-      <Button variant="destructive">Delete</Button>
-    </DialogFooter>
-  </DialogContent>
-</Dialog>`,
   usage: `Dialog is for DECISIONS and short forms — one focused task per surface. Long content and multi-step flows belong on a page or in a Sheet.
 
 - The trigger is a plain Button; the Dialog itself wraps DialogContent only.

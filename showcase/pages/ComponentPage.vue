@@ -5,7 +5,6 @@ import { defaultState, exampleAnchor } from '../lib/spec'
 import { tt } from '../lib/i18n'
 import CanvasStage from '../components/CanvasStage.vue'
 import ControlsPanel from '../components/ControlsPanel.vue'
-import ViewCode from '../components/ViewCode.vue'
 
 // The component page is a DOC SPINE, not a mode-switched workbench: one
 // vertical scroll — intro (name + description) → controls → Playground →
@@ -24,7 +23,6 @@ function set(key: string, value: string | number | boolean) {
 }
 
 const rendered = computed(() => props.spec.render(state))
-const code = computed(() => props.spec.code(state))
 const usageText = computed(() => tt(props.spec.usage ?? '', props.spec.usageZh))
 
 // An overlay spec (interactive: true) renders uncontrolled — a closed, live
@@ -40,10 +38,10 @@ const isOverlay = computed(() => props.spec.interactive === true)
 const playgroundBody = computed(() => h('div', { class: 'contents' }, [rendered.value]))
 
 // Each example becomes one doc section: title + optional note + its instances
-// frozen at the preset state + its own snippet. ALL sections render at once
-// down the scroll — safe for overlay specs because their renders are closed,
-// uncontrolled triggers (the pinning dead-lock came from controlled `open`,
-// not from having many triggers on the page).
+// frozen at the preset state. ALL sections render at once down the scroll —
+// safe for overlay specs because their renders are closed, uncontrolled
+// triggers (the pinning dead-lock came from controlled `open`, not from
+// having many triggers on the page).
 const exampleSections = computed(() =>
   (props.spec.examples ?? []).map((ex, i) => {
     const exState = Object.assign(defaultState(props.spec), ex.state)
@@ -55,7 +53,6 @@ const exampleSections = computed(() =>
       body: h('div', { class: 'flex flex-wrap items-center gap-3' }, [
         (ex.render ?? props.spec.render)(exState),
       ]),
-      code: (ex.code ?? props.spec.code)(exState),
     }
   }),
 )
@@ -91,20 +88,25 @@ function axisValues(key: string): Array<string | boolean> {
 </script>
 
 <template>
-  <!-- The doc column owns the page scroll. -->
+  <!-- The doc column owns the page scroll. Section rhythm uses the contract's
+       spacing rungs: gap-6 between page-level sections (the host's page
+       rhythm), gap-3 inside a section (title → note → body). -->
   <div class="min-w-0 flex-1 overflow-y-auto">
-    <div class="mx-auto flex max-w-3xl flex-col gap-12 px-8 py-10">
-      <header>
+    <div class="mx-auto flex max-w-3xl flex-col gap-6 px-8 py-10">
+      <header class="flex flex-col gap-2">
         <h1 class="text-heading font-semibold text-foreground">
           {{ spec.name }}
         </h1>
-        <p class="mt-2 text-body text-muted-foreground">
+        <p class="text-body text-muted-foreground">
           {{ tt(spec.description, spec.descriptionZh) }}
         </p>
       </header>
 
-      <section id="playground">
-        <h2 class="mb-3 text-title font-semibold text-foreground">
+      <section
+        id="playground"
+        class="flex flex-col gap-3"
+      >
+        <h2 class="text-title font-semibold text-foreground">
           {{ tt('Playground', '试一试') }}
         </h2>
         <ControlsPanel
@@ -115,7 +117,7 @@ function axisValues(key: string): Array<string | boolean> {
         <!-- Fixed-height frame: CanvasStage is built for flex-1 fill, so the
              wrapper gives the doc-flow section a concrete height and the
              stage's columns scroll inside it. -->
-        <div class="mt-4 flex h-80 flex-col overflow-hidden rounded-lg border border-border-soft">
+        <div class="flex h-80 flex-col overflow-hidden rounded-lg border border-border-soft">
           <CanvasStage
             v-model="viewport"
             :can-split="!isOverlay"
@@ -123,40 +125,32 @@ function axisValues(key: string): Array<string | boolean> {
             <component :is="playgroundBody" />
           </CanvasStage>
         </div>
-        <ViewCode
-          class="mt-3"
-          :code="code"
-        />
       </section>
 
       <section
         v-for="s in exampleSections"
         :id="s.anchor"
         :key="s.ex.name"
-        class="scroll-mt-6"
+        class="flex scroll-mt-6 flex-col gap-3"
       >
-        <h2 class="mb-1 text-title font-semibold text-foreground">
+        <h2 class="text-title font-semibold text-foreground">
           {{ tt(s.ex.name, s.ex.nameZh) }}
         </h2>
         <p
           v-if="s.ex.note"
-          class="mb-3 text-body text-muted-foreground"
+          class="text-body text-muted-foreground"
         >
           {{ tt(s.ex.note, s.ex.noteZh) }}
         </p>
         <component :is="s.body" />
-        <ViewCode
-          class="mt-3"
-          :code="s.code"
-        />
       </section>
 
       <section
         v-if="spec.matrix"
         id="all-variants"
-        class="scroll-mt-6"
+        class="flex scroll-mt-6 flex-col gap-3"
       >
-        <h2 class="mb-3 text-title font-semibold text-foreground">
+        <h2 class="text-title font-semibold text-foreground">
           {{ tt('All variants', '全部变体') }}
         </h2>
         <!-- Wide grids (Button: variant × 7 sizes) outgrow the measure;
@@ -169,9 +163,9 @@ function axisValues(key: string): Array<string | boolean> {
       <section
         v-if="spec.usage"
         id="usage"
-        class="scroll-mt-6"
+        class="flex scroll-mt-6 flex-col gap-3"
       >
-        <h2 class="mb-3 text-title font-semibold text-foreground">
+        <h2 class="text-title font-semibold text-foreground">
           {{ tt('Usage', '用法') }}
         </h2>
         <p class="text-body whitespace-pre-wrap text-muted-foreground">

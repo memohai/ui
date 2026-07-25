@@ -12,7 +12,6 @@ import {
   popoverMotionKeys,
   popoverSideKeys,
 } from '#/components/popover'
-import { numAttr, strAttr } from '../lib/codegen'
 
 // Uncontrolled (interactive: true): PopoverTrigger opens, Esc/outside-click
 // closes. The canvas shows the closed trigger you click. NO `open` control —
@@ -45,20 +44,6 @@ export const popoverSpec: ComponentSpec = {
             h(PopoverClose, { asChild: true }, () => h(Button, { size: 'sm' }, () => 'Save')),
           ]),
         ]),
-      code: () => `<Popover>
-  <PopoverTrigger as-child>
-    <Button variant="outline">Open popover</Button>
-  </PopoverTrigger>
-  <PopoverContent>
-    <p class="mb-2 text-body font-medium">Rename session</p>
-    <Input v-model="title" aria-label="Session title" />
-    <div class="mt-3 flex justify-end">
-      <PopoverClose as-child>
-        <Button size="sm">Save</Button>
-      </PopoverClose>
-    </div>
-  </PopoverContent>
-</Popover>`,
     },
     {
       name: 'Menu host',
@@ -76,24 +61,6 @@ export const popoverSpec: ComponentSpec = {
               ]),
             ]),
           ]), { menu: true }),
-      code: () => `<Popover>
-  <PopoverTrigger as-child>
-    <Button variant="outline">Open popover</Button>
-  </PopoverTrigger>
-  <PopoverContent menu>
-    <Command>
-      <CommandInput placeholder="Search commands…" />
-      <CommandList>
-        <CommandEmpty>No results.</CommandEmpty>
-        <CommandGroup>
-          <CommandItem value="rename">Rename session</CommandItem>
-          <CommandItem value="pin">Pin to top</CommandItem>
-          <CommandItem value="archive">Archive</CommandItem>
-        </CommandGroup>
-      </CommandList>
-    </Command>
-  </PopoverContent>
-</Popover>`,
     },
   ],
   render: state =>
@@ -101,22 +68,6 @@ export const popoverSpec: ComponentSpec = {
       h('p', { class: 'text-body font-medium' }, 'Session options'),
       h('p', { class: 'mt-1 text-caption text-muted-foreground' }, 'These apply to this session only.'),
     ]),
-  code: (state) => {
-    const attrs
-      = strAttr('side', String(state.side), 'bottom')
-      + strAttr('align', String(state.align), 'center')
-      + strAttr('motion', String(state.motion), 'menu')
-      + numAttr('side-offset', Number(state.sideOffset), 4)
-    return `<Popover>
-  <PopoverTrigger as-child>
-    <Button variant="outline">Open popover</Button>
-  </PopoverTrigger>
-  <PopoverContent${attrs}>
-    <p class="text-body font-medium">Session options</p>
-    <p class="mt-1 text-caption text-muted-foreground">These apply to this session only.</p>
-  </PopoverContent>
-</Popover>`
-  },
   usage: `Popover is a light, NON-MODAL panel anchored to its trigger. It closes on Esc and outside click without asking — so nothing the user would hate to lose (unsaved multi-field work, confirmations) belongs here; that is Dialog's job.
 
 - The trigger is a plain Button via PopoverTrigger as-child; the panel content lives in PopoverContent only.

@@ -43,32 +43,12 @@ export const sonnerSpec: ComponentSpec = {
       name: 'Undoable action',
       nameZh: '可撤销操作',
       state: { variant: 'message', title: 'Session archived', action: true },
-      code: () => `toast('Session archived', {
-  action: {
-    label: 'Undo',
-    onClick: () => restoreSession(id),
-  },
-})`,
     },
   ],
   render: state => [
     h(Button, { onClick: () => fire(state) }, () => 'Fire toast'),
     h(Toaster),
   ],
-  code: (state) => {
-    const variant = String(state.variant)
-    const description = String(state.description)
-    const duration = Number(state.duration)
-    const options: string[] = []
-    if (description) options.push(`description: '${description}'`)
-    if (state.action) options.push('action: { label: \'Undo\', onClick: undo }')
-    if (duration !== 4000) options.push(`duration: ${duration}`)
-    // Bare toast() IS the message variant — the namespace only appears for the
-    // semantic variants.
-    const call = variant === 'message' ? 'toast' : `toast.${variant}`
-    if (options.length === 0) return `${call}('${state.title}')`
-    return `${call}('${state.title}', {\n  ${options.join(',\n  ')},\n})`
-  },
   usage: `Toast is for TRANSIENT feedback about something that already happened — a save, a failure, an undoable step. Never the only carrier of must-read information: decisions belong in a Dialog, persistent state belongs inline on the page.
 
 - The host mounts <Toaster> ONCE at the app root (default dock: top-right). Feature code never renders Toaster — it calls toast() / toast.success() / toast.error().

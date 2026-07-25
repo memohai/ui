@@ -7,7 +7,6 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '#/components/input-group'
-import { boolAttr, strAttr } from '../lib/codegen'
 
 const SIZES = ['default', 'sm', 'lg'] as const
 
@@ -35,14 +34,6 @@ export const inputGroupSpec: ComponentSpec = {
             h(InputGroupButton, { variant: 'ghost', size: 'icon-xs', 'aria-label': 'Clear' }, () => h(X)),
           ),
         ]),
-      code: state => `<InputGroup${strAttr('size', String(state.size), 'default')}>
-  <InputGroupInput placeholder="${state.placeholder}" />
-  <InputGroupAddon align="inline-end">
-    <InputGroupButton variant="ghost" size="icon-xs" aria-label="Clear">
-      <X />
-    </InputGroupButton>
-  </InputGroupAddon>
-</InputGroup>`,
     },
     {
       name: 'Password reveal',
@@ -55,14 +46,6 @@ export const inputGroupSpec: ComponentSpec = {
             h(InputGroupButton, { variant: 'quiet', size: 'icon-xs', 'aria-label': 'Reveal' }, () => h(Eye)),
           ),
         ]),
-      code: state => `<InputGroup${strAttr('size', String(state.size), 'default')}>
-  <InputGroupInput placeholder="${state.placeholder}" type="password" model-value="sk-live-9f2c…" />
-  <InputGroupAddon align="inline-end">
-    <InputGroupButton variant="quiet" size="icon-xs" aria-label="Reveal">
-      <Eye />
-    </InputGroupButton>
-  </InputGroupAddon>
-</InputGroup>`,
     },
   ],
   render: state =>
@@ -70,15 +53,6 @@ export const inputGroupSpec: ComponentSpec = {
       h(InputGroupAddon, { align: 'inline-start' }, () => h(Search)),
       h(InputGroupInput, { placeholder: String(state.placeholder) }),
     ]),
-  code: (state) => {
-    const attrs = strAttr('size', String(state.size), 'default') + boolAttr('disabled', Boolean(state.disabled))
-    return `<InputGroup${attrs}>
-  <InputGroupAddon align="inline-start">
-    <Search />
-  </InputGroupAddon>
-  <InputGroupInput placeholder="${state.placeholder}" />
-</InputGroup>`
-  },
   usage: `In-field affordances (clear, reveal, steppers) are InputGroupButton — a real Button variant — never a hand-rolled icon with a hover background.
 
 - ghost for discrete actions (Clear); quiet for low-stakes peeks (password reveal) — quiet draws no hover chip so the field stays one clean rectangle.

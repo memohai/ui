@@ -10,7 +10,6 @@ import {
   tooltipAlignKeys,
   tooltipSideKeys,
 } from '#/components/tooltip'
-import { strAttr } from '../lib/codegen'
 
 // Tooltip is the one overlay the canvas shows OPEN by default — but via reka's
 // UNCONTROLLED `defaultOpen`, never a controlled `open` pin. A hint has no
@@ -39,16 +38,6 @@ export const tooltipSpec: ComponentSpec = {
         trigger: () => h(Button, { variant: 'outline', size: 'icon', 'aria-label': 'Import' }, () => h(Upload)),
         label: 'Import',
       }),
-      code: () => `<TooltipProvider>
-  <Tooltip>
-    <TooltipTrigger as-child>
-      <Button variant="outline" size="icon" aria-label="Import">
-        <Upload />
-      </Button>
-    </TooltipTrigger>
-    <TooltipContent>Import</TooltipContent>
-  </Tooltip>
-</TooltipProvider>`,
     },
     {
       name: 'Disabled control',
@@ -61,35 +50,12 @@ export const tooltipSpec: ComponentSpec = {
         ]),
         label: 'Only admins can deploy',
       }),
-      code: () => `<TooltipProvider>
-  <Tooltip>
-    <TooltipTrigger as-child>
-      <span class="inline-flex">
-        <Button disabled>Deploy</Button>
-      </span>
-    </TooltipTrigger>
-    <TooltipContent>Only admins can deploy</TooltipContent>
-  </Tooltip>
-</TooltipProvider>`,
     },
   ],
   render: state => tooltip(state, {
     trigger: () => h(Button, { variant: 'outline' }, () => 'Save'),
     label: String(state.label),
   }),
-  code: (state) => {
-    const attrs
-      = strAttr('side', String(state.side), 'top')
-      + strAttr('align', String(state.align), 'center')
-    return `<TooltipProvider>
-  <Tooltip>
-    <TooltipTrigger as-child>
-      <Button variant="outline">Save</Button>
-    </TooltipTrigger>
-    <TooltipContent${attrs}>${state.label}</TooltipContent>
-  </Tooltip>
-</TooltipProvider>`
-  },
   usage: `A Tooltip is a SHORT HINT on hover/focus — supplementary only. It never exists on touch, so nothing essential may live exclusively inside it.
 
 - Plain text, one short line. No links, buttons, or any interactive content — that is Popover / HoverCard territory.
