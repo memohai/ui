@@ -45,9 +45,9 @@ pnpm dev        # the showcase: http://localhost:5173
 
 `pnpm dev` serves the showcase (`showcase/` + root `index.html`) — a custom,
 spec-driven living reference: foundations (tokens) pages and one page per
-component with live controls, live Vue code generation, and theme/scheme
-switching. Each component page is a single spec in `showcase/specs/`; see
-AGENTS.md § The showcase for how to add one.
+component with live controls and theme/scheme switching. Each component page
+is a single spec in `showcase/specs/`; see `showcase/AGENTS.md` for how to
+add one.
 
 Day-to-day development happens inside a host checkout (`packages/ui/` is a
 full git repo there — branch, commit, and push from within it), so changes
