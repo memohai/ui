@@ -850,21 +850,21 @@ Rules for adding or changing a component page:
   reintroduce per-spec snippet fields — if a copy-paste story is ever needed
   it comes back as ONE well-designed surface, not per-section disclosures.
 - **The component page is a doc spine, not a mode-switched stage.** One
-  vertical scroll: intro (name + description) → **controls** (a card that
-  mirrors the host's SettingsSection/SettingsRow geometry — the showcase
-  can't import the host owners, so it transcribes them: --radius-menu-shell
-  bg-card shell, mx-4 min-h-[3.75rem] py-3 rows with an inset hairline,
-  label left / DEFAULT-size widget right) → **Playground** (the live instance
-  the controls drive) → **one section per example** (title + optional `note`
-  + instances frozen at preset state) → **All variants** (the `matrix` wall,
-  only when declared) → **Usage** (only when the spec has `usage`). All
-  example sections render at once down the scroll — that density is the
-  point; there is no "stage mode" switcher and no right rail. Section rhythm
-  uses the contract's spacing rungs: gap-6 between page-level sections (the
-  host's page rhythm), gap-3 inside a section. NEVER invent a third
-  control-board layout (a label-over-widget grid, sm-size widgets) — the
-  settings row is the one shape, and drifting from it is the 同形异码
-  failure the owner vocabulary exists to prevent.
+  vertical scroll: intro (name + description) → **controls** (a
+  SettingsSection of SettingsRows — the showcase COMPOSES the settings owner
+  vocabulary from `src/components/settings`, the same components the host's
+  settings pages use, with widgets in the trailing slot at DEFAULT size) →
+  **Playground** (the live instance the controls drive) → **one section per
+  example** (title + optional `note` + instances frozen at preset state) →
+  **All variants** (the `matrix` wall, only when declared) → **Usage** (only
+  when the spec has `usage`). All example sections render at once down the
+  scroll — that density is the point; there is no "stage mode" switcher and
+  no right rail. Section rhythm uses the contract's spacing rungs: gap-6
+  between page-level sections (the host's page rhythm), gap-3 inside a
+  section. NEVER invent a control-board layout (a label-over-widget grid, a
+  transcribed settings row, sm-size widgets) — the owner components are the
+  one shape, and hand-writing their look is the 同形异码 failure the owner
+  vocabulary exists to prevent.
 - **Example `note` is one line of when/why, never a restated title.** Optional
   per example — a section with nothing to teach renders no note line rather
   than filler. Same copy discipline as the rest of the library.

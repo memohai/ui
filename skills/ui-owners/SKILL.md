@@ -40,7 +40,9 @@ The page header + centered `max-w-3xl` column. Props: `title`, `description`,
 `variant: 'page' | 'tab'` (`tab` for a bot-detail settings tab, `page` for a standalone
 route). Slot: `#actions` (header-right toolbar). Every settings surface starts here.
 
-**SettingsSection** · `settings/section.vue`
+**SettingsSection** · `settings/section.vue` — a re-export shim; the
+implementation lives in `@felinic/ui` (`src/components/settings`), shared
+with the component showcase. Import new call sites from `@felinic/ui`.
 A grey section label above a bordered white card. Props: `title`. Slots: `#actions`
 (header toolbar, right of the title), default (the rows), `#footer` (an action band —
 Save/Cancel or pagination — rendered *inside* the card with a top hairline). A card is a
@@ -58,7 +60,9 @@ title at a second tier.
 
 ### Rows (things inside a section card)
 
-**SettingsRow** · `settings/row.vue` — *the workhorse.*
+**SettingsRow** · `settings/row.vue` — *the workhorse.* (Re-export shim; the
+implementation lives in `@felinic/ui` (`src/components/settings`), shared
+with the component showcase. Import new call sites from `@felinic/ui`.)
 One horizontal row inside a section card. The canonical geometry
 (`min-h-[3.75rem] py-3 mx-4 border-b`, inset hairline, `last:border-b-0`) lives here and
 nowhere else. Props:
