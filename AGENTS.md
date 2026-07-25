@@ -859,13 +859,14 @@ Rules for adding or changing a component page:
   sections never mix tones), the Playground's controls are a SettingsSection
   of SettingsRows (widgets in the trailing slot at DEFAULT size). The
   horizontal grid is the owners': the px-2 title inset exists RELATIVE TO A
-  CARD beneath — sections whose body is a surface (Playground's controls
-  card, the canvas) inset their titles px-2, sections with a bare body
-  (examples, All variants, Usage — text and buttons, no card) set
-  `bare` and keep title, hint, and body on one flush edge with a roomier
-  title→body gap. Never hand-align a title with its card, and never
-  hand-write a section title at a stronger weight (text-title/semibold is
-  NOT the section-title tier). All example sections render at once down the
+  surface beneath — Playground (controls card) and examples (each stages its
+  instances in a MINI PLAYGROUND: a plain rounded border frame with centered
+  content, no viewport/theme chrome) inset their titles px-2; sections with
+  a truly bare body (All variants, Usage — no card at all) set `bare` and
+  keep title, hint, and body on one flush edge with a roomier title→body
+  gap. Never hand-align a title with its card, and never hand-write a
+  section title at a stronger weight (text-title/semibold is NOT the
+  section-title tier). All example sections render at once down the
   scroll — that density is the point; there is no "stage mode" switcher and
   no right rail. Vertical rhythm: gap-8 between page-level sections (the
   host's settings-page rhythm). NEVER invent a control-board or section

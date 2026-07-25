@@ -39,10 +39,13 @@ const isOverlay = computed(() => props.spec.interactive === true)
 const playgroundBody = computed(() => h('div', { class: 'contents' }, [rendered.value]))
 
 // Each example becomes one doc section: title + optional note + its instances
-// frozen at the preset state. ALL sections render at once down the scroll —
-// safe for overlay specs because their renders are closed, uncontrolled
-// triggers (the pinning dead-lock came from controlled `open`, not from
-// having many triggers on the page).
+// frozen at the preset state, staged in a MINI PLAYGROUND — a plain rounded
+// frame with centered content (NO viewport/theme chrome; that belongs to the
+// Playground alone). With a surface beneath it, the section is no longer
+// bare: the title takes the card-relative px-2 inset. ALL sections render at
+// once down the scroll — safe for overlay specs because their renders are
+// closed, uncontrolled triggers (the pinning dead-lock came from controlled
+// `open`, not from having many triggers on the page).
 const exampleSections = computed(() =>
   (props.spec.examples ?? []).map((ex, i) => {
     const exState = Object.assign(defaultState(props.spec), ex.state)
@@ -51,7 +54,7 @@ const exampleSections = computed(() =>
       anchor: exampleAnchor(i),
       // Children wrapped in an array: a bare VNodeChild can be null, which
       // h()'s RawChildren rejects; VNodeArrayChildren allows it.
-      body: h('div', { class: 'flex flex-wrap items-center gap-3' }, [
+      body: h('div', { class: 'flex min-h-24 flex-wrap items-center justify-center gap-3 rounded-lg border border-border-soft px-6 py-6' }, [
         (ex.render ?? props.spec.render)(exState),
       ]),
     }
@@ -137,7 +140,6 @@ function axisValues(key: string): Array<string | boolean> {
         :key="s.ex.name"
         class="scroll-mt-6"
         tone="muted"
-        bare
         :title="tt(s.ex.name, s.ex.nameZh)"
         :description="s.ex.note ? tt(s.ex.note, s.ex.noteZh) : undefined"
       >
