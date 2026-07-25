@@ -5,6 +5,16 @@ parent contract (`../AGENTS.md`) still applies in full — tokens only, the
 clean/dirty rule, rem on text-coupled sizes, the z ladder. If you are working
 on the library itself (`src/`) or on the host app, you do NOT need this file.
 
+**The showcase is the copy-precedent surface.** Everyone who builds a Memoh
+interface will treat whatever they find here as the sanctioned way to write
+it — a hand-written pattern in the showcase reads as "official, feel free to
+copy". So: every class on every page must trace to an owner component or a
+documented tier. If a shape recurs, it becomes vocabulary (an owner, a prop,
+or one shared home like `lib/frame.ts`). If a shape is genuinely one-off
+(page-local demo staging), it may stay hand-written ONLY with a comment
+stating why it is not shared vocabulary. A component library that cannot
+build its own showcase out of itself has no authority to teach anyone.
+
 `pnpm dev` serves the module's living reference: a custom, spec-driven
 showcase (foundations pages + one page per component with live controls and
 light/dark × 5-scheme switching). It replaced Storybook (removed — 3 stale
@@ -69,14 +79,24 @@ spec has `usage`).
 - **Every visual decision must trace to an owner — or extend the
   vocabulary.** Layout, color, type rung, and inset alike: if a shape on the
   page is not covered by an owner component or a documented tier, the ONLY
-  legal moves are (1) add a prop to the owner (e.g. SectionGroup's `tone`) or
-  (2) add a new owner. Approximating the shape by hand — "close enough"
-  classes that merely look right — is reward hacking: it passes self-review
-  until someone does a same-level comparison against the real page type. When
-  in doubt, diff against the host surface that IS the same level (a settings
-  page, a provider grid) before writing a single class. And if the host has
-  a real counterpart component, MOVE the file (verbatim, token-adapted, host
-  becomes a re-export shim) — never transcribe it.
+  legal moves are (1) add a prop to the owner (e.g. SectionGroup's `tone`,
+  PageShell's `width`) or (2) add a new owner. Approximating the shape by
+  hand — "close enough" classes that merely look right — is reward hacking:
+  it passes self-review until someone does a same-level comparison against
+  the real page type. When in doubt, diff against the host surface that IS
+  the same level (a settings page, a provider grid) before writing a single
+  class. And if the host has a real counterpart component, MOVE the file
+  (verbatim, token-adapted, host becomes a re-export shim) — never
+  transcribe it.
+- **Static pages (Overview, foundations) follow the same law.** Frame:
+  PageShell with the legislated `width` rung ('md' reading column, 'lg'/'xl'
+  specimen boards) — never a hand-set max-w/p-8. Chapters: SectionGroup
+  `heading`, `bare` decided by the body (bordered cards/frames → inset;
+  hairline tables, prose, borderless grids → bare). Hairline token-ladder
+  lists are **SpecimenTable/SpecimenRow** (`showcase/components/`), the
+  single home for that shape. Explanatory notes become the SectionGroup
+  `description` (under the title), never a loose paragraph beside the
+  content.
 - **Example `note` is one line of when/why, never a restated title.** Optional
   per example — a section with nothing to teach renders no note line rather
   than filler. Same copy discipline as the rest of the library.

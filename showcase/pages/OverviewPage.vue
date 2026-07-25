@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { PageShell, SectionGroup } from '#/components/settings'
 import { componentSpecs } from '../specs'
 import { defaultState } from '../lib/spec'
 import { STAGE_FRAME_CLASS } from '../lib/frame'
@@ -29,66 +30,79 @@ const LEGACY = ['Badge (semantic fills)', 'Alert (semantic fills)', 'components/
 </script>
 
 <template>
-  <div class="mx-auto max-w-5xl p-8">
-    <section class="mb-10">
-      <p class="max-w-xl text-control text-foreground">
-        {{ tt(
-          'The living reference for @felinic/ui — every page renders the real component, live and tweakable.',
-          '@felinic/ui 的活文档——每一页渲染的都是真实组件,活的、可调。',
-        ) }}
-      </p>
-      <p class="mt-2 max-w-xl text-body text-muted-foreground">
+  <PageShell
+    width="xl"
+    :title="tt('Overview', '概览')"
+    :description="tt(
+      'The living reference for @felinic/ui — every page renders the real component, live and tweakable.',
+      '@felinic/ui 的活文档——每一页渲染的都是真实组件,活的、可调。',
+    )"
+  >
+    <div class="flex flex-col gap-8">
+      <!-- Second intro paragraph: usage guidance, the lead-in to the body
+           below — deliberately bare prose, not a section with its own
+           heading. -->
+      <p class="max-w-xl text-control text-muted-foreground">
         {{ tt(
           'Theme and color scheme switch at the bottom of the sidebar; each component page pairs a control board with live examples down the scroll.',
           '主题与配色方案在侧栏底部切换;每个组件页上方是控制板,向下滚动是一节节活示例。',
         ) }}
       </p>
-    </section>
 
-    <section class="mb-10">
-      <h2 class="mb-3 text-title font-semibold text-foreground">
-        {{ tt('Reference — copy these', '标杆——照抄这些') }}
-      </h2>
-      <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <button
-          v-for="{ spec, render } in cards"
-          :key="spec.id"
-          type="button"
-          :class="[STAGE_FRAME_CLASS, 'flex cursor-pointer flex-col p-4 text-left transition-colors hover:bg-(--ui-hover)']"
-          @click="navigate(`components/${spec.id}`)"
-        >
-          <div class="mb-1 text-title font-semibold text-foreground">
-            {{ spec.name }}
-          </div>
-          <p class="mb-4 line-clamp-2 text-body text-muted-foreground">
-            {{ tt(spec.description, spec.descriptionZh) }}
-          </p>
-          <div
-            class="pointer-events-none mt-auto flex min-h-20 w-full items-center justify-center rounded-md border border-border-soft p-3"
-            aria-hidden="true"
+      <SectionGroup
+        heading
+        :title="tt('Reference — copy these', '标杆——照抄这些')"
+      >
+        <!-- Index-card grid gutter (gap-4): the landing board's one-off
+             relationship — tighter than the section rhythm because every
+             card already carries its own STAGE_FRAME border. -->
+        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <button
+            v-for="{ spec, render } in cards"
+            :key="spec.id"
+            type="button"
+            :class="[STAGE_FRAME_CLASS, 'flex cursor-pointer flex-col p-4 text-left transition-colors hover:bg-(--ui-hover)']"
+            @click="navigate(`components/${spec.id}`)"
           >
-            <component :is="render" />
-          </div>
-        </button>
-      </div>
-    </section>
+            <!-- Card title rung (text-title semibold): one step BELOW the
+                 section heading (text-heading) it lives under. -->
+            <div class="mb-1 text-title font-semibold text-foreground">
+              {{ spec.name }}
+            </div>
+            <p class="mb-4 line-clamp-2 text-control text-muted-foreground">
+              {{ tt(spec.description, spec.descriptionZh) }}
+            </p>
+            <!-- Nested preview well: one radius step smaller (rounded-md)
+                 than the STAGE_FRAME card around it. -->
+            <div
+              class="pointer-events-none mt-auto flex min-h-20 w-full items-center justify-center rounded-md border border-border-soft p-3"
+              aria-hidden="true"
+            >
+              <component :is="render" />
+            </div>
+          </button>
+        </div>
+      </SectionGroup>
 
-    <section class="mb-10">
-      <h2 class="mb-3 text-title font-semibold text-foreground">
-        {{ tt('In progress — check before use', '进行中——用前先确认') }}
-      </h2>
-      <p class="text-body text-muted-foreground">
-        {{ IN_PROGRESS.join(' · ') }}
-      </p>
-    </section>
+      <SectionGroup
+        heading
+        bare
+        :title="tt('In progress — check before use', '进行中——用前先确认')"
+      >
+        <p class="text-control text-muted-foreground">
+          {{ IN_PROGRESS.join(' · ') }}
+        </p>
+      </SectionGroup>
 
-    <section>
-      <h2 class="mb-3 text-title font-semibold text-foreground">
-        {{ tt('Legacy — do not pattern-match', '遗留——不要照抄') }}
-      </h2>
-      <p class="text-body text-muted-foreground">
-        {{ LEGACY.join(' · ') }}
-      </p>
-    </section>
-  </div>
+      <SectionGroup
+        heading
+        bare
+        :title="tt('Legacy — do not pattern-match', '遗留——不要照抄')"
+      >
+        <p class="text-control text-muted-foreground">
+          {{ LEGACY.join(' · ') }}
+        </p>
+      </SectionGroup>
+    </div>
+  </PageShell>
 </template>

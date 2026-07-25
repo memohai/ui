@@ -14,16 +14,25 @@ const props = withDefaults(defineProps<{
   // so it only adds the remainder to reach the same pt-10/pb-12 vertical
   // rhythm.
   variant?: 'page' | 'tab'
+  // The measure (content column width). 'md' is the reading column every host
+  // page uses (max-w-3xl). 'lg'/'xl' exist for board-style pages whose content
+  // is a grid of specimens, not prose (the showcase's foundations/Overview
+  // pages). Never hand-set max-w on a page — if none of the three fits, that
+  // is a new tier to legislate here, not a class to write at the call site.
+  width?: 'md' | 'lg' | 'xl'
 }>(), {
   title: '',
   description: '',
   variant: 'page',
+  width: 'md',
 })
+
+const MAX_W = { md: 'max-w-3xl', lg: 'max-w-4xl', xl: 'max-w-5xl' } as const
 
 const rootClass = computed(() =>
   props.variant === 'tab'
-    ? 'mx-auto max-w-3xl pt-6 pb-8'
-    : 'mx-auto max-w-3xl px-6 pt-10 pb-12',
+    ? `mx-auto ${MAX_W[props.width]} pt-6 pb-8`
+    : `mx-auto ${MAX_W[props.width]} px-6 pt-10 pb-12`,
 )
 </script>
 
