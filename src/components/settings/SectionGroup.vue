@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import PageHeader from './PageHeader.vue'
 
 // SectionGroup — a titled content group: a section label (+ optional hint)
 // with an optional trailing action, heading a BARE body. Deliberately NOT
@@ -18,11 +19,10 @@ import { computed } from 'vue'
 // picking the tone by eye instead of by tier is the recurring drift this
 // prop exists to prevent.
 //
-// heading: the doc-page section tier — the title/hint pair mirrors the page
-// intro's pattern (a strong foreground title at text-title semibold, a muted
-// hint at text-control), not the settings label. Wins over `tone`. Use for
-// documentation-style spines (the showcase's component pages) where each
-// section reads as a chapter, not a settings row group.
+// heading: the doc-page section tier — the title/hint pair is the SHARED
+// PageHeader (the same component the page intro uses), so a chapter heading
+// on a documentation spine can never drift from the page header it mirrors.
+// Wins over `tone`.
 //
 // bare: the body carries NO bordered surface of its own (plain text, a row
 // of buttons, a matrix). The px-2 title inset exists to offset a title from
@@ -47,12 +47,7 @@ const props = withDefaults(defineProps<{
 })
 
 const titleClass = computed(() =>
-  props.heading
-    ? 'text-title font-semibold text-foreground'
-    : `text-label font-medium ${props.tone === 'muted' ? 'text-muted-foreground' : 'text-foreground'}`,
-)
-const hintClass = computed(() =>
-  props.heading ? 'text-control' : 'text-body',
+  `text-label font-medium ${props.tone === 'muted' ? 'text-muted-foreground' : 'text-foreground'}`,
 )
 </script>
 
@@ -62,8 +57,14 @@ const hintClass = computed(() =>
       v-if="title || description || $slots.actions"
       class="flex items-center justify-between gap-4"
     >
+      <PageHeader
+        v-if="heading && (title || description)"
+        :title="title"
+        :description="description"
+        :class="bare ? '' : 'px-2'"
+      />
       <div
-        v-if="title || description"
+        v-else-if="title || description"
         class="min-w-0"
         :class="bare ? '' : 'px-2'"
       >
@@ -75,8 +76,7 @@ const hintClass = computed(() =>
         </h2>
         <p
           v-if="description"
-          class="text-muted-foreground"
-          :class="hintClass"
+          class="text-body text-muted-foreground"
         >
           {{ description }}
         </p>

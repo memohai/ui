@@ -855,10 +855,9 @@ Rules for adding or changing a component page:
   declared) → **Usage** (only when the spec has `usage`). Every section is
   composed from the settings owner vocabulary (`src/components/settings`):
   a SectionGroup owns each section's title/hint — in `heading` mode (the
-  doc-page tier: the title/hint pair mirrors the page intro's pattern,
-  text-title semibold + text-control muted, NOT the settings label tiers;
-  user-decided: a doc spine reads as chapters, so same-level consistency
-  with settings pages yields to visual hierarchy), the Playground's
+  doc-page tier: the title/hint pair is the SHARED PageHeader, the very
+  component the page intro uses, so a chapter heading can never drift from
+  the page header it mirrors — "looks alike" is not reuse), the Playground's
   controls are a SettingsSection of SettingsRows (widgets in the trailing
   slot at DEFAULT size). The
   horizontal grid is the owners': the px-2 title inset exists RELATIVE TO A

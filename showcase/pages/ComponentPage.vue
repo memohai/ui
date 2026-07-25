@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ComponentSpec, SpecState } from '../lib/spec'
 import { computed, h, reactive, ref } from 'vue'
-import { SectionGroup } from '#/components/settings'
+import { PageHeader, SectionGroup } from '#/components/settings'
 import { defaultState, exampleAnchor } from '../lib/spec'
 import { tt } from '../lib/i18n'
 import CanvasStage from '../components/CanvasStage.vue'
@@ -106,15 +106,12 @@ function axisValues(key: string): Array<string | boolean> {
        rhythm); each section's title→body gap is owned by SectionGroup. -->
   <div class="min-w-0 flex-1 overflow-y-auto">
     <div class="mx-auto flex max-w-3xl flex-col gap-8 px-8 py-10">
-      <header class="flex flex-col gap-2 px-2">
-        <h1 class="text-heading font-semibold text-foreground">
-          {{ spec.name }}
-        </h1>
-        <!-- Matches PageShell's subtitle rung (text-sm on the host). -->
-        <p class="text-control text-muted-foreground">
-          {{ tt(spec.description, spec.descriptionZh) }}
-        </p>
-      </header>
+      <PageHeader
+        :title="spec.name"
+        :description="tt(spec.description, spec.descriptionZh)"
+        :level="1"
+        class="px-2"
+      />
 
       <SectionGroup
         heading
