@@ -24,27 +24,30 @@ withDefaults(defineProps<{
       </h2>
       <slot name="actions" />
     </div>
-    <!-- When a footer is present it becomes the card's REAL last child, so the
-         row above it loses its :last-child border-b-0 escape and its inset
-         hairline stacks against the footer's full-bleed border-t — two lines
-         fighting. The nth-last-child(2) rule hands the "I'm last" treatment to
-         whatever element sits directly above the footer. -->
+    <!-- When a footer is present its hairline becomes the card's visual last
+         divider, so the row above it loses its :last-child border-b-0 escape
+         and would stack its own hairline against the footer's — two lines
+         fighting. The nth-last-child(3) rule hands the "I'm last" treatment to
+         whatever content element sits directly above the footer's hairline. -->
     <div
       class="overflow-hidden rounded-menu-shell border border-border bg-card"
-      :class="$slots.footer ? '[&>:nth-last-child(2)]:border-b-0' : ''"
+      :class="$slots.footer ? '[&>:nth-last-child(3)]:border-b-0' : ''"
     >
       <slot />
       <!-- Footer: a right-aligned action bar (Save/Cancel) or a pagination strip.
-           Lives INSIDE the card, after the rows, so its top hairline meets both
-           card edges — the same inset logic as a row divider, but full-bleed
-           because it splits the card body from its action band. Only rendered
-           when a caller fills it, so a plain section is untouched. -->
-      <div
-        v-if="$slots.footer"
-        class="flex items-center justify-end gap-2 border-t border-border px-4 py-3"
-      >
-        <slot name="footer" />
-      </div>
+           Lives INSIDE the card, after the rows. Its divider is an INSET
+           hairline — same inset logic as a row divider, aligned to the content
+           padding rather than touching the card's edges. Only rendered when a
+           caller fills it, so a plain section is untouched. -->
+      <template v-if="$slots.footer">
+        <div
+          aria-hidden="true"
+          class="mx-4 border-t border-border"
+        />
+        <div class="flex items-center justify-end gap-2 px-4 py-3">
+          <slot name="footer" />
+        </div>
+      </template>
     </div>
   </section>
 </template>
