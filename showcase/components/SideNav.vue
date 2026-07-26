@@ -11,7 +11,7 @@ import {
 import { TextButton } from '#/components/text-button'
 import { ScrollArea } from '#/components/scroll-area'
 import { NavItem } from '#/components/settings'
-import { menuLabelClass } from '#/lib/menu'
+import { SidebarGroupLabel } from '#/components/sidebar'
 import { navGroups } from '../registry'
 import { navigate, route } from '../router'
 import { shellState } from '../shell'
@@ -23,20 +23,27 @@ import ChromeIconButton from './ChromeIconButton.vue'
 
 <template>
   <!-- Collapses to zero width (animated, same curve as the right rail); the
-       reopen affordance then lives in the tab bar. Inner content stays w-64
-       so it clips instead of reflowing during the transition. -->
+       reopen affordance then lives in the tab bar. Inner content stays w-60
+       so it clips instead of reflowing during the transition.
+       The panel's whole geometry is the host settings sidebar's recipe
+       (settings-sidebar/index.vue): 240px panel, px-4 (16px) list inset,
+       compact SidebarGroupLabel, gap-1 row seams, NavItem rows — the only
+       deliberate difference is that these rows carry no icons. -->
   <aside
     class="shrink-0 overflow-hidden border-border transition-[width] duration-200 ease-[cubic-bezier(0.32,0.72,0,1)]"
-    :class="shellState.navOpen ? 'w-64 border-r' : 'w-0'"
+    :class="shellState.navOpen ? 'w-60 border-r' : 'w-0'"
   >
-    <div class="flex h-full w-64 flex-col">
+    <div class="flex h-full w-60 flex-col">
       <!-- The wordmark is the home link; combined with the selected row below
            it this IS the breadcrumb. The header matches the tab bar's h-11 +
            bottom hairline exactly, so the seam runs unbroken across both
            panels and the two titles share one baseline. -->
-      <div class="flex h-11 shrink-0 items-center justify-between border-b border-border pr-2 pl-2">
+      <div class="flex h-11 shrink-0 items-center justify-between border-b border-border pr-2 pl-4">
+        <!-- Wordmark text lands at 30px from the panel edge — the same edge
+             the nav rows' text sits on (px-4 list inset + pl-3.5 row inset),
+             the trick the host uses to align its compact label with its rows. -->
         <TextButton
-          class="h-8 justify-start px-2.5 font-semibold"
+          class="h-8 justify-start px-3.5 font-semibold"
           @click="navigate('overview')"
         >
           Felinic UI
@@ -52,28 +59,22 @@ import ChromeIconButton from './ChromeIconButton.vue'
         </ChromeIconButton>
       </div>
       <ScrollArea class="min-h-0 flex-1">
-        <div class="p-2">
+        <div class="px-4 pt-2 pb-2">
           <div
-            v-for="group in navGroups"
+            v-for="(group, gi) in navGroups"
             :key="group.id"
-            class="mb-4 last:mb-0"
+            :class="gi > 0 ? 'pt-4' : ''"
           >
-            <!-- The group label IS a menu section heading — consume the
-               library's menuLabelClass, never re-type it. (History: this used
-               to hand-write the same recipe with pt-3/first:pt-1, but every
-               label is the first child of its v-for group container, so
-               first:pt-1 matched ALL labels — the 12px intent never rendered;
-               the page has always shown menuLabelClass's py-1 rhythm. If the
-               12px/28px group-gap intent is ever wanted, that is a deliberate
-               visual change, not a restore.) -->
-            <div :class="menuLabelClass">
+            <!-- Group label: the settings sidebar's compact tier, same
+                 component the host uses — never a hand-rolled label. -->
+            <SidebarGroupLabel size="compact">
               {{ tt(group.label, group.labelZh) }}
-            </div>
+            </SidebarGroupLabel>
             <!-- The nav rows are the library's NavItem — the SAME settings-nav
                row the host's settings/bot-detail sidebars use (lifted owner,
-               not a lookalike). The 2px seam between rows keeps adjacent
-               hover/active fills from fusing into one block. -->
-            <div class="flex flex-col gap-0.5">
+               not a lookalike). gap-1 seams are the settings sidebar's menu
+               rhythm. -->
+            <div class="flex flex-col gap-1">
               <NavItem
                 v-for="page in group.pages"
                 :key="page.id"
@@ -91,7 +92,7 @@ import ChromeIconButton from './ChromeIconButton.vue'
          menu, never the OS-native popup. The gradient strip fuses the foot
          with the list: rows fade out as they scroll under it instead of being
          clipped mid-glyph by the scroll edge. -->
-      <div class="relative flex items-center justify-between gap-1 p-2">
+      <div class="relative flex items-center justify-between gap-1 px-4 py-2">
         <div
           class="pointer-events-none absolute inset-x-0 -top-6 h-6 bg-linear-to-t from-background to-transparent"
           aria-hidden="true"
