@@ -827,6 +827,15 @@ Remaining (non-blocking) TODOs:
 - SegmentedControl disabled uses CSS `opacity: 0.5`; the contract says 40 — unify
   to `0.4` if/when the maintainer agrees it's not part of its personality.
 
+## The showcase (`showcase/`)
+
+`pnpm dev` serves the module's living reference: a custom, spec-driven
+showcase (foundations pages + one page per component with live controls and
+light/dark × 5-scheme switching). It replaced Storybook. Working IN the
+showcase (pages, specs, shell chrome) has its own doctrine — read
+**`showcase/AGENTS.md`** first. Working on the library (`src/`) or on the
+host app does not require it.
+
 ## Extending this contract
 
 When you lock a new cross-cutting decision (a color role, a duration, an icon

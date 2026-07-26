@@ -103,7 +103,7 @@ export type ButtonVariants = VariantProps<typeof buttonVariants>
 
 // Single source of truth for the variant/size axes. cva 0.7.1 does not expose
 // its `.config` at runtime, so the keys are mirrored here next to the cva call
-// (keep them in sync). Consumed by Storybook stories and the dev component wall
+// (keep them in sync). Consumed by the showcase specs and the dev component wall
 // so neither hand-maintains its own list.
 export const buttonVariantKeys = [
   'default',

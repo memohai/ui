@@ -55,3 +55,27 @@ export const badgeVariants = cva(
   },
 )
 export type BadgeVariants = VariantProps<typeof badgeVariants>
+
+// Single source of truth for the variant/size/font axes. cva 0.7.1 does not
+// expose its `.config` at runtime, so the keys are mirrored here next to the
+// cva call (keep them in sync). Consumed by the showcase specs so the
+// controls panel never hand-maintains its own list.
+export const badgeVariantKeys = [
+  'default',
+  'secondary',
+  'destructive',
+  'success',
+  'warning',
+  'info',
+  'outline',
+] as const satisfies readonly NonNullable<BadgeVariants['variant']>[]
+
+export const badgeSizeKeys = [
+  'default',
+  'sm',
+] as const satisfies readonly NonNullable<BadgeVariants['size']>[]
+
+export const badgeFontKeys = [
+  'sans',
+  'mono',
+] as const satisfies readonly NonNullable<BadgeVariants['font']>[]

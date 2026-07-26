@@ -1,0 +1,105 @@
+import type { VNodeChild } from 'vue'
+
+// A ControlSpec declares ONE knob on the Controls panel. The panel renders the
+// widget from this declaration; the spec's render()/code() consume the
+// resulting state. Options must come from the component's own exported key
+// arrays (buttonVariantKeys, buttonSizeKeys, …) — never a hand-copied list, so
+// the showcase can never drift from the shipped component (single-source rule,
+// same as the dev wall and the old stories).
+export type SpecState = Record<string, string | number | boolean>
+
+interface ControlBase {
+  key: string
+  label: string
+  // When present and false, the control renders disabled (opacity-40), not
+  // hidden — inapplicable knobs stay visible so the panel layout is stable.
+  when?: (state: SpecState) => boolean
+}
+
+export interface EnumControl extends ControlBase {
+  kind: 'enum'
+  options: readonly string[]
+  default: string
+  // segmented = the library SegmentedControl (≤5 options, one click, all
+  // visible); select = a dropdown for longer lists. Default picks by option
+  // count.
+  display?: 'segmented' | 'select'
+}
+
+export interface BooleanControl extends ControlBase {
+  kind: 'boolean'
+  default: boolean
+}
+
+export interface NumberControl extends ControlBase {
+  kind: 'number'
+  default: number
+  min?: number
+  max?: number
+}
+
+export interface StringControl extends ControlBase {
+  kind: 'string'
+  default: string
+  placeholder?: string
+}
+
+export type ControlSpec = EnumControl | BooleanControl | NumberControl | StringControl
+
+// A named example — one semantic section on the component page (the page is a
+// vertical doc spine: Playground first, then one section per example). Each
+// section renders its instances frozen at the preset state.
+export interface ExampleSpec {
+  name: string
+  nameZh?: string
+  // ONE line of when/why ("icon-only buttons must carry an aria-label"), not
+  // a restatement of the title. Optional — a section with nothing to teach
+  // renders no note line rather than filler (copy discipline).
+  note?: string
+  noteZh?: string
+  state?: Partial<SpecState>
+  // Optional render override for cases the default render can't express
+  // (e.g. slot-heavy compositions like InputGroup adornments).
+  render?: (state: SpecState) => VNodeChild
+}
+
+export interface ComponentSpec {
+  id: string // 'button' → route '#/components/button'
+  name: string // 'Button'
+  // 1–2 lines under the page title: what it IS, not how to use it.
+  description: string
+  // zh translation of description; falls back to description when absent.
+  descriptionZh?: string
+  controls: ControlSpec[]
+  examples?: ExampleSpec[]
+  // Optional "All variants" section: cross two control axes over spec defaults
+  // so the full variant grid is visible at once (Button: variant × size).
+  // rows/cols are control keys — enum controls contribute their options,
+  // booleans contribute [false, true]. Opt-in per spec: only axes a reviewer
+  // actually scans belong in a matrix.
+  matrix?: { rows: string, cols: string }
+  // OVERLAY spec: the component owns its own open/close (reka Select, Dialog,
+  // DropdownMenu, Tooltip, Popover — trigger opens, Esc/outside-click closes).
+  // The showcase renders these UNCONTROLLED — a closed, live trigger you click
+  // to open, exactly like the real component. It must NOT expose an `open`
+  // control pinning the surface open: pinning writes into a per-render throwaway
+  // state, so the overlay can never be closed, and its DismissableLayer freezes
+  // the whole page's pointer-events → the canvas dead-locks. (This flag also
+  // hides the light/dark compare toggle: two open overlays can't coexist under
+  // reka's document-level DismissableLayer — see CanvasStage.)
+  interactive?: boolean
+  render: (state: SpecState) => VNodeChild
+  // Agent-facing do/don't notes; renders the Usage section when present.
+  usage?: string
+  usageZh?: string
+}
+
+export function defaultState(spec: ComponentSpec): SpecState {
+  return Object.fromEntries(spec.controls.map(c => [c.key, c.default]))
+}
+
+// Section anchor id for the i-th example — the single naming source for the
+// ids ComponentPage stamps on example sections.
+export function exampleAnchor(index: number): string {
+  return `ex-${index}`
+}
