@@ -575,6 +575,12 @@ dark. Tooltip carries no border at all — its solid fill is its own edge.
 - Weight is **role-mapped** (single source — do not free-style):
   `font-semibold` → surface/section titles · `font-medium` → labels, button text,
   badges, emphasis · `font-normal` → body, descriptions, field values, placeholder.
+- The host carries **waived arbitrary weights** (`font-[430]`, `font-[550]`, …).
+  When porting such a surface, map to the NEAREST role rung — never copy the
+  arbitrary value (the guard rejects it, and copying launders a waived one-off
+  into a fake standard). A missing weight class is equally wrong: unweighted
+  text falls to `normal` (360), which reads anemic next to any medium-weight
+  row — nav/list rows are `font-medium`.
 
 ## Sizing & icons
 

@@ -6,6 +6,11 @@
 // the app's session list uses. Geometry mirrors that list: a fixed 2rem row
 // (h-8), and the PARENT owns a 2px seam between rows (gap-0.5) so adjacent
 // selected/hover fills never fuse into one block.
+// Weight is the medium ROLE RUNG (450): a nav row carries presence. The host's
+// settings nav reads as 430 only because it uses a waived arbitrary
+// font-[430] — never chase waived arbitrary weights; map to the nearest rung.
+// (No weight class here once rendered 360 — 70 units under the host rows, the
+// "sidebar text looks anemic" bug.)
 // Hover is deliberately suppressed on the active row: --selected-bg sits one
 // ladder rung above --ui-hover precisely so a selected row never reads lighter
 // than a merely-hovered one (AGENTS.md § Selected state).
@@ -16,7 +21,7 @@ defineEmits<{ select: [] }>()
 <template>
   <button
     type="button"
-    class="flex h-8 w-full cursor-pointer items-center rounded-md px-2.5 text-left text-control text-foreground disabled:pointer-events-none disabled:opacity-40"
+    class="flex h-8 w-full cursor-pointer items-center rounded-md px-2.5 text-left text-control font-medium text-foreground disabled:pointer-events-none disabled:opacity-40"
     :class="active ? '' : 'hover:bg-(--ui-hover)'"
     :data-ui-selected="active ? '' : undefined"
     :disabled="disabled"
