@@ -13,6 +13,7 @@ const outputDir = path.resolve(rootDir, './index.ts')
 const libExportLines = [
   'export { menuItemClass, menuLabelClass, menuContentClass, menuViewportClass, menuChromeClass, virtualListboxClass, menuAlignOffset, menuSearchHeaderClass, menuSearchInputClass, menuSeparatorClass, menuSlideClass } from \'./lib/menu\'',
   'export { selectTriggerClass } from \'./lib/trigger\'',
+  'export { useClipboard } from \'./lib/clipboard\'',
 ]
 const libExportAnchor = 'export * from \'./components/command/index\''
 

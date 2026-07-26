@@ -31,9 +31,47 @@ because there is only one copy of its spacing.
 
 ## The core owners
 
-Import paths are exact. All live under `apps/web/src/components/`.
+Import paths are exact. **As of the 2026-07 owner lift, every core owner below
+lives in `@felinic/ui`** (mostly `src/components/settings/`; a few in their own
+component dirs) — the `apps/web/src/components/` paths left in the entries are
+re-export shims that keep old imports working. Import new call sites from
+`@felinic/ui` directly; the shims die in the migration follow-up.
 
 ### Structure
+
+**SettingsShell** · `settings-shell/index.vue` — shim (impl in `@felinic/ui`).
+The settings page width shell: centered column with the page-width LADDER
+(`narrow` max-w-3xl · `standard` max-w-4xl · `wide` max-w-6xl · `full`) and the
+page gutter (`px-4 md:px-6`). The ladder's single source is
+`settingsWidthClass` (`@felinic/ui`, `src/components/settings/width.ts`) —
+DetailPane consumes the same helper so its back row shares the content's
+rails. PageShell is the OTHER page frame (title block + actions + doc gutter):
+PageShell for titled settings pages, SettingsShell for master-detail panes
+that carry their own inner structure.
+
+**DetailPane** · `settings/detail-pane.vue` — shim (impl in `@felinic/ui`).
+The in-page detail surface (list ↔ detail navigation): a back row
+(**BackButton**) width-matched to the body, a loading skeleton mirroring the
+real body (header card + 4-row form card, so the frame doesn't jump when
+content swaps in), and the detail slot. Props: `backLabel`, `width`
+(SettingsWidth ladder), `loading`. Emits `back`.
+
+**BackButton** · `settings/back-button.vue` — shim (impl in `@felinic/ui`).
+THE back affordance for in-page detail surfaces (DetailPane + bot-detail tabs
+that can't use DetailPane). Ghost button, `px-4`, chevron + truncated label,
+`/85` ink. Props: `label`. Emits `click`.
+
+**SwapTransition** · `settings/swap-transition.vue` — shim (impl in
+`@felinic/ui`; its `swap-forward/*` / `swap-back/*` classes live in the
+library's style.css). The directional push-pop for list ↔ detail swaps:
+forward opens the next pane at the top, back restores the exact scroll offset
+(an internal stack handles any nesting depth). Props: `direction:
+'forward' | 'back'`. No `appear` — the first paint is a plain cut.
+
+**StatusDot** · `settings/status-dot/index.vue` — shim (impl in
+`@felinic/ui`). The tiny status dot atom (status → color), composed by
+BackendCard (`enabled` badge) and MetricReadout — never hand-paint a colored
+dot.
 
 **PageShell** · `page-shell/index.vue` — a re-export shim; the implementation
 lives in `@felinic/ui` (`src/components/settings`), shared with the component
@@ -155,12 +193,16 @@ A `space-y-4` wrapper for a run of `FieldStack`s. Use it around a contiguous for
 
 ### Readouts & notices
 
-**DeviceCodePanel** · `device-code-panel/index.vue`
+**DeviceCodePanel** · `device-code-panel/index.vue` — shim (impl in
+`@felinic/ui`).
 设备码授权(RFC 8628)的"输码时刻":一句指引(caller i18n,防钓鱼警示写在 hint 里)→
-英雄码(text-2xl mono,select-all,不是输入框)→ 唯一动作"复制并前往"(同一手势里
-先开空白 tab 占位再复制,失败收回 —— 等剪贴板 Promise 再 open 会被弹窗拦截)→
+英雄码(text-3xl mono,select-all,不是输入框)→ 唯一动作"复制并打开"(【先发起复制、
+再同步打开,两行都不 await】——趁当前页聚焦先发起 writeText,失焦会让 Chromium 复制
+失败;绝不能先开空白 tab 占位再 await 剪贴板,那是已否决的错误方向)→
 可见性守卫的 mm:ss 倒计时(面板唯一活性信号;授权轮询是 caller 的事,静默)。
-Props: `code`, `verificationUri`, `expiresAt?`, `hint`, `retryLoading?`;emit `retry`
+Props: `code`, `verificationUri`, `expiresAt?`, `hint`, `retryLoading?`,以及入库后
+全部文案 props(`copyAndOpenLabel` / `retryLabel` / `expiredLabel` / `expiresInLabel`
+/ `copyFailedMessage`,均 caller i18n,无 fallback);emit `retry`
 (过期后重新签发)。"取消整个流程"属于 caller 的入口控件,与面板的 retry 语义不同,
 不要合并。已知同形状旧写法:bots ACP 面板、onboarding Step4 —— 迁移前先做各自的
 行为盘点(ACP 有真 cancel API 和错误态)。
@@ -223,10 +265,24 @@ class (single root node, merges with the component's base class).
 
 ### Dialogs
 
-**ConfirmDeleteDialog** · `confirm-delete-dialog/index.vue`
+**FormDialogShell** · `form-dialog-shell/index.vue` — shim (impl in
+`@felinic/ui`). The Dialog-with-a-form skeleton: Dialog + form + footer band
+(default `sm:max-w-106.25`). Compose it for any create/edit dialog whose body
+is a form — never hand-roll the dialog+form+footer assembly.
+
+**ConfirmPopover** · `confirm-popover/index.vue` — shim (impl in
+`@felinic/ui`). The anchored confirm bubble (NOT a modal): shared popover
+chrome, a title-grade question (`title`, or `message` alone), optional
+supporting line, ghost cancel + action confirm. Props: `title`, `message`,
+`cancelText` / `confirmText` (**required** — caller i18n, no fallback),
+`loading`, `variant`. Emits `confirm`.
+
+**ConfirmDeleteDialog** · `confirm-delete-dialog/index.vue` — shim (impl in
+`@felinic/ui`).
 The delete-confirmation dialog: `sm:max-w-sm`, title + optional `DialogDescription`,
 outline cancel + destructive confirm. Props: `open` (v-model), `title`, `description`,
-`confirmLabel` (defaults to `common.confirm`), `loading` (confirm shows spinner, cancel
+`cancelLabel` / `confirmLabel` (**required** — caller i18n; the old
+`common.confirm` fallback is gone), `loading` (confirm shows spinner, cancel
 disables so the dialog can't close mid-request). Emits `confirm` — the **caller** owns
 the actual delete call and closes on success. Copy is caller i18n; the component owns
 only skeleton + behavior. Do not hand-roll a Dialog+two-buttons confirm again; if a
