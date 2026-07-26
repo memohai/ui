@@ -575,17 +575,6 @@ dark. Tooltip carries no border at all — its solid fill is its own edge.
 - Weight is **role-mapped** (single source — do not free-style):
   `font-semibold` → surface/section titles · `font-medium` → labels, button text,
   badges, emphasis · `font-normal` → body, descriptions, field values, placeholder.
-- The host carries **waived arbitrary weights** (`font-[430]`, `font-[550]`, …).
-  Two legal fates, never a third: (a) the surface's owner component is LIFTED
-  into the library, and the waived value travels with it as a PINNED owner
-  value (single home + justification — the owner IS the law for that shape,
-  e.g. NavItem's 430; same precedent as SettingsRow's `min-h-[3.75rem]`);
-  (b) when porting a surface by hand (no owner lift), map to the NEAREST role
-  rung — never copy the arbitrary value to a call site (the guard rejects it,
-  and copying launders a waived one-off into a fake standard). A missing
-  weight class is equally wrong: unweighted text falls to `normal` (360),
-  which reads anemic next to any medium-weight row — nav/list rows are
-  `font-medium` unless their owner says otherwise.
 
 ## Sizing & icons
 
