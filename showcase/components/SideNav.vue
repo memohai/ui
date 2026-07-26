@@ -10,6 +10,7 @@ import {
 } from '#/components/select'
 import { TextButton } from '#/components/text-button'
 import { ScrollArea } from '#/components/scroll-area'
+import { NavItem } from '#/components/settings'
 import { menuLabelClass } from '#/lib/menu'
 import { navGroups } from '../registry'
 import { navigate, route } from '../router'
@@ -18,7 +19,6 @@ import { tt, setLocale, localeState } from '../lib/i18n'
 import type { Scheme } from '../theme'
 import { SCHEMES, setScheme, setTheme, themeState } from '../theme'
 import ChromeIconButton from './ChromeIconButton.vue'
-import RowButton from './RowButton.vue'
 </script>
 
 <template>
@@ -69,17 +69,19 @@ import RowButton from './RowButton.vue'
             <div :class="menuLabelClass">
               {{ tt(group.label, group.labelZh) }}
             </div>
-            <!-- The 2px seam between rows is the chat sidebar's row rhythm:
-               adjacent selected/hover fills never fuse into one block. -->
+            <!-- The nav rows are the library's NavItem — the SAME settings-nav
+               row the host's settings/bot-detail sidebars use (lifted owner,
+               not a lookalike). The 2px seam between rows keeps adjacent
+               hover/active fills from fusing into one block. -->
             <div class="flex flex-col gap-0.5">
-              <RowButton
+              <NavItem
                 v-for="page in group.pages"
                 :key="page.id"
                 :active="route.id === page.id"
-                @select="navigate(page.id)"
+                @click="navigate(page.id)"
               >
                 {{ tt(page.title, page.titleZh) }}
-              </RowButton>
+              </NavItem>
             </div>
           </div>
         </div>

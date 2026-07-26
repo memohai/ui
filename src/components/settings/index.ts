@@ -1,3 +1,4 @@
+export { default as NavItem } from './NavItem.vue'
 export { default as PageHeader } from './PageHeader.vue'
 export { default as PageShell } from './PageShell.vue'
 export { default as SectionGroup } from './SectionGroup.vue'
