@@ -4,7 +4,11 @@
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "baseUrl": ".",
+    // @vue/tsconfig 0.9.1 dropped this from its base (0.8.1 had it);
+    // pinned here to keep the TS 6 upgrade strictness-neutral.
+    "noUncheckedIndexedAccess": true,
+    // baseUrl removed: deprecated in TS 6 (TS5101); paths entries are
+    // already relative to this tsconfig and resolve without it.
     "paths": {
       "#/*": ["./src/*"]
     }
