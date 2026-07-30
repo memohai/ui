@@ -71,12 +71,20 @@ const props = withDefaults(defineProps<{
 })
 
 // Full literal class strings per tone — Tailwind scans source text, so a runtime
-// concat would never be generated. Both tones now use a soft-token triplet.
-const toneClass = computed(() =>
-  props.tone === 'destructive'
-    ? 'border-destructive-border bg-destructive-soft'
-    : 'border-warning-border bg-warning-soft',
-)
+// concat would never be generated. Clickable hover uses the *-soft-hover tokens
+// (utilities layer) so the wash is visible and stays in the same tone family.
+const toneClass = computed(() => {
+  if (props.tone === 'destructive') {
+    const rest = 'border-destructive-border bg-destructive-soft'
+    return props.clickable
+      ? `${rest} transition-colors hover:bg-destructive-soft-hover hover:border-destructive-border-hover`
+      : rest
+  }
+  const rest = 'border-warning-border bg-warning-soft'
+  return props.clickable
+    ? `${rest} transition-colors hover:bg-warning-soft-hover hover:border-warning-border-hover`
+    : rest
+})
 
 const iconClass = computed(() =>
   props.tone === 'destructive' ? 'text-destructive' : 'text-warning-foreground',

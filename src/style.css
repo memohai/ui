@@ -594,21 +594,6 @@
   :is(button, a)[data-slot="action-card"]:active::before {
     background-color: var(--action-card-active);
   }
-
-  /* ── CalloutBanner — clickable hover must stay in the banner's tone ─────────
-     hover:bg-accent replaced destructive/warning soft fills with neutral gray.
-     Intensify the same soft/border pair instead. */
-  :is(button)[data-slot="callout-banner"][data-clickable] {
-    transition: background-color 15ms ease, border-color 15ms ease;
-  }
-  :is(button)[data-slot="callout-banner"][data-clickable][data-tone="destructive"]:hover {
-    background-color: color-mix(in oklab, var(--destructive) 8%, transparent);
-    border-color: color-mix(in oklab, var(--destructive) 36%, transparent);
-  }
-  :is(button)[data-slot="callout-banner"][data-clickable][data-tone="warning"]:hover {
-    background-color: color-mix(in oklab, var(--warning-foreground) 10%, var(--warning-soft));
-    border-color: color-mix(in oklab, var(--warning-foreground) 22%, var(--warning-border));
-  }
 }
 
 @keyframes button-spin {
@@ -1104,6 +1089,8 @@
      call sites (see --muted-soft above for why color-mix, not a literal). */
   --destructive-soft: color-mix(in oklab, var(--destructive) 5%, transparent);
   --destructive-border: color-mix(in oklab, var(--destructive) 30%, transparent);
+  --destructive-soft-hover: color-mix(in oklab, var(--destructive) 14%, transparent);
+  --destructive-border-hover: color-mix(in oklab, var(--destructive) 45%, transparent);
   --border: oklch(0.915 0.0045 72);
   /* Alpha policy: the soft/faint divider and card-edge rung — same color-mix
      reasoning as --muted-soft/--destructive-soft, reproducing `border-border/60`
@@ -1402,6 +1389,8 @@
   --warning-solid-foreground: oklch(0.18 0.02 75);
   --warning-soft: oklch(0.97 0.045 80);
   --warning-border: oklch(0.86 0.10 80);
+  --warning-soft-hover: color-mix(in oklab, var(--warning-foreground) 16%, var(--warning-soft));
+  --warning-border-hover: color-mix(in oklab, var(--warning-foreground) 30%, var(--warning-border));
   --info: oklch(0.62 0.15 235);
   --info-foreground: oklch(0.36 0.12 235);
   --info-soft: oklch(0.96 0.035 235);
@@ -1969,6 +1958,8 @@
   --color-destructive-foreground: var(--destructive-foreground);
   --color-destructive-soft: var(--destructive-soft);
   --color-destructive-border: var(--destructive-border);
+  --color-destructive-soft-hover: var(--destructive-soft-hover);
+  --color-destructive-border-hover: var(--destructive-border-hover);
   --color-border: var(--border);
   --color-border-soft: var(--border-soft);
   --color-input: var(--input);
@@ -2051,6 +2042,8 @@
   --color-warning-solid-foreground: var(--warning-solid-foreground);
   --color-warning-soft: var(--warning-soft);
   --color-warning-border: var(--warning-border);
+  --color-warning-soft-hover: var(--warning-soft-hover);
+  --color-warning-border-hover: var(--warning-border-hover);
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
   --color-info-soft: var(--info-soft);
