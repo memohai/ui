@@ -17,7 +17,6 @@
     "prebuild": "tsx ./scripts/gen-entry.ts",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
-    "test": "tsx --test src/lib/clipboard.test.ts",
     "build-only": "vite build",
     "type-check": "vue-tsc --build"
   },
