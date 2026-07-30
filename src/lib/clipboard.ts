@@ -43,14 +43,15 @@ export function useClipboard() {
   const isSupported = hasNavigatorClipboard || hasExecCommandFallback
 
   async function copyText(text: string): Promise<boolean> {
+    if (!isSupported) return false
+
     if (hasNavigatorClipboard && typeof navigator !== 'undefined') {
       try {
         await navigator.clipboard.writeText(text)
         return true
       }
       catch {
-        // Permission behavior varies by browser. Try the legacy fallback as a
-        // second chance before reporting failure.
+        return false
       }
     }
 
