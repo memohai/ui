@@ -10,6 +10,9 @@
   <component
     :is="clickable ? 'button' : 'div'"
     :type="clickable ? 'button' : undefined"
+    data-slot="callout-banner"
+    :data-tone="tone"
+    :data-clickable="clickable ? '' : undefined"
     class="flex flex-col gap-3 rounded-menu-shell border px-4 py-3 text-left sm:flex-row sm:items-center"
     :class="[toneClass, clickable ? interactiveClass : '']"
   >
@@ -79,8 +82,8 @@ const iconClass = computed(() =>
   props.tone === 'destructive' ? 'text-destructive' : 'text-warning-foreground',
 )
 
-// When the whole banner is the affordance, it gets the neutral overlay hover the
-// rest of the app's clickable surfaces use — the tile's own chrome, not a page
-// injection.
-const interactiveClass = 'w-full transition-colors hover:bg-accent' /* ui-allow-style */
+// When the whole banner is the affordance, hover stays in the same tone family
+// (see [data-slot="callout-banner"] rules in style.css) — not hover:bg-accent,
+// which replaced destructive/warning fills with neutral gray.
+const interactiveClass = 'w-full cursor-pointer'
 </script>

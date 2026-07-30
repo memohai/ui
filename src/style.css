@@ -594,6 +594,21 @@
   :is(button, a)[data-slot="action-card"]:active::before {
     background-color: var(--action-card-active);
   }
+
+  /* ── CalloutBanner — clickable hover must stay in the banner's tone ─────────
+     hover:bg-accent replaced destructive/warning soft fills with neutral gray.
+     Intensify the same soft/border pair instead. */
+  :is(button)[data-slot="callout-banner"][data-clickable] {
+    transition: background-color 15ms ease, border-color 15ms ease;
+  }
+  :is(button)[data-slot="callout-banner"][data-clickable][data-tone="destructive"]:hover {
+    background-color: color-mix(in oklab, var(--destructive) 8%, transparent);
+    border-color: color-mix(in oklab, var(--destructive) 36%, transparent);
+  }
+  :is(button)[data-slot="callout-banner"][data-clickable][data-tone="warning"]:hover {
+    background-color: color-mix(in oklab, var(--warning-foreground) 10%, var(--warning-soft));
+    border-color: color-mix(in oklab, var(--warning-foreground) 22%, var(--warning-border));
+  }
 }
 
 @keyframes button-spin {
