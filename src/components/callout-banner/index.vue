@@ -10,6 +10,9 @@
   <component
     :is="clickable ? 'button' : 'div'"
     :type="clickable ? 'button' : undefined"
+    data-slot="callout-banner"
+    :data-tone="tone"
+    :data-clickable="clickable ? '' : undefined"
     class="flex flex-col gap-3 rounded-menu-shell border px-4 py-3 text-left sm:flex-row sm:items-center"
     :class="[toneClass, clickable ? interactiveClass : '']"
   >
@@ -68,19 +71,27 @@ const props = withDefaults(defineProps<{
 })
 
 // Full literal class strings per tone — Tailwind scans source text, so a runtime
-// concat would never be generated. Both tones now use a soft-token triplet.
-const toneClass = computed(() =>
-  props.tone === 'destructive'
-    ? 'border-destructive-border bg-destructive-soft'
-    : 'border-warning-border bg-warning-soft',
-)
+// concat would never be generated. Clickable hover uses the *-soft-hover tokens
+// (utilities layer) so the wash is visible and stays in the same tone family.
+const toneClass = computed(() => {
+  if (props.tone === 'destructive') {
+    const rest = 'border-destructive-border bg-destructive-soft'
+    return props.clickable
+      ? `${rest} transition-colors hover:bg-destructive-soft-hover hover:border-destructive-border-hover`
+      : rest
+  }
+  const rest = 'border-warning-border bg-warning-soft'
+  return props.clickable
+    ? `${rest} transition-colors hover:bg-warning-soft-hover hover:border-warning-border-hover`
+    : rest
+})
 
 const iconClass = computed(() =>
   props.tone === 'destructive' ? 'text-destructive' : 'text-warning-foreground',
 )
 
-// When the whole banner is the affordance, it gets the neutral overlay hover the
-// rest of the app's clickable surfaces use — the tile's own chrome, not a page
-// injection.
-const interactiveClass = 'w-full transition-colors hover:bg-accent' /* ui-allow-style */
+// When the whole banner is the affordance, hover stays in the same tone family
+// (see [data-slot="callout-banner"] rules in style.css) — not hover:bg-accent,
+// which replaced destructive/warning fills with neutral gray.
+const interactiveClass = 'w-full cursor-pointer'
 </script>
