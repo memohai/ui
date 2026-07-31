@@ -72,7 +72,7 @@ The system employs a **bimodal elevation strategy**:
 - **Breadcrumb**: Minimalist. 14px icons, 4px-6px gaps. Active page is `text-foreground font-normal`, inactive is `text-muted-foreground`.
 - **Sidebar**:
   - Container uses `primary-foreground` background.
-  - Active items use `accent` background with a 2px `primary` left border indicator.
+  - Active items use a `sidebar-accent` background and `font-medium` weight (no colored indicator bar or ring).
 
 ### Items
 
