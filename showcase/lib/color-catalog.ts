@@ -106,7 +106,7 @@ export const COLOR_SECTIONS: ColorSection[] = [
     title: 'Brand',
     titleZh: '品牌色',
     families: [
-      rowsFamily(['--brand', '--brand-soft', '--brand-border', '--brand-hover', '--sidebar-primary']),
+      rowsFamily(['--brand', '--brand-soft', '--brand-border', '--brand-hover']),
     ],
   },
   {
