@@ -1,9 +1,11 @@
 <template>
   <!-- Vertical Label-over-control field. Distinct from SettingsRow, whose label
        sits BESIDE the control; a FieldStack stacks them so a run of them reads as
-       a form column. space-y-1.5 is the label→control→help rhythm the house form
-       uses everywhere a field is stacked. -->
-  <div class="space-y-1.5">
+       a form column. The label→control→help rhythm has two rungs (GAP_CLASS):
+       'card' for fields inside SettingsSection chrome (the card carries the
+       grouping), 'bare' for fields sitting directly on the page (onboarding
+       wizard), where the group needs more internal air to hold together. -->
+  <div :class="GAP_CLASS[gap]">
     <!-- The label line. A plain #label slot lets a caller pair the label text
          with an inline toggle/meta on the same row (a name field + its enable
          switch); when it's filled it replaces the bound Label entirely, so the
@@ -84,6 +86,16 @@ import { computed, inject, provide, toValue, useId } from 'vue'
 import { FORM_ITEM_INJECTION_KEY } from '../form'
 import { Label } from '../label'
 
+// The two spacing rungs are the ONLY sanctioned values — add a rung here,
+// deliberately, never per-page via class injection (an injected space-y-*
+// silently loses to whichever utility the stylesheet happens to emit last).
+// Declared before defineProps: the SFC compiler resolves prop types statically
+// and cannot see through `keyof typeof` on a later local const.
+const GAP_CLASS: Record<'card' | 'bare', string> = {
+  card: 'space-y-1.5',
+  bare: 'space-y-2.5',
+}
+
 const props = withDefaults(defineProps<{
   label?: string
   // Bound to the control's id so clicking the label focuses it. Left to the
@@ -94,11 +106,18 @@ const props = withDefaults(defineProps<{
   // Draw a fixed-height error slot even when valid, so the message appearing
   // doesn't push content down (dialogs whose footer would jump).
   reserveError?: boolean
+  // Spacing rung by surface, not by taste (2026-08): 'card' keeps the 6px house
+  // rhythm inside SettingsSection cards; 'bare' opens to 10px where fields sit
+  // directly on the page with no card chrome (the onboarding wizard is the
+  // first such surface). Note the Label's own line-height eats ~4px of whatever
+  // rung is chosen — the perceived gap is smaller than the box gap.
+  gap?: 'card' | 'bare'
 }>(), {
   label: '',
   for: undefined,
   help: '',
   reserveError: false,
+  gap: 'card',
 })
 
 const id = useId()
