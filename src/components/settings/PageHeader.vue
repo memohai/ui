@@ -36,7 +36,11 @@ const tag = computed(() => `h${props.level}` as 'h1' | 'h2')
 
 <template>
   <div :class="framed ? 'mb-6' : ''">
-    <div :class="[framed || $slots.actions ? 'flex items-center justify-between gap-4' : '', framed ? 'min-h-9' : '']">
+    <!-- flex-wrap, not a breakpoint: the actions wrap under the title only
+         when the row genuinely can't fit them (a 390px phone, a narrow split
+         pane). When wrapped, the actions go full-width below md so a search
+         field stays usable; ≥md keeps the historical shrink-0 desktop row. -->
+    <div :class="[framed || $slots.actions ? 'flex flex-wrap items-center justify-between gap-x-4 gap-y-3' : '', framed ? 'min-h-9' : '']">
       <component
         :is="tag"
         class="min-w-0 truncate text-heading font-semibold text-foreground"
@@ -46,7 +50,7 @@ const tag = computed(() => `h${props.level}` as 'h1' | 'h2')
       </component>
       <div
         v-if="$slots.actions"
-        class="flex shrink-0 items-center gap-2"
+        class="flex items-center gap-2 max-md:w-full md:shrink-0"
       >
         <slot name="actions" />
       </div>

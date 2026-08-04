@@ -10,9 +10,9 @@ const props = withDefaults(defineProps<{
   title?: string
   description?: string
   // 'page' is a standalone surface that owns the full gutter. 'tab' lives
-  // inside the bot-detail tab container (which already adds px-6 pt-4 pb-4),
-  // so it only adds the remainder to reach the same pt-10/pb-12 vertical
-  // rhythm.
+  // inside the bot-detail tab container (which already adds the horizontal
+  // gutter — px-4, stepping to px-6 at md — plus pt-4 pb-4), so it only adds
+  // the remainder to reach the same vertical rhythm.
   variant?: 'page' | 'tab'
   // The measure (content column width). 'md' is the reading column every host
   // page uses (max-w-3xl). 'lg'/'xl' exist for board-style pages whose content
@@ -32,7 +32,10 @@ const MAX_W = { md: 'max-w-3xl', lg: 'max-w-4xl', xl: 'max-w-5xl' } as const
 const rootClass = computed(() =>
   props.variant === 'tab'
     ? `mx-auto ${MAX_W[props.width]} pt-6 pb-8`
-    : `mx-auto ${MAX_W[props.width]} px-6 pt-10 pb-12`,
+    // The <md gutter step mirrors SettingsShell/DetailPane (px-4 md:px-6):
+    // a phone keeps a 16px margin instead of the desktop 24px, and the
+    // airier vertical rhythm only starts where the width can afford it.
+    : `mx-auto ${MAX_W[props.width]} px-4 pt-6 pb-8 md:px-6 md:pt-10 md:pb-12`,
 )
 </script>
 
