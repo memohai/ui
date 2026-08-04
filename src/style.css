@@ -1024,7 +1024,7 @@
   transition-duration: 0.255s, 0s, 0s;
 }
 
-:root {
+:root, [data-color-scheme-preview="memoh"] {
   --font-sans: "Inter Variable", "Inter", "MiSans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Noto Sans SC", sans-serif;
   --radius: 0.625rem;
   --scheme-hue: 72;
@@ -1447,7 +1447,7 @@
   --chart-5: var(--destructive);
 }
 
-.dark {
+.dark, .dark [data-color-scheme-preview="memoh"] {
   --background: oklch(0.152 0 0);
   --foreground: oklch(0.90 0 0);
   --card: oklch(0.21 0 0);
@@ -1672,7 +1672,17 @@
   --btn-destructive-hover-text: oklch(0.80 0.18 25);
 }
 
-:root[data-color-scheme="ocean"] {
+/* ── Scheme previews: [data-color-scheme-preview="<id>"] ──────────────────────
+   Every scheme block above (:root/.dark defaults = memoh) and below carries a
+   parallel [data-color-scheme-preview] selector member. Putting that attribute
+   on any element scopes the FULL token set of that scheme into its subtree —
+   surfaces, brand, everything — regardless of the page's active scheme, and
+   .dark on an ancestor flips it to the dark set automatically. Direct
+   declarations on the element always beat inherited custom properties, so a
+   preview stays truthful even when the page runs a different scheme. Used by
+   the color-scheme picker cards; preview markup must consume tokens
+   (var(--background)/var(--card)/var(--brand)…), never per-scheme hexes. */
+:root[data-color-scheme="ocean"], [data-color-scheme-preview="ocean"] {
   --scheme-hue: 230;
   --brand: oklch(0.56 0.15 230);
   --brand-soft: oklch(0.96 0.035 230);
@@ -1697,7 +1707,7 @@
   --event-heartbeat-border: oklch(0.84 0.09 345);
 }
 
-.dark[data-color-scheme="ocean"] {
+.dark[data-color-scheme="ocean"], .dark [data-color-scheme-preview="ocean"] {
   --scheme-hue: 230;
   /* :root[data-color-scheme="ocean"] sets --destructive with specificity (0,2,0),
      which outranks .dark (0,1,0) and bleeds the light-mode value into dark. Restore
@@ -1725,7 +1735,7 @@
   --event-heartbeat-border: oklch(0.76 0.15 345 / 0.32);
 }
 
-:root[data-color-scheme="forest"] {
+:root[data-color-scheme="forest"], [data-color-scheme-preview="forest"] {
   --scheme-hue: 150;
   --brand: oklch(0.50 0.14 150);
   --brand-soft: oklch(0.96 0.035 150);
@@ -1749,7 +1759,7 @@
   --event-heartbeat-border: oklch(0.84 0.09 20);
 }
 
-.dark[data-color-scheme="forest"] {
+.dark[data-color-scheme="forest"], .dark [data-color-scheme-preview="forest"] {
   --scheme-hue: 150;
   --brand: oklch(0.66 0.12 150);
   --brand-soft: oklch(0.30 0.07 150 / 0.35);
@@ -1773,7 +1783,7 @@
   --event-heartbeat-border: oklch(0.74 0.14 20 / 0.32);
 }
 
-:root[data-color-scheme="rose"] {
+:root[data-color-scheme="rose"], [data-color-scheme-preview="rose"] {
   --scheme-hue: 355;
   --brand: oklch(0.58 0.18 355);
   --brand-soft: oklch(0.96 0.035 355);
@@ -1797,7 +1807,7 @@
   --event-heartbeat-border: oklch(0.84 0.09 355);
 }
 
-.dark[data-color-scheme="rose"] {
+.dark[data-color-scheme="rose"], .dark [data-color-scheme-preview="rose"] {
   --scheme-hue: 355;
   --brand: oklch(0.74 0.16 355);
   --brand-soft: oklch(0.30 0.07 355 / 0.35);
@@ -1821,7 +1831,7 @@
   --event-heartbeat-border: oklch(0.76 0.17 355 / 0.32);
 }
 
-:root[data-color-scheme="amber"] {
+:root[data-color-scheme="amber"], [data-color-scheme-preview="amber"] {
   --scheme-hue: 70;
   --brand: oklch(0.62 0.15 70);
   --brand-soft: oklch(0.97 0.045 75);
@@ -1845,7 +1855,7 @@
   --event-heartbeat-border: oklch(0.84 0.09 350);
 }
 
-.dark[data-color-scheme="amber"] {
+.dark[data-color-scheme="amber"], .dark [data-color-scheme-preview="amber"] {
   --scheme-hue: 70;
   --brand: oklch(0.78 0.13 70);
   --brand-soft: oklch(0.30 0.07 70 / 0.35);
@@ -1869,7 +1879,7 @@
   --event-heartbeat-border: oklch(0.76 0.15 350 / 0.32);
 }
 
-:root[data-color-scheme]:not([data-color-scheme="memoh"]) {
+:root[data-color-scheme]:not([data-color-scheme="memoh"]), [data-color-scheme-preview]:not([data-color-scheme-preview="memoh"]) {
   --background: oklch(0.984 0.004 var(--scheme-hue));
   --background-chrome: oklch(0.978 0.004 var(--scheme-hue));
   --foreground: oklch(0.21 0.004 var(--scheme-hue));
@@ -1897,7 +1907,7 @@
   --segment-track: oklch(0.945 0.005 var(--scheme-hue));
 }
 
-.dark[data-color-scheme]:not([data-color-scheme="memoh"]) {
+.dark[data-color-scheme]:not([data-color-scheme="memoh"]), .dark [data-color-scheme-preview]:not([data-color-scheme-preview="memoh"]) {
   --background: oklch(0.152 0.006 var(--scheme-hue));
   --foreground: oklch(0.90 0.004 var(--scheme-hue));
   --card: oklch(0.21 0.006 var(--scheme-hue));
