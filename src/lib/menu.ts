@@ -65,7 +65,11 @@ export const menuAlignOffset = -5
 // the chrome border the search row sits inside, so both land at 17 from the panel
 // edge). Shared so the two searchable surfaces don't each hand-write the header.
 export const menuSearchHeaderClass = 'flex h-10 shrink-0 items-center gap-2 border-b border-border/40 px-4'
-export const menuSearchInputClass = 'flex h-full w-full bg-transparent text-control outline-hidden placeholder:text-muted-foreground'
+// Coarse-pointer devices use the tokenized 16px title size: iOS Safari
+// auto-zooms a focused field below 16px in portrait or landscape, and that zoom
+// can strand the viewport after the keyboard closes. Fine-pointer desktop keeps
+// the 14px menu rhythm regardless of viewport width.
+export const menuSearchInputClass = 'flex h-full w-full bg-transparent text-control [@media(pointer:coarse)]:text-title outline-hidden placeholder:text-muted-foreground'
 
 // One menu row: layout + roving-focus highlight. Geometry is pinned to the
 // shared row contract: px-2.5 / py-1.5 / text-control (14px) / rounded-menu

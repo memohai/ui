@@ -367,7 +367,16 @@
       scale 0.255s linear(0, 0.3505, 0.7432, 0.9336, 0.9951, 1.0062, 1.0045, 1.0019, 1.0005, 1),
       background-color 0.15s ease;
   }
-  [data-button][data-variant="ghost"]:hover::before,
+  /* hover chip only where hover is real: on touch the tap leaves a STICKY
+     :hover that would keep the chip painted after the finger lifts (e.g. a
+     closed menu trigger still reading active). Touch feedback comes from
+     :active below; an open trigger keeps its chip via the state selectors,
+     which are not hover-gated. */
+  @media (hover: hover) {
+    [data-button][data-variant="ghost"]:hover::before {
+      background-color: var(--btn-ghost-hover);
+    }
+  }
   [data-button][data-variant="ghost"][data-state="open"]::before,
   [data-button][data-variant="ghost"][aria-expanded="true"]::before {
     background-color: var(--btn-ghost-hover);
