@@ -396,7 +396,17 @@
     background-color: var(--ui-pressed);
     transition-duration: 40ms;
   }
-
+  /* Chromium can retain the old :hover target during compositor scrolling.
+     SidebarContent explicitly hit-tests NavItem hover each frame. */
+  [data-sidebar="content"] [data-button][data-variant="ghost"][data-settings-nav-item]::before {
+    transition-property: scale;
+  }
+  [data-sidebar="content"] [data-button][data-variant="ghost"][data-settings-nav-item]:hover::before {
+    background-color: transparent;
+  }
+  [data-sidebar="content"] [data-button][data-variant="ghost"][data-settings-nav-item][data-pointer-hover]::before {
+    background-color: var(--btn-ghost-hover);
+  }
   /* ── Button: BRAND — solid scheme-color CTA (e.g. chat Send) ─────────────────
      Fill + hover/press live on a ::before shell (same model as primary/ghost),
      so the press shrinks only the fill and the glyph never moves. Press scale
