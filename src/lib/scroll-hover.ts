@@ -1,16 +1,4 @@
-export interface FrameScheduler {
-  request(callback: FrameRequestCallback): number
-  cancel(handle: number): void
-}
-
-const browserFrameScheduler: FrameScheduler = {
-  request: callback => requestAnimationFrame(callback),
-  cancel: handle => cancelAnimationFrame(handle),
-}
-
-export function createScrollHover(
-  scheduler: FrameScheduler = browserFrameScheduler,
-) {
+export function createScrollHover() {
   let pointer: { x: number, y: number } | undefined
   let hovered: HTMLElement | undefined
   let frame: number | undefined
@@ -36,7 +24,7 @@ export function createScrollHover(
   function scheduleSync(): void {
     if (frame !== undefined)
       return
-    frame = scheduler.request(() => {
+    frame = requestAnimationFrame(() => {
       frame = undefined
       if (scope)
         sync(scope)
@@ -72,7 +60,7 @@ export function createScrollHover(
   function dispose(): void {
     scrolling = false
     if (frame !== undefined)
-      scheduler.cancel(frame)
+      cancelAnimationFrame(frame)
     frame = undefined
     scope = undefined
     setHovered(undefined)
