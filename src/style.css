@@ -397,12 +397,14 @@
     transition-duration: 40ms;
   }
   /* Chromium can retain the old :hover target during compositor scrolling.
-     SidebarContent explicitly hit-tests NavItem hover each frame. */
+     SidebarContent explicitly hit-tests NavItem hover after scroll events. */
   [data-sidebar="content"] [data-button][data-variant="ghost"][data-settings-nav-item]::before {
     transition-property: scale;
   }
-  [data-sidebar="content"] [data-button][data-variant="ghost"][data-settings-nav-item]:hover::before {
-    background-color: transparent;
+  @media (hover: hover) {
+    [data-sidebar="content"] [data-button][data-variant="ghost"][data-settings-nav-item]:hover::before {
+      background-color: transparent;
+    }
   }
   [data-sidebar="content"] [data-button][data-variant="ghost"][data-settings-nav-item][data-pointer-hover]::before {
     background-color: var(--btn-ghost-hover);
