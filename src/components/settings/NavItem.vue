@@ -26,6 +26,7 @@ const rowClass = 'w-full justify-start gap-2.5 pl-3.5! pr-3! font-[430] tracking
 
 <template>
   <Button
+    data-settings-nav-item
     variant="ghost"
     :class="[rowClass, active && 'bg-sidebar-accent text-foreground!']"
   >
