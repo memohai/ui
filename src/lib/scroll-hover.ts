@@ -2,8 +2,6 @@ export function createScrollHover() {
   let pointer: { x: number, y: number } | undefined
   let hovered: HTMLElement | undefined
   let frame: number | undefined
-  let scrolling = false
-  let scope: HTMLElement | undefined
 
   function setHovered(next: HTMLElement | undefined): void {
     if (hovered === next)
@@ -21,15 +19,12 @@ export function createScrollHover() {
     setHovered(target && scope.contains(target) ? target : undefined)
   }
 
-  function scheduleSync(): void {
+  function scheduleSync(scope: HTMLElement): void {
     if (frame !== undefined)
       return
     frame = requestAnimationFrame(() => {
       frame = undefined
-      if (scope)
-        sync(scope)
-      if (scrolling)
-        scheduleSync()
+      sync(scope)
     })
   }
 
@@ -43,28 +38,16 @@ export function createScrollHover() {
     setHovered(undefined)
   }
 
-  function start(event: Event): void {
-    scope = event.currentTarget as HTMLElement
-    if (!scrolling) {
-      scrolling = true
-    }
-    scheduleSync()
-  }
-
-  function end(event: Event): void {
-    scope = event.currentTarget as HTMLElement
-    scrolling = false
-    scheduleSync()
+  function scroll(event: Event): void {
+    scheduleSync(event.currentTarget as HTMLElement)
   }
 
   function dispose(): void {
-    scrolling = false
     if (frame !== undefined)
       cancelAnimationFrame(frame)
     frame = undefined
-    scope = undefined
     setHovered(undefined)
   }
 
-  return { pointerMove, pointerLeave, start, end, dispose }
+  return { pointerMove, pointerLeave, scroll, dispose }
 }

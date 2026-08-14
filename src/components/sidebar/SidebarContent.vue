@@ -20,8 +20,7 @@ onBeforeUnmount(scrollHover.dispose)
     :class="cn('flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden', props.class)"
     @pointermove="scrollHover.pointerMove"
     @pointerleave="scrollHover.pointerLeave"
-    @scroll.passive="scrollHover.start"
-    @scrollend="scrollHover.end"
+    @scroll.passive="scrollHover.scroll"
   >
     <slot />
   </div>
