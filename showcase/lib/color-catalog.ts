@@ -166,7 +166,6 @@ export const COLOR_SECTIONS: ColorSection[] = [
     titleZh: '业务色板',
     families: [
       rampFamily('--event-schedule', DOMAIN_ROLES),
-      rampFamily('--event-heartbeat', DOMAIN_ROLES),
       rampFamily('--event-subagent', DOMAIN_ROLES),
       rampFamily('--event-discuss', DOMAIN_ROLES),
       rampFamily('--capability-tool', DOMAIN_ROLES),
