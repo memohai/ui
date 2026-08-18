@@ -1415,10 +1415,6 @@
   --event-schedule-foreground: var(--warning-foreground);
   --event-schedule-soft: var(--warning-soft);
   --event-schedule-border: var(--warning-border);
-  --event-heartbeat: oklch(0.60 0.19 355);
-  --event-heartbeat-foreground: oklch(0.40 0.15 355);
-  --event-heartbeat-soft: oklch(0.96 0.035 355);
-  --event-heartbeat-border: oklch(0.84 0.09 355);
   --event-subagent: var(--brand);
   --event-subagent-foreground: oklch(0.38 0.16 290);
   --event-subagent-soft: var(--brand-soft);
@@ -1572,10 +1568,6 @@
   --info-foreground: oklch(0.80 0.12 235);
   --info-soft: oklch(0.30 0.07 235 / 0.35);
   --info-border: oklch(0.72 0.13 235 / 0.32);
-  --event-heartbeat: oklch(0.72 0.15 355);
-  --event-heartbeat-foreground: oklch(0.82 0.13 355);
-  --event-heartbeat-soft: oklch(0.30 0.07 355 / 0.35);
-  --event-heartbeat-border: oklch(0.72 0.15 355 / 0.32);
   --event-subagent-foreground: oklch(0.82 0.13 290);
   --capability-tool: var(--info);
   --capability-tool-foreground: var(--info-foreground);
@@ -1722,10 +1714,6 @@
   --info-soft: oklch(0.96 0.035 250);
   --info-border: oklch(0.84 0.08 250);
   --destructive: oklch(0.58 0.21 25);
-  --event-heartbeat: oklch(0.60 0.17 345);
-  --event-heartbeat-foreground: oklch(0.40 0.14 345);
-  --event-heartbeat-soft: oklch(0.96 0.035 345);
-  --event-heartbeat-border: oklch(0.84 0.09 345);
 }
 
 .dark[data-color-scheme="ocean"], .dark [data-color-scheme-preview="ocean"] {
@@ -1750,10 +1738,6 @@
   --info-foreground: oklch(0.82 0.13 250);
   --info-soft: oklch(0.30 0.07 250 / 0.35);
   --info-border: oklch(0.76 0.14 250 / 0.32);
-  --event-heartbeat: oklch(0.76 0.15 345);
-  --event-heartbeat-foreground: oklch(0.82 0.13 345);
-  --event-heartbeat-soft: oklch(0.30 0.07 345 / 0.35);
-  --event-heartbeat-border: oklch(0.76 0.15 345 / 0.32);
 }
 
 :root[data-color-scheme="forest"], [data-color-scheme-preview="forest"] {
@@ -1774,10 +1758,6 @@
   --info-foreground: oklch(0.36 0.10 215);
   --info-soft: oklch(0.96 0.035 215);
   --info-border: oklch(0.84 0.08 215);
-  --event-heartbeat: oklch(0.58 0.16 20);
-  --event-heartbeat-foreground: oklch(0.38 0.13 20);
-  --event-heartbeat-soft: oklch(0.96 0.035 20);
-  --event-heartbeat-border: oklch(0.84 0.09 20);
 }
 
 .dark[data-color-scheme="forest"], .dark [data-color-scheme-preview="forest"] {
@@ -1798,10 +1778,6 @@
   --info-foreground: oklch(0.82 0.13 215);
   --info-soft: oklch(0.30 0.07 215 / 0.35);
   --info-border: oklch(0.73 0.11 215 / 0.32);
-  --event-heartbeat: oklch(0.74 0.14 20);
-  --event-heartbeat-foreground: oklch(0.82 0.13 20);
-  --event-heartbeat-soft: oklch(0.30 0.07 20 / 0.35);
-  --event-heartbeat-border: oklch(0.74 0.14 20 / 0.32);
 }
 
 :root[data-color-scheme="rose"], [data-color-scheme-preview="rose"] {
@@ -1822,10 +1798,6 @@
   --info-foreground: oklch(0.36 0.11 250);
   --info-soft: oklch(0.96 0.035 250);
   --info-border: oklch(0.84 0.08 250);
-  --event-heartbeat: oklch(0.60 0.19 355);
-  --event-heartbeat-foreground: oklch(0.40 0.15 355);
-  --event-heartbeat-soft: oklch(0.96 0.035 355);
-  --event-heartbeat-border: oklch(0.84 0.09 355);
 }
 
 .dark[data-color-scheme="rose"], .dark [data-color-scheme-preview="rose"] {
@@ -1846,10 +1818,6 @@
   --info-foreground: oklch(0.82 0.13 250);
   --info-soft: oklch(0.30 0.07 250 / 0.35);
   --info-border: oklch(0.74 0.12 250 / 0.32);
-  --event-heartbeat: oklch(0.76 0.17 355);
-  --event-heartbeat-foreground: oklch(0.82 0.13 355);
-  --event-heartbeat-soft: oklch(0.30 0.07 355 / 0.35);
-  --event-heartbeat-border: oklch(0.76 0.17 355 / 0.32);
 }
 
 :root[data-color-scheme="amber"], [data-color-scheme-preview="amber"] {
@@ -1870,10 +1838,6 @@
   --info-foreground: oklch(0.36 0.11 230);
   --info-soft: oklch(0.96 0.035 230);
   --info-border: oklch(0.84 0.08 230);
-  --event-heartbeat: oklch(0.60 0.17 350);
-  --event-heartbeat-foreground: oklch(0.40 0.14 350);
-  --event-heartbeat-soft: oklch(0.96 0.035 350);
-  --event-heartbeat-border: oklch(0.84 0.09 350);
 }
 
 .dark[data-color-scheme="amber"], .dark [data-color-scheme-preview="amber"] {
@@ -1894,10 +1858,6 @@
   --info-foreground: oklch(0.82 0.13 230);
   --info-soft: oklch(0.30 0.07 230 / 0.35);
   --info-border: oklch(0.72 0.12 230 / 0.32);
-  --event-heartbeat: oklch(0.76 0.15 350);
-  --event-heartbeat-foreground: oklch(0.82 0.13 350);
-  --event-heartbeat-soft: oklch(0.30 0.07 350 / 0.35);
-  --event-heartbeat-border: oklch(0.76 0.15 350 / 0.32);
 }
 
 :root[data-color-scheme]:not([data-color-scheme="memoh"]), [data-color-scheme-preview]:not([data-color-scheme-preview="memoh"]) {
@@ -2070,10 +2030,6 @@
   --color-event-schedule-foreground: var(--event-schedule-foreground);
   --color-event-schedule-soft: var(--event-schedule-soft);
   --color-event-schedule-border: var(--event-schedule-border);
-  --color-event-heartbeat: var(--event-heartbeat);
-  --color-event-heartbeat-foreground: var(--event-heartbeat-foreground);
-  --color-event-heartbeat-soft: var(--event-heartbeat-soft);
-  --color-event-heartbeat-border: var(--event-heartbeat-border);
   --color-event-subagent: var(--event-subagent);
   --color-event-subagent-foreground: var(--event-subagent-foreground);
   --color-event-subagent-soft: var(--event-subagent-soft);

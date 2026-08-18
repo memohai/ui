@@ -16,7 +16,7 @@ export const switchSpec: ComponentSpec = {
     { kind: 'enum', key: 'size', label: 'Size', options: SIZES, default: 'default', display: 'segmented' },
     { kind: 'boolean', key: 'checked', label: 'Checked', default: true },
     { kind: 'boolean', key: 'disabled', label: 'Disabled', default: false },
-    { kind: 'string', key: 'label', label: 'Label', default: 'Enable heartbeat' },
+    { kind: 'string', key: 'label', label: 'Label', default: 'Enable automation' },
   ],
   matrix: { rows: 'size', cols: 'checked' },
   render: state =>
